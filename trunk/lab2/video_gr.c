@@ -13,6 +13,9 @@
 #define V_RES		  768
 #define BITS_PER_PIXEL	  8
 
+#define LINEAR_MODEL_BIT 14
+#define BIT(n) (0x1 << (n))
+
 /* Private global variables */
 
 static char *video_mem;		/* Process address to which VRAM is mapped */
@@ -30,7 +33,7 @@ void * vg_init(unsigned long mode) {
 	reg.u.b.intno = 0x10;
 	reg.u.b.ah = 0x4F;
 	reg.u.b.al = 0x02;
-	reg.u.w.bx = 0x1 << 14 | mode;
+	reg.u.w.bx = BIT(LINEAR_MODEL_BIT) | mode;
 
 	s = sys_int86(&reg);
 
