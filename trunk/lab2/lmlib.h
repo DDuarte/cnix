@@ -32,7 +32,7 @@ int lm_init(void);
  * @brief Allocates a memory block in low memory area with the specified size
  * 
  * Allocates a memory block in the region up to the 1 MByte physical address with the input size.
- *  Initializes the input mmap_t struct with the maping information, which can be read but must
+ *  Initializes the input mmap_t struct with the mapping information, which can be read but must
  *  not be modified.
  * 
  * @param size size of the memory block to allocate

@@ -1,21 +1,29 @@
-#include <minix/drivers.h>
 #include <stdlib.h>
-
 #include "video_gr.h"
 
 #define WAIT_TIME_S 5
+#define PACKED_PIXEL_1024_768_8_MODE 0x105
 
-int main (int argc, char* argv[]) {
+int main(int argc, char** argv)
+{
+    char* video_mem;
+    int x, y;
+    unsigned short color;
+    
+    sef_startup();
 
-	char *video_mem;
+    video_mem = (char*)vg_init(PACKED_PIXEL_1024_768_8_MODE);
 
-	sef_startup();
+    printf("lab2/main: VRAM mapped on virtual address %p\n", video_mem);
 
-	video_mem = vg_init(0x105);
-	/*vg_fill(0x3F);*/
-	vg_set_pixel(500, 500, 0x3F);
-	sleep(WAIT_TIME_S);
-	vg_exit();
+    /* vg_fill(0x3f); */
 
-	return 0;
+    color = 0;
+
+    for (x = 0; x < 1024; ++x)
+        for (y = 0; y < 768; ++y)
+            vg_set_pixel(x, y, color++ % 56);
+
+    sleep(WAIT_TIME_S);
+    vg_exit();
 }

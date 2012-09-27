@@ -4,6 +4,7 @@
 #include <sys/mman.h>
 #include <sys/types.h>
 
+#include "lmlib.h"
 #include "vbe.h"
 
 /* Constants for VBE 0x105 mode */
@@ -16,6 +17,12 @@
 #define LINEAR_MODEL_BIT 14
 #define BIT(n) (0x1 << (n))
 
+#define VBE_MODE 0x4F
+#define SET_VBE_MODE 0x02
+#define BIOS_VIDEO_SERVICE 0x10
+
+#define ERR -1
+
 /* Private global variables */
 
 static char *video_mem;		/* Process address to which VRAM is mapped */
@@ -24,55 +31,73 @@ static unsigned h_res;		/* Horizontal screen resolution in pixels */
 static unsigned v_res;		/* Vertical screen resolution in pixels */
 static unsigned bits_per_pixel; /* Number of VRAM bits per pixel */
 
-void * vg_init(unsigned long mode) {
-	int r, s;
-	struct mem_range mr;
-	vbe_mode_info_t vmi_p;
-	struct reg86u reg;
+void* vg_init(unsigned long mode)
+{
+    vbe_mode_info_t vmi_p;
+    struct reg86u r;
+    struct mem_range mr;
+    unsigned int vram_size;
 
-	reg.u.b.intno = 0x10;
-	reg.u.b.ah = 0x4F;
-	reg.u.b.al = 0x02;
-	reg.u.w.bx = BIT(LINEAR_MODEL_BIT) | mode;
+    r.u.b.intno = BIOS_VIDEO_SERVICE;
+    r.u.b.ah = VBE_MODE;
+    r.u.b.al = SET_VBE_MODE;
+    r.u.w.bx = BIT(LINEAR_MODEL_BIT) | mode;
+    if (sys_int86(&r))
+    {
+        printf("lab2/vg_init: failed in sys_int86");
+        return NULL;
+    }
 
-	s = sys_int86(&reg);
+    if (vbe_get_mode_info(mode, &vmi_p) == ERR)
+    {
+        printf("lab2/vg_init: failed in vbe_get_mode_info");
+        return NULL;
+    }
 
-	if (vbe_get_mode_info(mode, &vmi_p) != 0) {
-		return NULL;
-	}
+    h_res = vmi_p.XResolution;
+    v_res = vmi_p.YResolution;
+    bits_per_pixel = vmi_p.BitsPerPixel;
 
-	h_res = vmi_p.XResolution;
-	v_res = vmi_p.YResolution;
-	bits_per_pixel = vmi_p.BitsPerPixel;
+    vram_size =  h_res * v_res * (bits_per_pixel / 8);
 
-	mr.mr_base = vmi_p.PhysBasePtr;
-	mr.mr_limit = mr.mr_base + h_res * v_res * (bits_per_pixel / 8);
-	r = sys_privctl(SELF, SYS_PRIV_ADD_MEM, &mr);
+    mr.mr_base = vmi_p.PhysBasePtr;
+    mr.mr_limit = mr.mr_base + vram_size;
+    if (sys_privctl(SELF, SYS_PRIV_ADD_MEM, &mr))
+    {
+        printf("lab2/vg_init: failed in sys_privctl");
+        return NULL;
+    }
 
-	video_mem = vm_map_phys(SELF, (void *) mr.mr_base, h_res * v_res * (bits_per_pixel / 8));
+    video_mem = vm_map_phys(SELF, (void*)mr.mr_base, vram_size);
 
+    if (video_mem == MAP_FAILED)
+    {
+        printf("lab2/vg_init: failed in vm_map_phys");
+        return NULL;
+    }
 
-
-	return (video_mem == MAP_FAILED ? NULL : video_mem);
-
-	if (s != OK || r != OK || video_mem == MAP_FAILED) {
-		return NULL;
-	} else {
-		return video_mem;
-	}
+    return video_mem;
 }
 
-int vg_fill(unsigned long color) {
-	int i, j, colorT;
-	char* vptr = video_mem;
-	for (i = 0; i < h_res * v_res; i++) {
-		colorT = color;
-		for (j = 0; j < bits_per_pixel / 8; j++) {
-			*vptr = (char) colorT;
-			vptr++;
-			colorT >> 8;
-		}
-	}
+int vg_fill(unsigned long color)
+{
+    int i, j;
+    unsigned long colorTemp;
+    char* ptr;
+
+    ptr = video_mem;
+
+    for (i = 0; i < h_res * v_res; ++i)
+    {
+        colorTemp = color;
+        for (j = 0; j < ((bits_per_pixel / 8)| 1); ++j)
+        {
+            *ptr = (char)colorTemp;
+            ++ptr;
+            colorTemp >>= 8;
+        }
+    }
+
 	return 0;
 }
 
