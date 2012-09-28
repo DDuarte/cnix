@@ -13,6 +13,9 @@
 #define V_RES		  768
 #define BITS_PER_PIXEL	  8
 
+#define LINEAR_MODEL_BIT 14
+#define BIT(n) (0x1 << (n))
+
 #define min(x,y) ((x) < (y) : (x) ? (y))
 
 #define VBE_MODE 0x4F
