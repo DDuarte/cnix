@@ -149,7 +149,7 @@ int vg_draw_line(unsigned long xi, unsigned long yi, unsigned long xf,
 	
 	if (xi == xf) {
 		if (yi > yf) {
-			for (i = yi; i > yf; i--)
+			for (i = yi; i >= yf; i--)
 				vg_set_pixel(xi, i, color);
 		} else {
 			for (i = yi; i < yf; i++)
@@ -159,7 +159,7 @@ int vg_draw_line(unsigned long xi, unsigned long yi, unsigned long xf,
 	} else if (xi < xf) {
 
 		m = (yf - yi) / (xf - xi);
-		for (i = xi; i < xf; i++) {
+		for (i = xi; i <= xf; i++) {
 			vg_set_pixel(i, yi, color);
 			yi += m;
 		}
@@ -167,7 +167,7 @@ int vg_draw_line(unsigned long xi, unsigned long yi, unsigned long xf,
 	} else { /* xi > xf */
 
 		m = (yi - yf) / (xi - xf);
-		for (i = xi; i > xf; i--) {
+		for (i = xi; i >= xf; i--) {
 			vg_set_pixel(i, yi, color);
 			yi += m;
 		}
