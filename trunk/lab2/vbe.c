@@ -19,10 +19,10 @@
 
 int vbe_get_mode_info(unsigned short mode, vbe_mode_info_t *vmi_p) {
 
-	struct reg86u r;
-	mmap_t map;
-	
-	if (mode < 0x100)
+    struct reg86u r;
+    mmap_t map;
+
+    if (mode < 0x100)
     {
         printf("lab2/vbe_get_mode_info: mode is non-VBE (%u)", mode);
         return -1;
@@ -33,27 +33,27 @@ int vbe_get_mode_info(unsigned short mode, vbe_mode_info_t *vmi_p) {
         printf("lab2/vbe_get_mode_info: failed in lm_init");
         return -1;
     }
-	
-	
-	lm_alloc(VBE_MODE_INFO_BLOCK_SIZE, &map);
-	
-	r.u.b.ah = VBE_MODE;
-	r.u.b.al = RET_VBE_MODE_INFO;
-	r.u.w.es = PB2BASE(map.phys);
-	r.u.w.di = PB2OFF(map.phys);
-	r.u.w.cx = mode | BIT(LINEAR_MODEL_BIT);;
-	r.u.b.intno = BIOS_VIDEO_SERVICE;
-	
-	if (sys_int86(&r))
+
+
+    lm_alloc(VBE_MODE_INFO_BLOCK_SIZE, &map);
+
+    r.u.b.ah = VBE_MODE;
+    r.u.b.al = RET_VBE_MODE_INFO;
+    r.u.w.es = PB2BASE(map.phys);
+    r.u.w.di = PB2OFF(map.phys);
+    r.u.w.cx = mode | BIT(LINEAR_MODEL_BIT);;
+    r.u.b.intno = BIOS_VIDEO_SERVICE;
+
+    if (sys_int86(&r))
     {
         printf("lab2/vbe_get_mode_info: failed in sys_int86");
         return -1;
     }
-	
-	*vmi_p = *(vbe_mode_info_t*)map.virtual; /* NEEDS to be called after sys_int86 because reasons */
-	
-	lm_free(&map);
-	
-	return r.u.w.ax; /* VBE return status */
+
+    *vmi_p = *(vbe_mode_info_t*)map.virtual; /* NEEDS to be called after sys_int86 because reasons */
+
+    lm_free(&map);
+
+    return r.u.w.ax; /* VBE return status */
 }
 
