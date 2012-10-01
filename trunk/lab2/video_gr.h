@@ -70,6 +70,22 @@ long vg_get_pixel(unsigned long x, unsigned long y);
 int vg_draw_line(unsigned long xi, unsigned long yi,
                    unsigned long xf, unsigned long yf, unsigned long color);
 
+/**
+ * @brief Draw filled rectangle with the specifed end points and color
+ *
+ * Draws a filled rectangle with the specified end points and the input color,
+ *  by writing to VRAM
+ *
+ * @param x1 horizontal coordinate of "first" endpoint, starts at 0 (leftmost pixel)
+ * @param y1 vertical coordinate of "first" endpoint, starts at 0 (top pixel)
+ * @param x2 horizontal coordinate of "last" endpoint, starts at 0 (leftmost pixel)
+ * @param y2 vertical coordinate of "last" endpoint, starts at 0 (top pixel)
+ * @param color color of the line segment to draw and rectangle fill
+ * @return 0 upon success, non-zero upon failure
+ */
+int vg_draw_rectangle(unsigned long x1, unsigned long y1, unsigned long x2,
+        unsigned long y2, unsigned long color);
+
  /**
  * @brief Returns to default Minix 3 text mode (0x03: 25 x 80, 16 colors)
  *
