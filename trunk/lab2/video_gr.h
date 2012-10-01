@@ -86,6 +86,20 @@ int vg_draw_line(unsigned long xi, unsigned long yi,
 int vg_draw_rectangle(unsigned long x1, unsigned long y1, unsigned long x2,
         unsigned long y2, unsigned long color);
 
+/**
+ * @brief Draw circle with the specifed center point, radius and line color
+ *
+ * Draws a a circle with the specified center point, radius and line color,
+ *  by writing to VRAM
+ *
+ * @param x0 horizontal coordinate of the circle's center
+ * @param y0 vertical coordinate of the circle's center
+ * @param radius radius (in pixel) of the circle
+ * @param color color of the line segment to draw and rectangle fill
+ * @return 0 upon success, non-zero upon failure
+ */
+int vg_draw_circle(int x0, int y0, int radius, unsigned long color);
+
  /**
  * @brief Returns to default Minix 3 text mode (0x03: 25 x 80, 16 colors)
  *

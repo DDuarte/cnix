@@ -213,6 +213,8 @@ int vg_draw_rectangle(unsigned long x1, unsigned long y1, unsigned long x2,
 
 int vg_draw_circle(int x0, int y0, int radius, unsigned long color)
 {
+  /* Based on a sample code from Wikipedia */
+
   int f, ddF_x, ddF_y, x, y;
 
   f = 1 - radius;
@@ -220,36 +222,43 @@ int vg_draw_circle(int x0, int y0, int radius, unsigned long color)
   ddF_y = -2 * radius;
   x = 0;
   y = radius;
- 
+
   vg_set_pixel(x0, y0 + radius, color);
   vg_set_pixel(x0, y0 - radius, color);
+  vg_draw_line(x0, y0 + radius, x0, y0 - radius, color);
+
   vg_set_pixel(x0 + radius, y0, color);
   vg_set_pixel(x0 - radius, y0, color);
- 
+  vg_draw_line(x0 + radius, y0, x0 - radius, y0, color);
+
   while(x < y)
   {
-    // ddF_x == 2 * x + 1;
-    // ddF_y == -2 * y;
-    // f == x*x + y*y - radius*radius + 2*x - y + 1;
-    if(f >= 0) 
-    {
+    if (f >= 0) {
       y--;
       ddF_y += 2;
       f += ddF_y;
     }
+
     x++;
     ddF_x += 2;
-    f += ddF_x;    
-    vg_set_pixel(x0 + x, y0 + y, color);
-    vg_set_pixel(x0 - x, y0 + y, color);
-    vg_set_pixel(x0 + x, y0 - y, color);
-    vg_set_pixel(x0 - x, y0 - y, color);
-    vg_set_pixel(x0 + y, y0 + x, color);
-    vg_set_pixel(x0 - y, y0 + x, color);
-    vg_set_pixel(x0 + y, y0 - x, color);
-    vg_set_pixel(x0 - y, y0 - x, color);
+    f += ddF_x;
+    /* vg_set_pixel(x0 + x, y0 + y, color); */
+    /* vg_set_pixel(x0 - x, y0 + y, color); */
+    vg_draw_line(x0 + x, y0 + y, x0 - x, y0 + y, color);
+
+    /* vg_set_pixel(x0 + x, y0 - y, color); */
+    /* vg_set_pixel(x0 - x, y0 - y, color); */
+    vg_draw_line(x0 + x, y0 - y, x0 - x, y0 - y, color);
+
+    /* vg_set_pixel(x0 + y, y0 + x, color); */
+    /* vg_set_pixel(x0 - y, y0 + x, color); */
+    vg_draw_line(x0 + y, y0 + x, x0 - y, y0 + x, color);
+
+    /* vg_set_pixel(x0 + y, y0 - x, color); */
+    /* vg_set_pixel(x0 - y, y0 - x, color); */
+    vg_draw_line(x0 + y, y0 - x, x0 - y, y0 - x, color);
   }
-  
+
   return 0;
 }
 
