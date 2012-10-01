@@ -11,10 +11,6 @@ static long parse_long(char *str, int base);
 static void print_usage(char *argv[]);
 
 int main(int argc, char **argv) {
-
-  char *video_mem;
-  vt_info_t vt_info;
-
   /* Initialize service */
   
   sef_startup();
@@ -44,11 +40,8 @@ static int proc_args(int argc, char *argv[]) {
 
   unsigned long grMode, col, xiCoord, yiCoord, xfCoord, yfCoord;
   int ret;
-  char *str;
-  long num;
+  char *video_mem;
 
-  /* always blank the screen: in emulation mode, we need to use a printable char */
-  vt_blank();
   /* check the function to test: if the first characters match, accept it */
   if (strncmp(argv[1], "fill", strlen("fill")) == 0) {
 	  if( argc != 4 ) {
@@ -64,12 +57,12 @@ static int proc_args(int argc, char *argv[]) {
 	  printf("video_gr:: vg_fill(0x%X)\n",
 			  (unsigned)col);
 
-	  ret = vg_init();
-	  if (ret != OK)
+	  video_mem = vg_init(grMode);
+	  if (!video_mem)
 	  {
 		vg_exit();
-		printf("video_gr: vg_init() return error code %d \n", ret);
-		return ret;
+		printf("video_gr: vg_init() return NULL");
+		return 1;
 	  }
 	  
 	  ret = vg_fill(col);
@@ -102,12 +95,12 @@ static int proc_args(int argc, char *argv[]) {
 	  printf("video_gr:: vg_set_pixel(%lu, %lu, 0x%X)\n",
 			  xiCoord, yiCoord, (unsigned)col);
 			  
-	  ret = vg_init(grMode);
-	  if (ret != OK)
+	  video_mem = vg_init(grMode);
+	  if (!video_mem)
 	  {
 		vg_exit();
-		printf("video_gr: vg_init() return error code %d \n", ret);
-		return ret;
+		printf("video_gr: vg_init() return NULL \n");
+		return 1;
 	  }
 	  
 	  ret = vg_set_pixel(xiCoord, yiCoord, col);
@@ -142,12 +135,12 @@ static int proc_args(int argc, char *argv[]) {
 	  printf("video_gr:: vg_get_pixel(%lu, %lu)\n",
 			  xiCoord, yiCoord);
 	  			  
-	  ret = vg_init(grMode);
-	  if (ret != OK)
+	  video_mem = vg_init(grMode);
+	  if (!video_mem)
 	  {
 		vg_exit();
-		printf("video_gr: vg_init() return error code %d \n", ret);
-		return ret;
+		printf("video_gr: vg_init() return NULL\n");
+		return 1;
 	  }
 	  
 	  ret = vg_set_pixel(xiCoord, yiCoord, col);
@@ -186,14 +179,14 @@ static int proc_args(int argc, char *argv[]) {
 	  printf("video_gr:: vg_init(0x%X)\n",
 			  (unsigned) grMode);
 	  printf("video_gr:: vg_draw_line(%lu, %lu, %lu, %lu, 0x%X)\n",
-		 xiCoord, yiCoord, xfCoord, yfCoord (unsigned)col);
+		 xiCoord, yiCoord, xfCoord, yfCoord, (unsigned)col);
 	  
-	  ret = vg_init(grMode);
-	  if (ret != OK)
+	  video_mem = vg_init(grMode);
+	  if (!video_mem)
 	  {
 		vg_exit();
-		printf("video_gr: vg_init() return error code %d \n", ret);
-		return ret;
+		printf("video_gr: vg_init() return NULL");
+		return 1;
 	  }
 	  
 	  ret = vg_draw_line(xiCoord, yiCoord, xfCoord, yfCoord, col);
@@ -228,14 +221,14 @@ static int proc_args(int argc, char *argv[]) {
 	  printf("video_gr:: vg_init(0x%X)\n",
 			  (unsigned) grMode);
 	  printf("video_gr:: vg_draw_rectangle(%lu, %lu, %lu, %lu, 0x%X)\n",
-		 xiCoord, yiCoord, xfCoord, yfCoord (unsigned)col);
+		 xiCoord, yiCoord, xfCoord, yfCoord, (unsigned)col);
 	  
-	  ret = vg_init(grMode);
-	  if (ret != OK)
+	  video_mem = vg_init(grMode);
+	  if (!video_mem)
 	  {
 		vg_exit();
-		printf("video_gr: vg_init() return error code %d \n", ret);
-		return ret;
+		printf("video_gr: vg_init() return NULL\n");
+		return 1;
 	  }
 	  
 	  ret = vg_draw_rectangle(xiCoord, yiCoord, xfCoord, yfCoord, col);
