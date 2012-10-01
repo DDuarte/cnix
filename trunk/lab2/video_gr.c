@@ -211,6 +211,48 @@ int vg_draw_rectangle(unsigned long x1, unsigned long y1, unsigned long x2,
     return OK;
 }
 
+int vg_draw_circle(int x0, int y0, int radius, unsigned long color)
+{
+  int f, ddF_x, ddF_y, x, y;
+
+  f = 1 - radius;
+  ddF_x = 1;
+  ddF_y = -2 * radius;
+  x = 0;
+  y = radius;
+ 
+  vg_set_pixel(x0, y0 + radius, color);
+  vg_set_pixel(x0, y0 - radius, color);
+  vg_set_pixel(x0 + radius, y0, color);
+  vg_set_pixel(x0 - radius, y0, color);
+ 
+  while(x < y)
+  {
+    // ddF_x == 2 * x + 1;
+    // ddF_y == -2 * y;
+    // f == x*x + y*y - radius*radius + 2*x - y + 1;
+    if(f >= 0) 
+    {
+      y--;
+      ddF_y += 2;
+      f += ddF_y;
+    }
+    x++;
+    ddF_x += 2;
+    f += ddF_x;    
+    vg_set_pixel(x0 + x, y0 + y, color);
+    vg_set_pixel(x0 - x, y0 + y, color);
+    vg_set_pixel(x0 + x, y0 - y, color);
+    vg_set_pixel(x0 - x, y0 - y, color);
+    vg_set_pixel(x0 + y, y0 + x, color);
+    vg_set_pixel(x0 - y, y0 + x, color);
+    vg_set_pixel(x0 + y, y0 - x, color);
+    vg_set_pixel(x0 - y, y0 - x, color);
+  }
+  
+  return 0;
+}
+
 int vg_exit() {
     struct reg86u reg86;
 
