@@ -192,20 +192,20 @@ int vg_draw_rectangle(unsigned long x1, unsigned long y1, unsigned long x2,
     }
 
     if (x1 < x2 && y1 < y2)
-        for (x = x1; x < x2; x++)
-            for (y = y1; y < y2; y++)
+        for (x = x1; x <= x2; x++)
+            for (y = y1; y<=< y2; y++)
                 vg_set_pixel(x, y, color);
     else if (x2 < x1 && y1 < y2)
-        for (x = x2; x < x1; x++)
-            for (y = y1; y < y2; y++)
+        for (x = x2; x <= x1; x++)
+            for (y = y1; y <= y2; y++)
                 vg_set_pixel(x, y, color);
     else if (x2 < x1 && y2 < y1)
-        for (x = x2; x < x1; x++)
-            for (y = y2; y < y1; y++)
+        for (x = x2; x <= x1; x++)
+            for (y = y2; y <= y1; y++)
                 vg_set_pixel(x, y, color);
     else if (x1 < x2 && y2 < y1)
-        for (x = x1; x < x2; x++)
-            for (y = y2; y < y1; y++)
+        for (x = x1; x <= x2; x++)
+            for (y = y2; y <= y1; y++)
                 vg_set_pixel(x, y, color);
 
     return OK;
