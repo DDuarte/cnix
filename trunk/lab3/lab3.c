@@ -36,7 +36,7 @@ static int proc_args(int argc, char *argv[]) {
 
   /* check the function to test: if the first characters match, accept it */
   if (strncmp(argv[1], "timer-test-square", strlen("timer-test-square")) == 0) {
-      if( argc != 4 ) {
+      if( argc != 3 ) {
           printf("lab3: wrong no of arguments for test of timer_test_square() \n");
           return 1;
       }
@@ -75,7 +75,7 @@ static unsigned long parse_ulong(char *str, int base) {
       return ULONG_MAX;
   }
 
-   Successful conversion
+  /* Successful conversion */
   return val;
 }
 
@@ -96,6 +96,6 @@ static long parse_long(char *str, int base) {
       return LONG_MAX;
   }
 
-  /* Successful conversion
+  /* Successful conversion */
   return val;
 }
