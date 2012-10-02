@@ -9,7 +9,7 @@
 
 /**
  * @brief Configures a timer to generate a square wave
- * 
+ *
  * @param timer Timer to configure. (Ranges from 0 to 2)
  * @param freq Frequency of the square wave to generate
  * @return Return 0 upon success and non-zero otherwise

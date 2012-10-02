@@ -15,12 +15,12 @@ int main(int argc, char **argv) {
   sef_startup();
 
   timer_test_square(30);
-  
+
   /*
   if ( argc == 1 ) {
       print_usage(argv);
       return 0;
-  } else {   
+  } else {
       if( proc_args(argc, argv) == 0 ) {
       }
   }
@@ -45,7 +45,7 @@ static int proc_args(int argc, char *argv[]) {
   int ret;
   char *video_mem;
 
-   check the function to test: if the first characters match, accept it 
+   check the function to test: if the first characters match, accept it
   if (strncmp(argv[1], "fill", strlen("fill")) == 0) {
       if( argc != 4 ) {
           printf("video_gr: wrong no of arguments for test of vg_fill() \n");
@@ -67,7 +67,7 @@ static int proc_args(int argc, char *argv[]) {
         printf("video_gr: vg_init() return NULL");
         return 1;
       }
-      
+
       ret = vg_fill(col);
       if (ret != OK)
       {
@@ -75,11 +75,11 @@ static int proc_args(int argc, char *argv[]) {
         printf("video_gr: vg_fill() return error code %d \n", ret);
         return ret;
       }
-      
+
       sleep(WAIT_TIME_S);
       vg_exit();
       return ret;
-      
+
   } else if (strncmp(argv[1], "set-pixel", strlen("set-pixel")) == 0) {
       if( argc != 6 ) {
           printf("video_gr: wrong no of arguments for test of vg_set_pixel() \n");
@@ -97,7 +97,7 @@ static int proc_args(int argc, char *argv[]) {
               (unsigned) grMode);
       printf("video_gr:: vg_set_pixel(%lu, %lu, 0x%X)\n",
               xiCoord, yiCoord, (unsigned)col);
-              
+
       video_mem = vg_init(grMode);
       if (!video_mem)
       {
@@ -105,7 +105,7 @@ static int proc_args(int argc, char *argv[]) {
         printf("video_gr: vg_init() return NULL \n");
         return 1;
       }
-      
+
       ret = vg_set_pixel(xiCoord, yiCoord, col);
       if (ret != OK)
       {
@@ -113,11 +113,11 @@ static int proc_args(int argc, char *argv[]) {
         printf("video_gr: vg_set_pixel() return error code %d \n", ret);
         return ret;
       }
-      
+
       sleep(WAIT_TIME_S);
       vg_exit();
       return ret;
-      
+
   } else if (strncmp(argv[1], "get-pixel", strlen("get-pixel")) == 0) {
       if( argc != 6 ) {
           printf("video_gr: wrong no of arguments for test of vg_get_pixel() \n");
@@ -137,7 +137,7 @@ static int proc_args(int argc, char *argv[]) {
               xiCoord, yiCoord, col);
       printf("video_gr:: vg_get_pixel(%lu, %lu)\n",
               xiCoord, yiCoord);
-                    
+
       video_mem = vg_init(grMode);
       if (!video_mem)
       {
@@ -145,7 +145,7 @@ static int proc_args(int argc, char *argv[]) {
         printf("video_gr: vg_init() return NULL\n");
         return 1;
       }
-      
+
       ret = vg_set_pixel(xiCoord, yiCoord, col);
       if (ret != OK)
       {
@@ -153,15 +153,15 @@ static int proc_args(int argc, char *argv[]) {
         printf("video_gr: vg_set_pixel() return error code %d \n", ret);
         return ret;
       }
-      
+
       col = vg_get_pixel(xiCoord, yiCoord);
-      
+
       sleep(WAIT_TIME_S);
       vg_exit();
       printf("Returned color: 0x%X\n", col);
       return ret;
-              
-              
+
+
   } else if (strncmp(argv[1], "draw-line", strlen("draw-line")) == 0) {
       if( argc != 8 ) {
           printf("video_gr: wrong no of arguments for test of vg_draw_line() \n");
@@ -183,7 +183,7 @@ static int proc_args(int argc, char *argv[]) {
               (unsigned) grMode);
       printf("video_gr:: vg_draw_line(%lu, %lu, %lu, %lu, 0x%X)\n",
          xiCoord, yiCoord, xfCoord, yfCoord, (unsigned)col);
-      
+
       video_mem = vg_init(grMode);
       if (!video_mem)
       {
@@ -191,7 +191,7 @@ static int proc_args(int argc, char *argv[]) {
         printf("video_gr: vg_init() return NULL");
         return 1;
       }
-      
+
       ret = vg_draw_line(xiCoord, yiCoord, xfCoord, yfCoord, col);
       if (ret != OK)
       {
@@ -199,11 +199,11 @@ static int proc_args(int argc, char *argv[]) {
         printf("video_gr: vg_draw_line() return error code %d \n", ret);
         return ret;
       }
-      
+
       sleep(WAIT_TIME_S);
       vg_exit();
       return ret;
-      
+
   } else if (strncmp(argv[1], "draw-rectangle", strlen("draw-rectangle")) == 0) {
       if( argc != 8 ) {
           printf("video_gr: wrong no of arguments for test of vg_draw_rectangle() \n");
@@ -225,7 +225,7 @@ static int proc_args(int argc, char *argv[]) {
               (unsigned) grMode);
       printf("video_gr:: vg_draw_rectangle(%lu, %lu, %lu, %lu, 0x%X)\n",
          xiCoord, yiCoord, xfCoord, yfCoord, (unsigned)col);
-      
+
       video_mem = vg_init(grMode);
       if (!video_mem)
       {
@@ -233,7 +233,7 @@ static int proc_args(int argc, char *argv[]) {
         printf("video_gr: vg_init() return NULL\n");
         return 1;
       }
-      
+
       ret = vg_draw_rectangle(xiCoord, yiCoord, xfCoord, yfCoord, col);
       if (ret != OK)
       {
@@ -241,11 +241,11 @@ static int proc_args(int argc, char *argv[]) {
         printf("video_gr: vg_draw_rectangle() return error code %d \n", ret);
         return ret;
       }
-      
+
       sleep(WAIT_TIME_S);
       vg_exit();
       return ret;
-  } else if (strncmp(argv[1], "draw-circle", strlen("draw-circle")) == 0) {  draw-circle <graphic-hex-mode> <centerx-coord> <centery-coord> <radius> <color-hex-code> 
+  } else if (strncmp(argv[1], "draw-circle", strlen("draw-circle")) == 0) {  draw-circle <graphic-hex-mode> <centerx-coord> <centery-coord> <radius> <color-hex-code>
       if( argc != 7 ) {
           printf("video_gr: wrong no of arguments for test of vg_draw_circle() \n");
           return 1;
@@ -264,7 +264,7 @@ static int proc_args(int argc, char *argv[]) {
               (unsigned) grMode);
       printf("video_gr:: vg_draw_circle(%lu, %lu, %lu, 0x%X)\n",
          xiCoord, yiCoord, radius, (unsigned)col);
-      
+
       video_mem = vg_init(grMode);
       if (!video_mem)
       {
@@ -272,7 +272,7 @@ static int proc_args(int argc, char *argv[]) {
         printf("video_gr: vg_init() return NULL\n");
         return 1;
       }
-      
+
       ret = vg_draw_circle(xiCoord, yiCoord, radius, col);
       if (ret != OK)
       {
@@ -280,7 +280,7 @@ static int proc_args(int argc, char *argv[]) {
         printf("video_gr: vg_draw_circle() return error code %d \n", ret);
         return ret;
       }
-      
+
       sleep(WAIT_TIME_S);
       vg_exit();
       return ret;
@@ -307,7 +307,7 @@ static unsigned long parse_ulong(char *str, int base) {
       return ULONG_MAX;
   }
 
-   Successful conversion 
+   Successful conversion
   return val;
 }
 
@@ -328,7 +328,7 @@ static long parse_long(char *str, int base) {
       return LONG_MAX;
   }
 
-  /* Successful conversion 
+  /* Successful conversion
   return val;
 }
 */
