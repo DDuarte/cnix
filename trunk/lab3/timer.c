@@ -1,13 +1,22 @@
 #include <minix/syslib.h>
 #include <minix/drivers.h>
 #include <minix/com.h>
+#include <minix/bitmap.h>
 
 #include "i8254.h"
 
-/*#define BIT(n) (0x1 << (n))*/
+typedef struct {
+    int hook_id;
+    int bit;
+} interrupt_data;
 
-static int timer_hook_id;
+typedef struct {
+    interrupt_data data;
+    unsigned long counter;
+    unsigned long freq;
+} timer;
 
+static timer timer0;
 
 int timer_set_square(unsigned long timer, unsigned long freq) {
     /* change Timer timer to mode 3 */
@@ -23,23 +32,29 @@ int timer_set_square(unsigned long timer, unsigned long freq) {
 }
 
 int timer_subscribe_int(void ) {
-
-    sys_irqsetpolicy(TIMER0_IRQ, IRQ_ENABLE, &timer_hook_id);
-    sys_irqenable(&timer_hook_id);
     
-	return 0;
+    timer0.data.bit = 0;
+    timer0.data.hook_id = timer0.data.bit;
+    
+    sys_irqsetpolicy(TIMER0_IRQ, IRQ_REENABLE, &(timer0.data.hook_id));
+    sys_irqenable(&(timer0.data.hook_id));
+    
+    timer0.counter = 0;
+    
+	return timer0.data.bit;
 }
 
 int timer_unsubscribe_int() {
 
-    sys_irqdisable(&timer_hook_id);
-    /*sys_irqmpolicy(&timer_hook_id);*/
+    sys_irqdisable(&(timer0.data.hook_id));
+    sys_irqrmpolicy(&(timer0.data.hook_id));
     
 	return 0;
 }
 
 void timer_int_handler() {
-    printf("Hello!\n");
+    timer0.counter++;
+    printf("Counter: %d\n", timer0.counter);
 }
 
 int timer_test_square(unsigned long freq) {
@@ -51,11 +66,11 @@ int timer_test_int(unsigned long time) {
     
     message msg;
     int ipc_status;
-    int r, cnt = 0;
+    int r;
     
     timer_subscribe_int();
     
-    while( cnt <= time ) {
+    while( timer0.counter <= time ) {
         r =  driver_receive(ANY, &msg, &ipc_status); /* Get a request message. */
         if ( r != 0 ) { 
             printf("driver_receive failed with: %d", r);
@@ -64,9 +79,8 @@ int timer_test_int(unsigned long time) {
         if (is_ipc_notify(ipc_status)) { /* received notification */
             switch (_ENDPOINT_P(msg.m_source)) {
                 case HARDWARE: /* hardware interrupt notification */				
-                    if (msg.NOTIFY_ARG & BIT(timer_hook_id)) { /* subscribed interrupt */
+                    if (bit_isset(msg.NOTIFY_ARG, timer0.data.bit)) { /* subscribed interrupt */
                         timer_int_handler();
-                        cnt++;
                     }
                     break;
                 default:

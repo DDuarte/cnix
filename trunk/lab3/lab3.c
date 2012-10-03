@@ -25,13 +25,14 @@ int main(int argc, char **argv) {
 
 static void print_usage(char *argv[]) {
   printf("Usage: one of the following:\n"
-     "\t service run %s -args \"timer-test-square <freq>\" \n",
-     argv[0]);
+     "\t service run %s -args \"timer-test-square <freq>\" \n"
+     "\t service run %s -args \"timer-test-int <time>\" \n",
+     argv[0], argv[0]);
 }
 
 static int proc_args(int argc, char *argv[]) {
 
-  unsigned long freq;
+  unsigned long freq, time;
   int ret;
 
   /* check the function to test: if the first characters match, accept it */
@@ -49,6 +50,25 @@ static int proc_args(int argc, char *argv[]) {
       {
         printf("lab3: timer_test_square() return error code %d \n", ret);
         return ret;
+      }
+
+      return ret;
+  } else if (strncmp(argv[1], "timer-test-int", strlen("timer-test-int")) == 0) {
+      if( argc != 3 ) {
+          printf("lab3: wrong no of arguments for test of timer_test_int() \n");
+          return 1;
+      }
+      if( (time = parse_ulong(argv[2], 10)) == ULONG_MAX )
+          return 1;
+      printf("lab3: timer_test_int(%d)\n", time);
+
+      ret = timer_test_int(time);
+      if (ret != OK)
+      {
+        printf("lab3: timer_test_int() return error code %d \n", ret);
+        return ret;
+      } else {
+        printf("lab3: timer_test_int() return code %d \n", ret);
       }
 
       return ret;
