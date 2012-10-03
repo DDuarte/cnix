@@ -5,10 +5,16 @@
 
 int speaker_ctrl(unsigned char on) {
 
-    if (on == 1) {
-        sys_outb(SPEAKER_CTRL, 0x3);
+    if (on == TRUE) {
+        if (sys_outb(SPEAKER_CTRL, 3) != 0) { /* first 2 bits enabled - 11*/
+            printf("lab3/speaker_ctrl: sys_outb on failed\n");
+            return 1;
+        }
     } else {
-        sys_outb(SPEAKER_CTRL, 0x0);
+        if (sys_outb(SPEAKER_CTRL, 0) != 0) { /* all bits disabled */
+            printf("lab3/speaker_ctrl: sys_outb off failed\n");
+            return 1;
+        }
     }
 
     return 0;
@@ -16,8 +22,8 @@ int speaker_ctrl(unsigned char on) {
 
 int speaker_test(unsigned long freq, unsigned long time) {
 
-    if (speaker_ctrl(1) != 0) {
-        printf("lab3/speaker_test: speaker_ctrl(1) failed\n");
+    if (speaker_ctrl(TRUE) != 0) {
+        printf("lab3/speaker_test: speaker_ctrl(TRUE) failed\n");
         return 1;
     }
 
@@ -26,16 +32,15 @@ int speaker_test(unsigned long freq, unsigned long time) {
         return 1;
     }
 
-    if (timer_test_int(time * 60) != 0) {
+    if (timer_test_int(time * 60) != 0) { /* in seconds */
         printf("lab3/speaker_test: timer_test_int failed\n");
         return 1;
     }
 
-    if (speaker_ctrl(0) != 0) {
-        printf("lab3/speaker_test: speaker_ctrl(0) failed\n");
+    if (speaker_ctrl(FALSE) != 0) {
+        printf("lab3/speaker_test: speaker_ctrl(FALSE) failed\n");
         return 1;
     }
 
     return 0;
 }
-

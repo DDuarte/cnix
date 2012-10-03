@@ -9,13 +9,12 @@ static long parse_long(char *str, int base);
 static void print_usage(char *argv[]);
 
 int main(int argc, char **argv) {
-  /* Initialize service */
 
+  /* Initialize service */
   sef_startup();
 
   if ( argc == 1 ) {
       print_usage(argv);
-      return 0;
   } else {
       proc_args(argc, argv);
   }
@@ -91,7 +90,7 @@ static unsigned long parse_ulong(char *str, int base) {
   }
 
   if (endptr == str) {
-      printf("lab3: parse_ulong: no digits were found in %s \n", str);
+      printf("lab3/parse_ulong: no digits were found in %s \n", str);
       return ULONG_MAX;
   }
 
@@ -112,7 +111,7 @@ static long parse_long(char *str, int base) {
   }
 
   if (endptr == str) {
-      printf("lab3: parse_long: no digits were found in %s \n", str);
+      printf("lab3/parse_long: no digits were found in %s \n", str);
       return LONG_MAX;
   }
 
