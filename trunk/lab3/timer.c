@@ -25,8 +25,8 @@ int timer_set_square(unsigned long timer, unsigned long freq) {
 
     sys_outb(TIMER_CTRL, TIMER_BIN | TIMER_SQR_WAVE | TIMER_LSB_MSB | (timer << 6));
 
-    sys_outb(TIMER_0, (TIMER_FREQ / freq) &  0xFF); /* LSB */
-    sys_outb(TIMER_0, (TIMER_FREQ / freq) >> 8); /* MSB */
+    sys_outb(timer + TIMER_0, (TIMER_FREQ / freq) &  0xFF); /* LSB */
+    sys_outb(timer + TIMER_0, (TIMER_FREQ / freq) >> 8); /* MSB */
 
     return 0;
 }
@@ -36,8 +36,8 @@ int timer_subscribe_int(void ) {
     timer0.data.bit = 0;
     timer0.data.hook_id = timer0.data.bit;
     
-    sys_irqsetpolicy(TIMER0_IRQ, IRQ_REENABLE, &(timer0.data.hook_id));
-    sys_irqenable(&(timer0.data.hook_id));
+    sys_irqsetpolicy(TIMER0_IRQ, IRQ_REENABLE, &timer0.data.hook_id);
+    sys_irqenable(&timer0.data.hook_id);
     
     timer0.counter = 0;
     
@@ -46,8 +46,8 @@ int timer_subscribe_int(void ) {
 
 int timer_unsubscribe_int() {
 
-    sys_irqdisable(&(timer0.data.hook_id));
-    sys_irqrmpolicy(&(timer0.data.hook_id));
+    sys_irqdisable(&timer0.data.hook_id);
+    sys_irqrmpolicy(&timer0.data.hook_id);
     
 	return 0;
 }
