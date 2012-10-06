@@ -46,16 +46,15 @@ int timer_set_square(unsigned long timer, unsigned long freq) {
 int timer_subscribe_int(void ) {
 
     timer0.data.bit = 0;
-    timer0.data.hook_id = timer0.data.bit;
 
     if (sys_irqsetpolicy(TIMER0_IRQ, IRQ_REENABLE, &timer0.data.hook_id) != 0) {
         printf("lab3/timer_subscribe_int: sys_irqsetpolicy failed\n");
-        return 1;
+        return -1;
     }
 
     if (sys_irqenable(&timer0.data.hook_id) != 0) {
         printf("lab3/timer_subscribe_int: sys_irqenable failed\n");
-        return 1;
+        return -1;
     }
 
     timer0.counter = 0;
@@ -100,7 +99,7 @@ int timer_test_int(unsigned long time) {
     int ipc_status;
     int r;
 
-    if (timer_subscribe_int() != 0) {
+    if (timer_subscribe_int() < 0) {
         printf("lab3/timer_test_int: timer_subscribe_int failed\n");
         return 1;
     }
