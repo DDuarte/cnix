@@ -46,6 +46,7 @@ int timer_set_square(unsigned long timer, unsigned long freq) {
 int timer_subscribe_int(void ) {
 
     timer0.data.bit = 0;
+    timer0.data.hook_id = timer0.data.bit;
 
     if (sys_irqsetpolicy(TIMER0_IRQ, IRQ_REENABLE, &timer0.data.hook_id) != 0) {
         printf("lab3/timer_subscribe_int: sys_irqsetpolicy failed\n");
