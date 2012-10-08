@@ -32,7 +32,7 @@ int speaker_test(unsigned long freq, unsigned long time) {
         return 1;
     }
 
-    if (timer_test_int(time * 60) != 0) { /* in seconds */
+    if (timer_test_int(time) != 0) { /* in seconds */
         printf("lab3/speaker_test: timer_test_int failed\n");
         return 1;
     }
