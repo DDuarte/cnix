@@ -81,7 +81,8 @@ int timer_unsubscribe_int() {
 void timer_int_handler() {
 
     timer0.counter++;
-    printf("lab3/timer_int_handler: counter %u\n", timer0.counter); /* debug code */
+    if (timer0.counter % 60 == 0)
+        printf("lab3/timer_int_handler: counter %u\n", timer0.counter / 60); /* debug code */
 }
 
 int timer_test_square(unsigned long freq) {
@@ -105,7 +106,7 @@ int timer_test_int(unsigned long time) {
         return 1;
     }
 
-    while (timer0.counter <= time) {
+    while (timer0.counter <= time * 60) {
         r = driver_receive(ANY, &msg, &ipc_status); /* Get a request message. */
         if (r != 0) {
             printf("lab3/timer_test_int: driver_receive failed with: %d", r);
