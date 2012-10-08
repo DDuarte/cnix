@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #include "timer.h"
+#include "speaker.h"
 
 static int proc_args(int argc, char *argv[]);
 static unsigned long parse_ulong(char *str, int base);
@@ -25,8 +26,9 @@ int main(int argc, char **argv) {
 static void print_usage(char *argv[]) {
   printf("Usage: one of the following:\n"
      "\t service run %s -args \"timer-test-square <freq>\" \n"
-     "\t service run %s -args \"timer-test-int <time>\" \n",
-     argv[0], argv[0]);
+     "\t service run %s -args \"timer-test-int <time>\" \n"
+     "\t service run %s -args \"speaker-test <freq> <time>\" \n",
+     argv[0], argv[0], argv[0]);
 }
 
 static int proc_args(int argc, char *argv[]) {
@@ -71,6 +73,26 @@ static int proc_args(int argc, char *argv[]) {
       }
 
       return ret;
+  } else if (strncmp(argv[1], "speaker-test", strlen("speaker-test")) == 0) {
+      if( argc != 4 ) {
+          printf("lab3: wrong no of arguments for test of speaker-test() \n");
+          return 1;
+      }
+      if( (freq = parse_ulong(argv[2], 10)) == ULONG_MAX )
+          return 1;
+
+      if( (time = parse_ulong(argv[3], 10)) == ULONG_MAX )
+          return 1;
+      printf("lab3: speaker_test(%d, %d)\n", freq, time);
+      
+      ret = speaker_test(freq, time);
+      if (ret != OK)
+      {
+        printf("lab3: speaker_test() return error code %d \n", ret);
+        return ret;
+      } else {
+        printf("lab3: speaker_test() return code %d \n", ret);
+      }
   } else {
       printf("lab3: non valid function \"%s\" to test\n", argv[1]);
       return 1;
