@@ -24,10 +24,13 @@ void keyboard_handler() {
 void timer_handler()
 {
     counter++;
-    if (counter == 60) int_stop_handler();
+    printf("%i\n", counter);
+    if (counter == 60)
+        int_stop_handler();
 }
 
-int test_scan(void) {
+int test_scan(void)
+{
     /*int bit = int_subscribe(KB_IRQ, (IRQ_REENABLE | IRQ_EXCLUSIVE), &keyboard_handler);
     int res = int_start_handler();
     int_unsubscribe(bit);
@@ -35,8 +38,9 @@ int test_scan(void) {
     int bit = int_subscribe(0, IRQ_REENABLE, &timer_handler);
     int res = int_start_handler();
     int_unsubscribe(bit);
+    return res;
 }
 
-int test_leds(unsigned short n, unsigned short *leds) {
+int test_leds(unsigned short n, unsigned short* leds) {
     /* To be completed */
 }
