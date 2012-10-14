@@ -21,6 +21,7 @@
 #define ERROR 0xFE
 #define REPEAT 0xFC
 
+#define TIMER0_IRQ 0x00
 #define KB_IRQ 0x01
 
 int write_kbc(unsigned long port, unsigned char byte);
