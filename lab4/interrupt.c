@@ -14,16 +14,30 @@ typedef struct
 
 #define NUM_OF_INTERRUPTS 32
 
-static interrupt int_data[NUM_OF_INTERRUPTS] = { { -1, NULL }, { -1, NULL },{ -1, NULL }, { -1, NULL }, { -1, NULL }, { -1, NULL }, { -1, NULL },{ -1, NULL }, { -1, NULL }, { -1, NULL }, { -1, NULL }, { -1, NULL }, { -1, NULL }, { -1, NULL }, { -1, NULL },{ -1, NULL }, { -1, NULL }, { -1, NULL }, { -1, NULL }, { -1, NULL }, { -1, NULL }, { -1, NULL }, { -1, NULL }, { -1, NULL }, { -1, NULL }, { -1, NULL }, { -1, NULL },{ -1, NULL }, { -1, NULL }, { -1, NULL }, { -1, NULL }, { -1, NULL } };
+static interrupt int_data[NUM_OF_INTERRUPTS];
 
-static int executing = 0;
+static int executing;
+
+void int_init(void)
+{
+    int i;
+
+    executing = 0;
+
+    for (i = 0; i < NUM_OF_INTERRUPTS; ++i)
+        _int_resetInterrupt(i);
+}
+
+
+void _int_resetInterrupt(int bit)
+{
+    int_data[bit].hook_id = -1;
+    int_data[bit].callback = NULL;
+}
 
 int int_subscribe(int irq_line, int policy, void (*callback)()) {
     int r, bit = 0;
 
-    for (r = 0; r < NUM_OF_INTERRUPTS; ++r)
-        printf("%d, %d", int_data[r].hook_id, int_data[r].callback);
-    
     while (int_data[bit].hook_id != -1 && bit < NUM_OF_INTERRUPTS) { bit++; }
     
     if (bit == NUM_OF_INTERRUPTS) {
@@ -44,16 +58,14 @@ int int_subscribe(int irq_line, int policy, void (*callback)()) {
         else
             printf("int_subscribe: sys_irqsetpolicy failed with error %d.\n", r);
 
-        int_data[bit].hook_id = -1;
-        int_data[bit].callback = NULL;
+        _int_resetInterrupt(bit);
         return -1;
     }
 
     r = sys_irqenable(&int_data[bit].hook_id);
     if (r != 0) {
         printf("int_subscribe: sys_irqenable failed with: %d\n", r);
-        int_data[bit].hook_id = -1;
-        int_data[bit].callback = NULL;
+        _int_resetInterrupt(bit);
         return -1;
     }
     
@@ -84,13 +96,12 @@ int int_unsubscribe(int bit)
             printf("int_unsubscribe: sys_irqrmpolicy failed with : %d\n", r);
     }
 
-    int_data[bit].hook_id = -1;
-    int_data[bit].callback = NULL;
+    _int_resetInterrupt(bit);
 
     return 0; /* never fails (but prints errors if interrupt was not enabled) */
 }
 
-static int int_handle() {
+static int int_handle(void) {
     
     message msg;
     int ipc_status;
@@ -113,13 +124,13 @@ static int int_handle() {
         if (is_ipc_notify(ipc_status)) {
             switch (_ENDPOINT_P(msg.m_source)) {
                 case HARDWARE:
+                {
                     for (i = 0; i < NUM_OF_INTERRUPTS; i++)
                         if (int_data[i].hook_id != -1 && int_data[r].callback != NULL)
                             if (bit_isset(msg.NOTIFY_ARG, i))
                                 int_data[i].callback();
                     break;
-                default:
-                    break;
+                }
             }
         }
     }
@@ -127,11 +138,11 @@ static int int_handle() {
     return 0;
 }
 
-int int_start_handler() {
+int int_start_handler(void) {
     executing = 1;
     return int_handle();
 }
 
-void int_stop_handler() {
+void int_stop_handler(void) {
     executing = 0;
 }
