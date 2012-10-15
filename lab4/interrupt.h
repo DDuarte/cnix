@@ -1,6 +1,8 @@
 #ifndef INTERRUPT_H_
 #define INTERRUPT_H_
 
+#define NUM_OF_INTERRUPTS 32
+
 void int_init(void);
 int  int_subscribe(int irq_line, int policy, void (*callback)());
 int  int_unsubscribe(int bit);

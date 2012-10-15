@@ -12,8 +12,6 @@ typedef struct
     void (*callback)();
 } interrupt;
 
-#define NUM_OF_INTERRUPTS 32
-
 static interrupt int_data[NUM_OF_INTERRUPTS];
 
 static int executing;
@@ -27,7 +25,6 @@ void int_init(void)
     for (i = 0; i < NUM_OF_INTERRUPTS; ++i)
         _int_resetInterrupt(i);
 }
-
 
 void _int_resetInterrupt(int bit)
 {

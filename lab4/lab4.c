@@ -24,7 +24,6 @@ int main(int argc, char **argv) {
   /* Initialize service */
   sef_startup();
 
-
   if ( argc == 1 ) {
       print_usage(argv);
   } else {

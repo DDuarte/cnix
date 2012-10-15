@@ -24,9 +24,8 @@ void keyboard_handler(void) {
         scancode = (scancode << 8) | read_kbc();
     else if (scancode == 0xE1) { /* 6 byte scancode (only pause) */
         int i;
-        for (i = 0; i < 5; ++i) {
+        for (i = 0; i < 5; ++i)
             scancode = (scancode << 8) | read_kbc();
-        }
         printf("Makecode: 0x%X\n", scancode);
         return;
     }
@@ -72,8 +71,15 @@ void timer_handler(void) {
         bitmask ^= BIT(leds_s[i]);
 
         printf("%d - %d\n", leds_s[i], bitmask);
-        write_kbc(DATA_REG, LEDS_SWITCH);
-        write_kbc(DATA_REG, bitmask);
+        if (write_kbc(DATA_REG, LEDS_SWITCH) != 0) {
+            printf("timer_handler: write_kbc (1) failed.\n");
+            return;
+        }
+        
+        if (write_kbc(DATA_REG, bitmask) != 0) {
+            printf("timer_handler: write_kbc (2) faield.\n");
+            return;
+        }
     }
 
     counter++;
