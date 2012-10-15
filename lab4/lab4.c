@@ -55,7 +55,7 @@ static int proc_args(int argc, char *argv[]) {
       printf("lab4: test_scan()\n");
 
       ret = test_scan();
-      printf("lab4: test_scan() called\n");
+
       if (ret != 0)
       {
         printf("lab4: test_scan() return error code %d \n", ret);
