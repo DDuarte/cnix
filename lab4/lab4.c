@@ -71,7 +71,7 @@ static int proc_args(int argc, char *argv[]) {
           return 1;
       }
       
-      num = argc - 3;
+      num = argc - 2;
       leds = (unsigned short*) malloc(num * sizeof(unsigned short));
       
       for (i = 0; i < num; i++) {
