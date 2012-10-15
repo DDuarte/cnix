@@ -21,7 +21,10 @@ int write_kbc(unsigned long port, unsigned char byte) {
             return 0;
         }
 
-        tickdelay(micros_to_ticks(DELAY_US));
+        if (tickdelay(micros_to_ticks(DELAY_US)) != 0) {
+            printf("write_kbc: tickdelay failed.\n");
+            return -1;
+        }
         counter++;
     }
     
@@ -53,7 +56,10 @@ int read_kbc(void) {
                 return -1;
         }
 
-        tickdelay(micros_to_ticks(DELAY_US));
+        if (tickdelay(micros_to_ticks(DELAY_US)) != 0) {
+            printf("read_kbc: tickdelay failed.\n");
+            return -1;
+        }
         counter++;
     }
     
