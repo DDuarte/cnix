@@ -78,6 +78,9 @@ static int proc_args(int argc, char *argv[]) {
         if ( (numTemp = parse_ulong(argv[i+2], 10)) == ULONG_MAX) {
             free(leds);
             return 1;
+        } else if (numTemp > 2) {
+            printf("lab4: there are only 3 leds (0/1/2)\n");
+            return 1;
         } else {
             leds[i] = (unsigned short)numTemp;
         }
