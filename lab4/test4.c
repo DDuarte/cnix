@@ -9,15 +9,28 @@
 #include <stdio.h>
 
 static int counter = 0;
-static unsigned short scancode;
+unsigned long long scancode;
 
 void keyboard_handler(void) {
 
     scancode = read_kbc();
-    
-    if (scancode == 0xE0)
+
+    if (scancode == -1) {
+        printf("Weirdcode: 0x%X\n", scancode);
+        return;
+    }
+
+    if (scancode == 0xE0) /* 2 byte scancode */
         scancode = (scancode << 8) | read_kbc();
-    
+    else if (scancode == 0xE1) { /* 6 byte scancode (only pause) */
+        int i;
+        for (i = 0; i < 5; ++i) {
+            scancode = (scancode << 8) | read_kbc();
+        }
+        printf("Makecode: 0x%X\n", scancode);
+        return;
+    }
+
     if (scancode & 0x80) /* MSB means release code */
         printf("Breakcode: 0x%X", scancode);
     else
@@ -48,7 +61,10 @@ void timer_handler(void) {
     int i;
 
     if (counter == (n_s * 60))
+    {
         int_stop_handler();
+        return;
+    }
 
     if (counter % 60 == 0) /* 1 second */
     {

@@ -10,7 +10,7 @@
 
     test_leds(18, a);
     test_scan();
-    
+
     return 0;
 }*/
 
@@ -23,7 +23,7 @@ int main(int argc, char **argv) {
 
   /* Initialize service */
   sef_startup();
-  
+
 
   if ( argc == 1 ) {
       print_usage(argv);
@@ -70,10 +70,10 @@ static int proc_args(int argc, char *argv[]) {
           printf("lab4: wrong no of arguments for test of test_leds() \n");
           return 1;
       }
-      
+
       num = argc - 2;
       leds = (unsigned short*) malloc(num * sizeof(unsigned short));
-      
+
       for (i = 0; i < num; i++) {
         unsigned long numTemp;
         if ( (numTemp = parse_ulong(argv[i+2], 10)) == ULONG_MAX) {
@@ -83,13 +83,13 @@ static int proc_args(int argc, char *argv[]) {
             leds[i] = (unsigned short)numTemp;
         }
       }
-          
+
       printf("lab4: test_leds(%d)\n", num);
-      
+
       ret = test_leds(num, leds);
-      
+
       free(leds);
-      
+
       if (ret != OK)
       {
         printf("lab4: test_leds() return error code %d \n", ret);
@@ -97,7 +97,7 @@ static int proc_args(int argc, char *argv[]) {
       } else {
         printf("lab4: test_leds() return code %d \n", ret);
       }
-      
+
       return ret;
   } else {
       printf("lab4: non valid function \"%s\" to test\n", argv[1]);
