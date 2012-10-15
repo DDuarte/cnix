@@ -6,6 +6,7 @@
 #include <minix/sysutil.h>
 #include <minix/syslib.h>
 #include <minix/drivers.h>
+#include <stdio.h>
 
 static int counter = 0;
 static unsigned char scancode;
@@ -36,23 +37,31 @@ int test_scan(void) {
 
 static unsigned short* leds_s;
 static unsigned short n_s;
-static unsigned short c_s;
+static int bitmask = 0;
 
 void timer_handler(void)
 {
-    if (c_s == n_s)
+    if (counter == (n_s * 60))
         int_stop_handler();
 
-    printf("%d\n", leds_s[c_s++]);
+    if (counter % 60 == 0)
+    {
+        bitmask ^= BIT(leds_s[counter / 60]);
+
+        printf("%d - %d\n", leds_s[counter / 60], bitmask);
+        write_kbc(DATA_REG, 0xED);
+        write_kbc(DATA_REG, bitmask);
+    }
+
+    counter++;
 }
 
 int test_leds(unsigned short n, unsigned short* leds) {
     
     timer_set_square(0, 60);
-    
+
     leds_s = leds;
     n_s = n;
-    c_s = 0;
 
     int_init();
     int bit = int_subscribe(TIMER0_IRQ, IRQ_REENABLE, &timer_handler);
