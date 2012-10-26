@@ -2,5 +2,5 @@
 
 int main(int argc, char *argv[]) {
     sef_startup();
-    return test_packet();
+    return test_config();
 }
