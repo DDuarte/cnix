@@ -3,10 +3,11 @@
 
 #define DELAY_US 20000
 
-#define TIMEOUT_COUNTER 1000
+#define TIMEOUT_COUNTER 3
 
 #define STAT_REG 0x64
 #define DATA_REG 0x60
+#define CMD_REG  0x64
 
 #define LEDS_SWITCH 0xED
 
@@ -22,7 +23,8 @@
 #define REPEAT 0xFC
 
 #define TIMER0_IRQ 0x00
-#define KB_IRQ 0x01
+#define KB_IRQ     0x01
+#define MOUSE_IRQ  0x0C
 
 int write_kbc(unsigned long port, unsigned char byte);
 int read_kbc(void);

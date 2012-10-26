@@ -1,3 +1,6 @@
+#include "test5.h"
+
 int main(int argc, char *argv[]) {
-    /* To be completed ... */
+    sef_startup();
+    return test_packet();
 }

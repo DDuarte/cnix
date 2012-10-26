@@ -28,6 +28,7 @@ int write_kbc(unsigned long port, unsigned char byte) {
         counter++;
     }
     
+    printf("write_kbc: time out.\n");
     return -1;
 }
 
