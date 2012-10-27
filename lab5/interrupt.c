@@ -23,10 +23,10 @@ void int_init(void)
     executing = 0;
 
     for (i = 0; i < NUM_OF_INTERRUPTS; ++i)
-        _int_resetInterrupt(i);
+        _int_reset_interrupt(i);
 }
 
-void _int_resetInterrupt(int bit)
+void _int_reset_interrupt(int bit)
 {
     int_data[bit].hook_id = -1;
     int_data[bit].callback = NULL;
@@ -55,14 +55,14 @@ int int_subscribe(int irq_line, int policy, void (*callback)()) {
         else
             printf("int_subscribe: sys_irqsetpolicy failed with error %d.\n", r);
 
-        _int_resetInterrupt(bit);
+        _int_reset_interrupt(bit);
         return -1;
     }
 
     r = sys_irqenable(&int_data[bit].hook_id);
     if (r != 0) {
         printf("int_subscribe: sys_irqenable failed with: %d\n", r);
-        _int_resetInterrupt(bit);
+        _int_reset_interrupt(bit);
         return -1;
     }
     
@@ -93,7 +93,7 @@ int int_unsubscribe(int bit)
             printf("int_unsubscribe: sys_irqrmpolicy failed with : %d\n", r);
     }
 
-    _int_resetInterrupt(bit);
+    _int_reset_interrupt(bit);
 
     return 0; /* never fails (but prints errors if interrupt was not enabled) */
 }

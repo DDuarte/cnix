@@ -28,5 +28,5 @@
 
 int write_kbc(unsigned long port, unsigned char byte);
 int read_kbc(void);
-    
+
 #endif /* KBC_H_ */
