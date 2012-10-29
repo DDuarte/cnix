@@ -24,9 +24,9 @@ static int num_interrupts = 0;
 static short timerDuration = 0;
 static long timerCounter = 0;
 
-typedef enum { IDLE, READY, DONE } mouse_state_t;
+typedef enum { MSI, MSR, MSD } mouse_state_t;
 
-static mouse_state_t mouseState = IDLE;
+static mouse_state_t mouseState = MSI;
 
 static void _mouseCallback(void) {
 
@@ -45,15 +45,15 @@ static void _mouseCallback(void) {
 
     if (counter == 0) {
         switch (mouseState) {
-            case IDLE:
+            case MSI:
                 if (bit_isset(packet[0], 0))
-                    mouseState = READY;
+                    mouseState = MSR;
                 break;
-            case READY:
-                if (!bit_isset(packet[0], 0), || !bit_isset(packet[0],1) || bit_isset(packet[0],2))
-                    mouseState = IDLE;
+            case MSR:
+                if (!bit_isset(packet[0], 0) || !bit_isset(packet[0],1) || bit_isset(packet[0],2))
+                    mouseState = MSI;
                 else
-                    mouseState = DONE;
+                    mouseState = MSD;
             break;
         }
     
@@ -75,7 +75,7 @@ static void _mouseCallback(void) {
 
 static void mouseCallback(void) {
     _mouseCallback();
-    if (mouseState == DONE)
+    if (mouseState == MSD)
         int_stop_handler();
 }
 
@@ -126,9 +126,7 @@ int test_packet(void) {
 
     int_unsubscribe(mouseInterrupt);
 
-    sys_inb(
-    
-    sys_inb(DATA_REG, &res1)
+    sys_inb(DATA_REG, &res1);
     
     return res;
 }
@@ -173,7 +171,7 @@ int test_asynch(unsigned short duration) {
     int_unsubscribe(mouseInterrupt);
     int_unsubscribe(timer0Interrupt);
 
-    sys_inb(DATA_REG, &res1)
+    sys_inb(DATA_REG, &res1);
     
     return res;
 }
@@ -233,7 +231,7 @@ int test_config(void) {
             byte[2]);
 
             
-    sys_inb(DATA_REG, &res1)
+    sys_inb(DATA_REG, &res1);
     
     return 0;
 }
