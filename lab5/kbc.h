@@ -21,6 +21,7 @@
 
 #define ERROR 0xFE
 #define REPEAT 0xFC
+#define ACK 0xFA
 
 #define TIMER0_IRQ 0x00
 #define KB_IRQ     0x01

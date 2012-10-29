@@ -11,15 +11,11 @@
 
 #define DEBUG
 
-void printfd(char* format, ...) {
 #ifdef DEBUG
-    va_list args;
-    va_start(args, format);
-    printf(format, args);
-    va_end(args);
+#define printfd printf
+#else
+#define printfd // 
 #endif
-    return;
-}
 
 static unsigned char packet[3] = { 0, 0, 0 };
 static short counter = 0;
@@ -111,6 +107,11 @@ int test_packet(void) {
     }
 
     printfd("DEBUG: acknowledge: 0x%X\n", res);
+    if (res != ACK) {
+        printf("read_kbc: did not receive acknowledge byte (0x%X), exiting\n.", res);
+        return 1;
+    }
+
     printfd("DEBUG: Subscribing interruption\n");
 
     mouseInterrupt = int_subscribe(MOUSE_IRQ, IRQ_REENABLE | IRQ_EXCLUSIVE, &mouseCallback);
