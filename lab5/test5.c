@@ -7,6 +7,19 @@
 #include <minix/bitmap.h>
 
 #include <stdio.h>
+#include <stdarg.h>
+
+#define DEBUG
+
+void printfd(char* format, ...) {
+#ifdef DEBUG
+    va_list args;
+    va_start(args, format);
+    printf(format, args);
+    va_end(args);
+#endif
+    return;
+}
 
 static unsigned char packet[3] = { 0, 0, 0 };
 static short counter = 0;
@@ -24,7 +37,6 @@ static void _mouseCallback(void) {
     packet[counter] = datatemp;
 
     if (counter == 0 && !bit_isset(packet[0], 3)) {
-        /*printf("DEBUG: bit(3) packet[0] = %d\n", !!bit_isset(packet[counter], 3));*/
         return;
     }
 
@@ -32,14 +44,17 @@ static void _mouseCallback(void) {
     num_interrupts++;
 
     if (counter == 0) {
-        printf("B1=0x%02X B2=0x%02X B3=0x%02X LB=%d MB=%d RB=%d XOV=%d YOV=%d X=%04d Y=%04d\n", packet[0], packet[1], packet[2],
-          bit_isset(packet[0], 0),
-          bit_isset(packet[0], 2),
-          bit_isset(packet[0], 1),
-          bit_isset(packet[0], 6),
-          bit_isset(packet[0], 7),
-          !bit_isset(packet[0], 4) ? packet[1] : - (packet[1] + 1),
-          !bit_isset(packet[0], 5) ? packet[2] : - (packet[2] + 1));
+        printf("B1=0x%02X B2=0x%02X B3=0x%02X LB=%d MB=%d RB=%d XOV=%d YOV=%d X=%04d Y=%04d\n",
+          packet[0], // B1
+          packet[1], // B2
+          packet[2], // B3
+          !!bit_isset(packet[0], 0), // LB
+          !!bit_isset(packet[0], 2), // MB
+          !!bit_isset(packet[0], 1), // RB
+          !!bit_isset(packet[0], 6), // XOV
+          !!bit_isset(packet[0], 7), // YOV
+          !bit_isset(packet[0], 4) ? packet[1] : (char)(packet[1]),  // X
+          !bit_isset(packet[0], 5) ? packet[2] : (char)(packet[2])); // Y
     }
 
 }
@@ -80,13 +95,13 @@ int test_packet(void) {
         return 1;
     }
 
-    printf("DEBUG: acknowledge: 0x%X\n", res);
-    printf("DEBUG: Subscribing interruption\n");
+    printfd("DEBUG: acknowledge: 0x%X\n", res);
+    printfd("DEBUG: Subscribing interruption\n");
 
     mouseInterrupt = int_subscribe(MOUSE_IRQ, IRQ_REENABLE | IRQ_EXCLUSIVE, &mouseCallback);
-    printf("DEBUG: mouseInterrupt: %d\n", mouseInterrupt);
+    printfd("DEBUG: mouseInterrupt: %d\n", mouseInterrupt);
 
-    printf("DEBUG: STARTING_HANDLER.\n");
+    printfd("DEBUG: STARTING_HANDLER.\n");
 
     res = int_start_handler();
 
@@ -118,17 +133,17 @@ int test_asynch(unsigned short duration) {
         return 1;
     }
 
-    printf("DEBUG: acknowledge: 0x%X\n", res);
+    printfd("DEBUG: acknowledge: 0x%X\n", res);
 
-    printf("DEBUG: Subscribing mouse interruption\n");
+    printfd("DEBUG: Subscribing mouse interruption\n");
     mouseInterrupt = int_subscribe(MOUSE_IRQ, IRQ_REENABLE | IRQ_EXCLUSIVE, &mouseAsynchCallback);
-    printf("DEBUG: mouseInterrupt: %d\n", mouseInterrupt);
+    printfd("DEBUG: mouseInterrupt: %d\n", mouseInterrupt);
 
-    printf("DEBUG: Subscribing Timer0 interruption\n");
+    printfd("DEBUG: Subscribing Timer0 interruption\n");
     timer0Interrupt = int_subscribe(TIMER0_IRQ, IRQ_REENABLE, &timer0Callback);
-    printf("DEBUG: timer0Interrupt: %d\n", timer0Interrupt);
+    printfd("DEBUG: timer0Interrupt: %d\n", timer0Interrupt);
 
-    printf("DEBUG: STARTING_HANDLER.\n");
+    printfd("DEBUG: STARTING_HANDLER.\n");
 
     res = int_start_handler();
 
@@ -173,7 +188,7 @@ int test_config(void) {
 
     byte[1] = res;
 
-    tickdelay(micros_to_ticks(50000));
+    tickdelay(micros_to_ticks(5000)); // waiting for the mouse
 
     if (sys_inb(DATA_REG, &res) != 0) {
         printf("test_config: sys_inb (2) failed.\n");
@@ -184,11 +199,11 @@ int test_config(void) {
 
     printf("Mode: %s\nEnable: %d\nScaling: %s\nLB: %d\nMB: %d\nRB: %d\nResolution: %d count/mm\nSample Rate: %d\n",
             bit_isset(byte[0], 6) ? "Remote" : "Stream",
-            bit_isset(byte[0], 5),
+            !!bit_isset(byte[0], 5),
             bit_isset(byte[0], 4) ? "1:1" : "2:1",
-            bit_isset(byte[0], 3),
-            bit_isset(byte[0], 2),
-            bit_isset(byte[0], 1),
+            !!bit_isset(byte[0], 3),
+            !!bit_isset(byte[0], 2),
+            !!bit_isset(byte[0], 1),
             0x1 << byte[1],
             byte[2]);
 
