@@ -28,6 +28,8 @@ static int num_interrupts = 0;
 static short timerDuration = 0;
 static long timerCounter = 0;
 
+static long mouseState = 0;
+
 static void _mouseCallback(void) {
 
     unsigned long datatemp;
@@ -43,6 +45,19 @@ static void _mouseCallback(void) {
     counter = (counter + 1) % 3;
     num_interrupts++;
 
+    switch (mouseState) {
+        case 0:
+            if (bit_isset(packet[0], 0))
+                mouseState = 1;
+            break;
+        case 1:
+            if (!bit_isset(packet[0], 0))
+                mouseState = 0;
+            else if(bit_isset(packet[0], 1))
+                mouseState = 2;
+            break;
+    }
+    
     if (counter == 0) {
         printf("B1=0x%02X B2=0x%02X B3=0x%02X LB=%d MB=%d RB=%d XOV=%d YOV=%d X=%04d Y=%04d\n",
           packet[0], // B1
@@ -61,7 +76,7 @@ static void _mouseCallback(void) {
 
 static void mouseCallback(void) {
     _mouseCallback();
-    if (num_interrupts == 300)
+    if (mouseState == 2)
         int_stop_handler();
 }
 
