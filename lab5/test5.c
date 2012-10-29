@@ -24,7 +24,9 @@ static int num_interrupts = 0;
 static short timerDuration = 0;
 static long timerCounter = 0;
 
-static long mouseState = 0;
+typedef enum { IDLE, READY, DONE } mouse_state_t;
+
+static mouse_state_t mouseState = IDLE;
 
 static void _mouseCallback(void) {
 
@@ -41,20 +43,21 @@ static void _mouseCallback(void) {
     counter = (counter + 1) % 3;
     num_interrupts++;
 
-    switch (mouseState) {
-        case 0:
-            if (bit_isset(packet[0], 0))
-                mouseState = 1;
-            break;
-        case 1:
-            if (!bit_isset(packet[0], 0))
-                mouseState = 0;
-            else if(bit_isset(packet[0], 1))
-                mouseState = 2;
-            break;
-    }
-    
     if (counter == 0) {
+        switch (mouseState) {
+            case IDLE:
+                if (bit_isset(packet[0], 0))
+                    mouseState = READY;
+                break;
+            case READY:
+                if (!bit_isset(packet[0], 0), || !bit_isset(packet[0],1) || bit_isset(packet[0],2))
+                    mouseState = IDLE;
+                else
+                    mouseState = DONE;
+            break;
+        }
+    
+
         printf("B1=0x%02X B2=0x%02X B3=0x%02X LB=%d MB=%d RB=%d XOV=%d YOV=%d X=%04d Y=%04d\n",
           packet[0], // B1
           packet[1], // B2
@@ -72,7 +75,7 @@ static void _mouseCallback(void) {
 
 static void mouseCallback(void) {
     _mouseCallback();
-    if (mouseState == 2)
+    if (mouseState == DONE)
         int_stop_handler();
 }
 
@@ -88,7 +91,7 @@ static void timer0Callback(void) {
 
 int test_packet(void) {
     int mouseInterrupt;
-    unsigned long res;
+    unsigned long res, res1;
 
     int_init();
 
@@ -123,12 +126,16 @@ int test_packet(void) {
 
     int_unsubscribe(mouseInterrupt);
 
+    sys_inb(
+    
+    sys_inb(DATA_REG, &res1)
+    
     return res;
 }
 
 int test_asynch(unsigned short duration) {
     int mouseInterrupt, timer0Interrupt;
-    unsigned long res;
+    unsigned long res, res1;
 
     timerDuration = duration;
 
@@ -166,11 +173,13 @@ int test_asynch(unsigned short duration) {
     int_unsubscribe(mouseInterrupt);
     int_unsubscribe(timer0Interrupt);
 
+    sys_inb(DATA_REG, &res1)
+    
     return res;
 }
 
 int test_config(void) {
-    unsigned long res;
+    unsigned long res, res1;
     unsigned char byte[3];
 
     if (write_kbc(CMD_REG, 0xD4) != 0) {/* Write Byte to Mouse */
@@ -223,5 +232,8 @@ int test_config(void) {
             0x1 << byte[1],
             byte[2]);
 
+            
+    sys_inb(DATA_REG, &res1)
+    
     return 0;
 }
