@@ -1,5 +1,6 @@
 #include "interrupt.h"
 #include "kbc.h"
+#include "mouse.h"
 
 #include <minix/sysutil.h>
 #include <minix/syslib.h>
@@ -24,15 +25,15 @@ static int num_interrupts = 0;
 static short timerDuration = 0;
 static long timerCounter = 0;
 
-typedef enum { MSI, MSR, MSD } mouse_state_t;
+typedef enum { MSI, MSR, MSD } mouse_state_m_t;
 
-static mouse_state_t mouseState = MSI;
+static mouse_state_m_t mouseState = MSI;
 
 static void _mouseCallback(void) {
 
     unsigned long datatemp;
-    if (sys_inb(DATA_REG, &datatemp) != 0) {
-        printf("read_kbc: sys_inb (2) failed.\n");
+    if (mouse_read(&datatemp) != 0) {
+        printf("read_kbc: mouse_read failed.\n");
     }
     packet[counter] = datatemp;
 
@@ -43,33 +44,43 @@ static void _mouseCallback(void) {
     counter = (counter + 1) % 3;
     num_interrupts++;
 
-    if (counter == 0) {
-        switch (mouseState) {
-            case MSI:
-                if (bit_isset(packet[0], 0))
-                    mouseState = MSR;
-                break;
-            case MSR:
-                if (!bit_isset(packet[0], 0) || !bit_isset(packet[0],1) || bit_isset(packet[0],2))
-                    mouseState = MSI;
-                else
-                    mouseState = MSD;
-            break;
-        }
-    
+    if (counter != 0)
+        return;
 
-        printf("B1=0x%02X B2=0x%02X B3=0x%02X LB=%d MB=%d RB=%d XOV=%d YOV=%d X=%04d Y=%04d\n",
-          packet[0], // B1
-          packet[1], // B2
-          packet[2], // B3
-          !!bit_isset(packet[0], 0), // LB
-          !!bit_isset(packet[0], 2), // MB
-          !!bit_isset(packet[0], 1), // RB
-          !!bit_isset(packet[0], 6), // XOV
-          !!bit_isset(packet[0], 7), // YOV
-          !bit_isset(packet[0], 4) ? packet[1] : (char)(packet[1]),  // X
-          !bit_isset(packet[0], 5) ? packet[2] : (char)(packet[2])); // Y
+    mouse_state.ldown = !!bit_isset(packet[0], 0); // LB
+    mouse_state.mdown = !!bit_isset(packet[0], 2); // MB
+    mouse_state.rdown = !!bit_isset(packet[0], 1); // RB
+    mouse_state.ovfx =  !!bit_isset(packet[0], 6); // XOV
+    mouse_state.ovfy =  !!bit_isset(packet[0], 7); // YOV
+    mouse_state.diffx = !bit_isset(packet[0], 4) ? packet[1] : (char)(packet[1]);  // X
+    mouse_state.diffy = !bit_isset(packet[0], 5) ? packet[2] : (char)(packet[2]); // Y
+
+
+    switch (mouseState) {
+    case MSI:
+        if (mouse_state.ldown)
+            mouseState = MSR;
+        break;
+    case MSR:
+        if (!mouse_state.ldown || !mouse_state.rdown || mouse_state.mdown)
+            mouseState = MSI;
+        else
+            mouseState = MSD;
+        break;
     }
+
+
+    printf("B1=0x%02X B2=0x%02X B3=0x%02X LB=%d MB=%d RB=%d XOV=%d YOV=%d X=%04d Y=%04d\n",
+        packet[0], // B1
+        packet[1], // B2
+        packet[2], // B3
+        mouse_state.ldown, // LB
+        mouse_state.mdown, // MB
+        mouse_state.rdown, // RB
+        mouse_state.ovfx, // XOV
+        mouse_state.ovfy, // YOV
+        mouse_state.diffx, // X
+        mouse_state.diffy); // Y
 
 }
 
@@ -95,23 +106,8 @@ int test_packet(void) {
 
     int_init();
 
-    if (write_kbc(CMD_REG, 0xD4) != 0) {/* Write Byte to Mouse */
-        printf("test_packet: write_kbc CMD failed.\n");
-        return 1;
-    }
-    if (write_kbc(DATA_REG, 0xF4) != 0) {/* Enable Sending Data Packets */
-        printf("test_packet: write_kbc DATA failed.\n");
-        return 1;
-    }
-
-    if (sys_inb(DATA_REG, &res) != 0) {
-        printf("read_kbc: sys_inb failed.\n");
-        return 1;
-    }
-
-    printfd("DEBUG: acknowledge: 0x%X\n", res);
-    if (res != ACK) {
-        printf("read_kbc: did not receive acknowledge byte (0x%X), exiting\n.", res);
+    if (mouse_enable_stream_mode() != 0) {
+        printf("test_packet: mouse_enable_stream_mode failed.\n");
         return 1;
     }
 
@@ -126,7 +122,7 @@ int test_packet(void) {
 
     int_unsubscribe(mouseInterrupt);
 
-    sys_inb(DATA_REG, &res1);
+    mouse_read(&res1); /* clear out buffer */
     
     return res;
 }
@@ -139,18 +135,13 @@ int test_asynch(unsigned short duration) {
 
     int_init();
 
-    if (write_kbc(CMD_REG, 0xD4) != 0) {/* Write Byte to Mouse */
-        printf("test_asynch: write_kbc CMD failed.\n");
+    if (mouse_write(ENABLE_SEND_PACKETS) != 0) {
+        printf("test_packet: mouse_write failed.\n");
         return 1;
     }
 
-    if (write_kbc(DATA_REG, 0xF4) != 0) {/* Enable Sending Data Packets */
-        printf("Test_asynch: write_kbc DATA failed.\n");
-        return 1;
-    }
-
-    if (sys_inb(DATA_REG, &res) != 0) {
-        printf("test_asynch: sys_inb failed.\n");
+    if (mouse_read(&res) != 0) {
+        printf("test_asynch: mouse_read failed.\n");
         return 1;
     }
 
@@ -171,7 +162,7 @@ int test_asynch(unsigned short duration) {
     int_unsubscribe(mouseInterrupt);
     int_unsubscribe(timer0Interrupt);
 
-    sys_inb(DATA_REG, &res1);
+    mouse_read(&res1); /* clear out buffer */
     
     return res;
 }
@@ -180,23 +171,18 @@ int test_config(void) {
     unsigned long res, res1;
     unsigned char byte[3];
 
-    if (write_kbc(CMD_REG, 0xD4) != 0) {/* Write Byte to Mouse */
-        printf("test_config: write_kbc CMD failed.\n");
+    if (mouse_write(GET_MOUSE_STATUS) != 0) {
+        printf("test_packet: mouse_write failed.\n");
         return 1;
     }
 
-    if (write_kbc(DATA_REG, 0xE9)) {/* Enable Sending Data Packets */
-        printf("test_config: write_kbc DATA failed.\n");
-        return 1;
-    }
-
-    if (sys_inb(DATA_REG, &res) != 0) {
-        printf("test_config: sys_inb failed.\n");
+    if (mouse_read(&res) != 0) {
+        printf("test_config: mouse_read failed.\n");
         return 1;
     }
 
     while (1) {
-        sys_inb(DATA_REG, &res);
+        mouse_read(&res);
         if (!bit_isset(res, 7) && !bit_isset(res, 3))
             break;
     }
@@ -204,7 +190,7 @@ int test_config(void) {
     byte[0] = res;
 
     while (1) {
-        sys_inb(DATA_REG, &res);
+        mouse_read(&res);
         if (res <= 3)
             break;
     }
@@ -213,25 +199,33 @@ int test_config(void) {
 
     tickdelay(micros_to_ticks(5000)); // waiting for the mouse
 
-    if (sys_inb(DATA_REG, &res) != 0) {
-        printf("test_config: sys_inb (2) failed.\n");
+    if (mouse_read(&res) != 0) {
+        printf("test_config: mouse_read (2) failed.\n");
         return 1;
     }
 
     byte[2] = res;
 
-    printf("Mode: %s\nEnable: %d\nScaling: %s\nLB: %d\nMB: %d\nRB: %d\nResolution: %d count/mm\nSample Rate: %d\n",
-            bit_isset(byte[0], 6) ? "Remote" : "Stream",
-            !!bit_isset(byte[0], 5),
-            bit_isset(byte[0], 4) ? "1:1" : "2:1",
-            !!bit_isset(byte[0], 3),
-            !!bit_isset(byte[0], 2),
-            !!bit_isset(byte[0], 1),
-            0x1 << byte[1],
-            byte[2]);
+    mouse_status.mode = bit_isset(byte[0], 6);
+    mouse_status.enable = !!bit_isset(byte[0], 5);
+    mouse_status.scaling = bit_isset(byte[0], 4);
+    mouse_status.ldown = !!bit_isset(byte[0], 3);
+    mouse_status.mdown = !!bit_isset(byte[0], 2);
+    mouse_status.rdown = !!bit_isset(byte[0], 1);
+    mouse_status.resolution = 0x1 << byte[1];
+    mouse_status.rate = byte[2];
 
-            
-    sys_inb(DATA_REG, &res1);
+    printf("Mode: %s\nEnable: %d\nScaling: %s\nLB: %d\nMB: %d\nRB: %d\nResolution: %d count/mm\nSample Rate: %d\n",
+        mouse_status.mode ? "Remote" : "Stream",
+        mouse_status.enable,
+        mouse_status.scaling ? "1:1" : "2:1",
+        mouse_status.ldown,
+        mouse_status.mdown,
+        mouse_status.rdown,
+        mouse_status.resolution,
+        mouse_status.rate);
+  
+    mouse_read(&res1); /* clear out buffer */
     
     return 0;
 }
