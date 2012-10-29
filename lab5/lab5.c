@@ -23,7 +23,7 @@ int main(int argc, char **argv) {
 static void print_usage(char *argv[]) {
     printf("Usage: one of the following:\n"
        "\t service run %s -args \"test-packet\" \n"
-       "\t service run %s -args \"test-asynch seconds\" \n"
+       "\t service run %s -args \"test-asynch <seconds>\" \n"
        "\t service run %s -args \"test-config\" \n",
        argv[0], argv[0], argv[0]);
 }
