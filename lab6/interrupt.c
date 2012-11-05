@@ -4,6 +4,7 @@
 #include <minix/syslib.h>
 #include <minix/com.h>
 #include <minix/bitmap.h>
+#include <minix/type.h>
 #include <stdio.h>
 
 typedef struct
@@ -142,4 +143,24 @@ int int_start_handler(void) {
 
 void int_stop_handler(void) {
     executing = 0;
+}
+
+void int_enable_system(void) {
+    endpoint_t ep;
+    char name[256];
+    int priv_f;
+
+    sys_whoami(&ep, name, 256, &priv_f);
+    sys_enable_iop(ep);
+    asm("STI"); /* enable interrupts */
+}
+
+void int_disable_system(void) {
+    endpoint_t ep;
+    char name[256];
+    int priv_f;
+
+    sys_whoami(&ep, name, 256, &priv_f);
+    sys_enable_iop(ep);
+    asm("CLI"); /* disable interrupts */
 }

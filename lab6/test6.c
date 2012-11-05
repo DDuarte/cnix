@@ -8,7 +8,7 @@
 #define DEBUG 1
 
 int test_conf(void) {
-    int res = 0;
+    int res;
     unsigned long regA, regB, regC, regD;
     
     sys_outb(RTC_ADDR_REG, RTC_REG_B);
@@ -18,7 +18,7 @@ int test_conf(void) {
         return res;
     }
     
-    printf("DEBUG: RTC_REG_B : 0x%02X\n", regB);
+    printfd("DEBUG: RTC_REG_B : 0x%02X\n", regB);
     
     printf("SET:%d PIE:%d AIE:%d UIE:%d SQWE:%d DM:%d MODE:%s DSE:%d\n",
         !!(bit_isset(regB, RTC_SET_BIT)),
@@ -37,7 +37,7 @@ int test_conf(void) {
         return res;
     }
     
-    printf("DEBUG: RTC_REG_A : 0x%02X\n", regA);
+    printfd("DEBUG: RTC_REG_A : 0x%02X\n", regA);
     
     printf("UIP:%d\n", !!(bit_isset(regA, RTC_UIP_BIT)));
     
@@ -48,7 +48,7 @@ int test_conf(void) {
         return res;
     }
     
-    printf("DEBUG: RTC_REG_C : 0x%02X\n", regC);
+    printfd("DEBUG: RTC_REG_C : 0x%02X\n", regC);
     
     printf("UF:%d AF:%d PF:%d IRQF:%d\n", 
         !!(bit_isset(regC, RTC_UF_BIT)),
@@ -71,8 +71,7 @@ int test_conf(void) {
 }
 
 int test_date(void) {
-	int res = 0;
-    unsigned long regA = 0;
+    int res;
     unsigned long seconds, minutes, hours, day_of_month, month, year, day_of_week,
                   seconds_alarm, minutes_alarm, hours_alarm;
     

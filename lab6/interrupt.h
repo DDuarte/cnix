@@ -10,4 +10,7 @@ int  int_start_handler(void);
 void int_stop_handler(void);
 void _int_reset_interrupt(int bit);
 
+void int_enable_system(void);
+void int_disable_system(void);
+
 #endif /* INTERRUPT_H_ */
