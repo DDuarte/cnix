@@ -40,3 +40,40 @@ unsigned long bcd_to_decimal(unsigned long bcd) {
 
     return n;
 }
+
+void rtc_wait_valid() {
+
+    unsigned long regA;
+    int res;
+
+    do {
+        sys_outb(RTC_ADDR_REG, RTC_REG_A);
+        res = sys_inb(RTC_DATA_REG, &regA);
+
+        if (res != 0) {
+            printf("rtc_wait_valid: sys_inb failed.\n");
+            return;
+        }
+
+    } while (bit_isset(regA, RTC_UIP_BIT));
+}
+
+int rtc_read_register(unsigned long reg, unsigned long* value) {
+
+    int res;
+
+    res = sys_outb(RTC_ADDR_REG, reg);
+    if (res != 0)
+    {
+        printf("rtc_read_register: sys_outb failed.\n");
+        return res;
+    }
+
+    res = sys_inb(RTC_DATA_REG, value);
+    if (res != 0) {
+        printf("rtc_read_register: sys_inb failed.\n");
+        return res;
+    }
+
+    return 0;
+}
