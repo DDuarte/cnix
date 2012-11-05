@@ -73,85 +73,26 @@ int test_conf(void) {
 int test_date(void) {
 	int res = 0;
     unsigned long regA = 0;
-    unsigned long seconds, minutes, hours, day_of_month, month, year, day_of_week;
+    unsigned long seconds, minutes, hours, day_of_month, month, year, day_of_week,
+                  seconds_alarm, minutes_alarm, hours_alarm;
     
-    do {
-        
-    sys_outb(RTC_ADDR_REG, RTC_REG_A);
-    res = sys_inb(RTC_DATA_REG, &regA);
-    if (res != 0) {
-        printf("test_date: sys_inb failed.\n");
-        return res;
-    }
-    
-    printf("DEBUG: RTC_REG_A : 0x%X\n", regA);
-    
-    } while (bit_isset(regA, RTC_UIP_BIT));
-    
-    sys_outb(RTC_ADDR_REG, RTC_SECONDS);
-    res = sys_inb(RTC_DATA_REG, &seconds);
-    if (res != 0) {
-        printf("test_date: sys_inb failed.\n");
-        return res;
-    }
-    
-    printf("DEBUG: RTC_SECONDS : 0x%X\n", seconds);
-    
-    sys_outb(RTC_ADDR_REG, RTC_MINUTES);
-    res = sys_inb(RTC_DATA_REG, &minutes);
-    if (res != 0) {
-        printf("test_date: sys_inb failed.\n");
-        return res;
-    }
-    
-    printf("DEBUG: RTC_MINUTES : 0x%X\n", minutes);
-    
-    sys_outb(RTC_ADDR_REG, RTC_HOURS);
-    res = sys_inb(RTC_DATA_REG, &hours);
-    if (res != 0) {
-        printf("test_date: sys_inb failed.\n");
-        return res;
-    }
-    
-    printf("DEBUG: RTC_HOURS : 0x%X\n", hours);
-    
-    sys_outb(RTC_ADDR_REG, RTC_DAY_OF_MONTH);
-    res = sys_inb(RTC_DATA_REG, &day_of_month);
-    if (res != 0) {
-        printf("test_date: sys_inb failed.\n");
-        return res;
-    }
-    
-    printf("DEBUG: RTC_DAY_OF_MONTH : 0x%X\n", day_of_month);
-    
-    sys_outb(RTC_ADDR_REG, RTC_MONTH);
-    res = sys_inb(RTC_DATA_REG, &month);
-    if (res != 0) {
-        printf("test_date: sys_inb failed.\n");
-        return res;
-    }
-    
-    printf("DEBUG: RTC_MONTH : 0x%X\n", month);
-    
-    sys_outb(RTC_ADDR_REG, RTC_YEAR);
-    res = sys_inb(RTC_DATA_REG, &year);
-    if (res != 0) {
-        printf("test_date: sys_inb failed.\n");
-        return res;
-    }
-    
-    printf("DEBUG: RTC_YEAR : 0x%X\n", year);
-    
-    sys_outb(RTC_ADDR_REG, RTC_DAY_OF_WEEK);
-    res = sys_inb(RTC_DATA_REG, &day_of_week);
-    if (res != 0) {
-        printf("test_date: sys_inb failed.\n");
-        return res;
-    }
-    
-    printf("DEBUG: RTC_DAY_OF_WEEK : 0x%X\n", day_of_week);
-    
-    
+    rtc_wait_valid();
+
+    rtc_read_register(RTC_SECONDS, &seconds);
+    rtc_read_register(RTC_MINUTES, &minutes);
+    rtc_read_register(RTC_HOURS, &hours);
+    rtc_read_register(RTC_DAY_OF_MONTH, &day_of_month);
+    rtc_read_register(RTC_MONTH, &month);
+    rtc_read_register(RTC_YEAR, &year);
+    rtc_read_register(RTC_DAY_OF_WEEK, &day_of_week);
+    rtc_read_register(RTC_SECONDS_ALARM, &seconds_alarm);
+    rtc_read_register(RTC_MINUTES_ALARM, &minutes_alarm);
+    rtc_read_register(RTC_HOURS_ALARM, &hours_alarm);
+
+    printf("%s %s %u %u:%u:%u UTC 20%u\n", month_s[bcd_to_decimal(month) - 1], week_day_s[day_of_week - 1], bcd_to_decimal(day_of_month),
+        bcd_to_decimal(hours), bcd_to_decimal(minutes), bcd_to_decimal(seconds), bcd_to_decimal(year));
+    printf("Alarm: %u:%u:%u\n", bcd_to_decimal(hours_alarm), bcd_to_decimal(minutes_alarm), bcd_to_decimal(seconds_alarm));
+
     return res;
 }
 
