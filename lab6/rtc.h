@@ -52,6 +52,8 @@
 
 #define RTC_VRT_BIT         7
 
+#define RTC_IRQ             0x8
+
 typedef struct
 {
     int Seconds;
@@ -69,6 +71,13 @@ static const char* month_s[12] = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Ju
 unsigned long bcd_to_decimal(unsigned long bcd);
 
 void rtc_wait_valid();
+
 int rtc_read_register(unsigned long reg, unsigned long* value);
+int rtc_write_register(unsigned long reg, unsigned long value);
+
+int rtc_subscribe_periodic(void(*callback)(void));
+
+long periodicHandler();
+
 
 #endif /* RTC_H__ */
