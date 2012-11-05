@@ -30,7 +30,7 @@ static void _rtcIntHandler(void) {
         _periodicHandler();
 }
 
-int rtc_subscribe_periodic(void(*callback)(void)) {
+int rtc_subscribe_periodic(void(*callback)()) {
     unsigned long regA, regB;
     
     
@@ -99,7 +99,7 @@ int rtc_read_register(unsigned long reg, unsigned long* value) {
         return res;
     }
 
-    res = sys_inb(RTC_DATA_REG, val_temp);
+    res = sys_inb(RTC_DATA_REG, &val_temp);
     if (res != 0) {
         printf("rtc_read_register: sys_inb failed.\n");
         return res;

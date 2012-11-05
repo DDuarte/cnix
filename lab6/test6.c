@@ -14,7 +14,9 @@ int test_conf(void) {
     rtc_read_register(RTC_REG_B, &regB);
     
     printfd("DEBUG: RTC_REG_B : 0x%02X\n", regB);
-    
+
+    /*printf("DEBUG: RTC_REG_B : 0x%02X\n", regB);*/
+
     printf("SET:%d PIE:%d AIE:%d UIE:%d SQWE:%d DM:%d MODE:%s DSE:%d\n",
         !!(bit_isset(regB, RTC_SET_BIT)),
         !!(bit_isset(regB, RTC_PIE_BIT)),
@@ -27,13 +29,13 @@ int test_conf(void) {
        
     rtc_read_register(RTC_REG_A, &regA);
     
-    printfd("DEBUG: RTC_REG_A : 0x%02X\n", regA);
+    /*printf("DEBUG: RTC_REG_A : 0x%02X\n", regA);*/
     
     printf("UIP:%d\n", !!(bit_isset(regA, RTC_UIP_BIT)));
     
     rtc_read_register(RTC_REG_C, &regC);
-    
-    printfd("DEBUG: RTC_REG_C : 0x%02X\n", regC);
+   
+    /*printf("DEBUG: RTC_REG_C : 0x%02X\n", regC);*/
     
     printf("UF:%d AF:%d PF:%d IRQF:%d\n", 
         !!(bit_isset(regC, RTC_UF_BIT)),
@@ -43,7 +45,7 @@ int test_conf(void) {
     
     rtc_read_register(RTC_REG_D, &regD);
     
-    printf("DEBUG: RTC_REG_D : 0x%02X\n", regD);
+    /*printf("DEBUG: RTC_REG_D : 0x%02X\n", regD);*/
     
     printf("VRT:%d\n", !!bit_isset(regD, RTC_VRT_BIT));
     
@@ -76,12 +78,55 @@ int test_date(void) {
     return res;
 }
 
-int test_int(unsigned long duration) { 
-	printf("test_int: Starting time interval with duration %u ms", duration);
+static unsigned long _counter = 0;
+static unsigned long _duration;
+
+void Handler() {
+    
+    
+    _counter = periodicHandler();
+    
+    if (_counter >= _duration)
+        int_stop_handler();
+}
+
+int test_int(unsigned long duration) {     
+    unsigned long regA, regB;
+    int_init();
+    
+    rtc_read_register(RTC_REG_C, NULL);
+    
+        
     
     
     
+    int_subscribe(RTC_IRQ, IRQ_REENABLE,Handler);
     
-    printf("test_int: Elapsed time interval of duration %u ms", duration);
+    rtc_read_register(RTC_REG_B, &regB);
+    
+    bit_set(regB, RTC_PIE_BIT);
+    bit_unset(regB, RTC_AIE_BIT);
+    bit_unset(regB, RTC_UIE_BIT);
+    
+    rtc_write_register(RTC_REG_B, regB);
+    
+    rtc_read_register(RTC_REG_A, &regA);
+    
+    bit_unset(regA, RTC_RS0_BIT);
+    bit_set(regA, RTC_RS1_BIT);
+    bit_set(regA, RTC_RS2_BIT);
+    bit_unset(regA, RTC_RS3_BIT);
+    
+    rtc_write_register(RTC_REG_A, regA);
+    
+    rtc_subscribe_periodic(Handler);
+	printf("test_int: Starting time interval with duration %u ms\n", duration);
+    _duration = duration;
+    
+    int_start_handler();
+    
+    printf("test_int: Elapsed time interval of duration %u ms\n", duration);
+    
+    return 0;
 }
 

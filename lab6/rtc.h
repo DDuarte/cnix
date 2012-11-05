@@ -65,8 +65,8 @@ typedef struct
     int HoursAlarm;
 } rtc_time_t;
 
-static const char* week_day_s[7] = { "Thu", "Fri", "Sat", "Sun", "Mon", "Tue", "Wed" };
-static const char* month_s[12] = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Set", "Oct", "Nov", "Dec" };
+static const char* week_day_s[] = { "Thu", "Fri", "Sat", "Sun", "Mon", "Tue", "Wed" };
+static const char* month_s[] = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Set", "Oct", "Nov", "Dec" };
 
 unsigned long bcd_to_decimal(unsigned long bcd);
 
