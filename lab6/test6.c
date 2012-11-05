@@ -29,7 +29,7 @@ int test_conf(void) {
         !!(bit_isset(regB, RTC_DM_BIT)),
         !!(bit_isset(regB, RTC_MODE_BIT)) ? "24" : "12",
         !!(bit_isset(regB, RTC_DSE_BIT)));
-    
+
     return res;
 }
 

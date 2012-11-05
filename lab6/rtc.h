@@ -63,4 +63,6 @@ typedef struct
     int HoursAlarm;
 } rtc_time_t;
 
+unsigned long bcd_to_decimal(unsigned long bcd);
+
 #endif /* RTC_H__ */
