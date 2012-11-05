@@ -1,5 +1,6 @@
 #include <minix/drivers.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "test6.h"
 
@@ -78,14 +79,14 @@ static int proc_args(int argc, char *argv[]) {
         if ((duration = parse_ulong(argv[2], 10)) == ULONG_MAX)
             return 1;
 
-        printf("lab6: test_int()\n");
+        printf("lab6: test_int(%u)\n", duration);
 
         ret = test_int(duration);
 
         if (ret != 0)
-            printf("lab6: test_int() return error code %d \n", ret);
+            printf("lab6: test_int(%u) return error code %d \n", duration, ret);
         else
-            printf("lab6: test_int() return code %d \n", ret);
+            printf("lab6: test_int(%u) return code %d \n", duration, ret);
 
         return ret;
 

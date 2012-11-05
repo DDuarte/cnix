@@ -63,6 +63,8 @@ typedef struct
     int HoursAlarm;
 } rtc_time_t;
 
+static const char* week_day[7] = { "Thursday", "Friday", "Saturday", "Sunday", "Monday", "Tuesday", "Wednesday" };
+
 unsigned long bcd_to_decimal(unsigned long bcd);
 
 #endif /* RTC_H__ */

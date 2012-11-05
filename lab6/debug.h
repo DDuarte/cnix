@@ -4,7 +4,7 @@
 #ifdef DEBUG
 #define printfd printf
 #else
-#define printfd //
+#define printfd(...)
 #endif
 
 #endif /* DEBUG_H__ */
