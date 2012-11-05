@@ -50,7 +50,7 @@
 
 /* RTC_REG_D BITS */
 
-#define RTC_VRM_BIT         7
+#define RTC_VRT_BIT         7
 
 typedef struct
 {

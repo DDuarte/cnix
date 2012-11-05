@@ -9,7 +9,7 @@
 
 int test_conf(void) {
     int res = 0;
-    unsigned long regB;
+    unsigned long regA, regB, regC, regD;
     
     sys_outb(RTC_ADDR_REG, RTC_REG_B);
     res = sys_inb(RTC_DATA_REG, &regB);
@@ -29,7 +29,44 @@ int test_conf(void) {
         !!(bit_isset(regB, RTC_DM_BIT)),
         !!(bit_isset(regB, RTC_MODE_BIT)) ? "24" : "12",
         !!(bit_isset(regB, RTC_DSE_BIT)));
-
+        
+    sys_outb(RTC_ADDR_REG, RTC_REG_A);
+    res = sys_inb(RTC_DATA_REG, &regA);
+    if (res != 0) {
+        printf("test_conf: sys_inb failed.\n");
+        return res;
+    }
+    
+    printf("DEBUG: RTC_REG_A : 0x%02X\n", regA);
+    
+    printf("UIP:%d\n", !!(bit_isset(regA, RTC_UIP_BIT)));
+    
+    sys_outb(RTC_ADDR_REG, RTC_REG_C);
+    res = sys_inb(RTC_DATA_REG, &regC);
+    if (res != 0) {
+        printf("test_conf: sys_inb failed.\n");
+        return res;
+    }
+    
+    printf("DEBUG: RTC_REG_C : 0x%02X\n", regC);
+    
+    printf("UF:%d AF:%d PF:%d IRQF:%d\n", 
+        !!(bit_isset(regC, RTC_UF_BIT)),
+        !!(bit_isset(regC, RTC_AF_BIT)),
+        !!(bit_isset(regC, RTC_PF_BIT)),
+        !!(bit_isset(regC, RTC_IRQF_BIT)));
+    
+    sys_outb(RTC_ADDR_REG, RTC_REG_D);
+    res = sys_inb(RTC_DATA_REG, &regD);
+    if (res != 0) {
+        printf("test_conf: sys_inb failed.\n");
+        return res;
+    }
+    
+    printf("DEBUG: RTC_REG_D : 0x%02X\n", regD);
+    
+    printf("VRT:%d\n", !!bit_isset(regD, RTC_VRT_BIT));
+    
     return res;
 }
 
@@ -119,6 +156,11 @@ int test_date(void) {
 }
 
 int test_int(unsigned long duration) { 
-	/* To be completed */
+	printf("test_int: Starting time interval with duration %u ms", duration);
+    
+    
+    
+    
+    printf("test_int: Elapsed time interval of duration %u ms", duration);
 }
 
