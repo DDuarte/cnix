@@ -10,13 +10,8 @@
 int test_conf(void) {
     int res;
     unsigned long regA, regB, regC, regD;
-    
-    sys_outb(RTC_ADDR_REG, RTC_REG_B);
-    res = sys_inb(RTC_DATA_REG, &regB);
-    if (res != 0) {
-        printf("test_conf: sys_inb failed.\n");
-        return res;
-    }
+
+    rtc_read_register(RTC_REG_B, &regB);
     
     printfd("DEBUG: RTC_REG_B : 0x%02X\n", regB);
     
@@ -29,24 +24,14 @@ int test_conf(void) {
         !!(bit_isset(regB, RTC_DM_BIT)),
         !!(bit_isset(regB, RTC_MODE_BIT)) ? "24" : "12",
         !!(bit_isset(regB, RTC_DSE_BIT)));
-        
-    sys_outb(RTC_ADDR_REG, RTC_REG_A);
-    res = sys_inb(RTC_DATA_REG, &regA);
-    if (res != 0) {
-        printf("test_conf: sys_inb failed.\n");
-        return res;
-    }
+       
+    rtc_read_register(RTC_REG_A, &regA);
     
     printfd("DEBUG: RTC_REG_A : 0x%02X\n", regA);
     
     printf("UIP:%d\n", !!(bit_isset(regA, RTC_UIP_BIT)));
     
-    sys_outb(RTC_ADDR_REG, RTC_REG_C);
-    res = sys_inb(RTC_DATA_REG, &regC);
-    if (res != 0) {
-        printf("test_conf: sys_inb failed.\n");
-        return res;
-    }
+    rtc_read_register(RTC_REG_C, &regC);
     
     printfd("DEBUG: RTC_REG_C : 0x%02X\n", regC);
     
@@ -56,12 +41,7 @@ int test_conf(void) {
         !!(bit_isset(regC, RTC_PF_BIT)),
         !!(bit_isset(regC, RTC_IRQF_BIT)));
     
-    sys_outb(RTC_ADDR_REG, RTC_REG_D);
-    res = sys_inb(RTC_DATA_REG, &regD);
-    if (res != 0) {
-        printf("test_conf: sys_inb failed.\n");
-        return res;
-    }
+    rtc_read_register(RTC_REG_D, &regD);
     
     printf("DEBUG: RTC_REG_D : 0x%02X\n", regD);
     
@@ -88,6 +68,7 @@ int test_date(void) {
     rtc_read_register(RTC_MINUTES_ALARM, &minutes_alarm);
     rtc_read_register(RTC_HOURS_ALARM, &hours_alarm);
 
+    /* format similar to unix date command */
     printf("%s %s %u %u:%u:%u UTC 20%u\n", month_s[bcd_to_decimal(month) - 1], week_day_s[day_of_week - 1], bcd_to_decimal(day_of_month),
         bcd_to_decimal(hours), bcd_to_decimal(minutes), bcd_to_decimal(seconds), bcd_to_decimal(year));
     printf("Alarm: %u:%u:%u\n", bcd_to_decimal(hours_alarm), bcd_to_decimal(minutes_alarm), bcd_to_decimal(seconds_alarm));
