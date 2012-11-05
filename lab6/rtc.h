@@ -6,8 +6,8 @@
 
 #define RTC_SECONDS         0x0
 #define RTC_SECONDS_ALARM   0x1
-#define RTC_MINUTS          0x2
-#define RTC_MINUTS_ALARM    0x3
+#define RTC_MINUTES          0x2
+#define RTC_MINUTES_ALARM    0x3
 #define RTC_HOURS           0x4
 #define RTC_HOURS_ALARM     0x5
 #define RTC_DAY_OF_WEEK     0x6

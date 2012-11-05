@@ -26,12 +26,13 @@ static void print_usage(char *argv[]) {
     printf("Usage: one of the following:\n"
        "\t service run %s -args \"test-conf\" \n"
        "\t service run %s -args \"test-date\" \n"
-       "\t service run %s -args \"test-period\" \n",
+       "\t service run %s -args \"test-int <duration>\" \n",
        argv[0], argv[0], argv[0]);
 }
 
 static int proc_args(int argc, char *argv[]) {
     int ret;
+    unsigned long duration;
 
     /* check the function to test: if the first characters match, accept it */
     if (strncmp(argv[1], "test-conf", strlen("test-conf")) == 0) {
@@ -52,7 +53,7 @@ static int proc_args(int argc, char *argv[]) {
         return ret;
 
     } else if (strncmp(argv[1], "test-date", strlen("test-date")) == 0) {
-        if (argc != 3) {
+        if (argc != 2) {
             printf("lab6: wrong no of arguments for test of test_date() \n");
             return 1;
         }
@@ -68,20 +69,23 @@ static int proc_args(int argc, char *argv[]) {
 
         return ret;
 
-    } else if (strncmp(argv[1], "test-period", strlen("test-period")) == 0) {
-        if(argc != 2) {
-            printf("lab6: wrong no of arguments for test_period() \n");
+    } else if (strncmp(argv[1], "test-int", strlen("test-int")) == 0) {
+        if(argc != 3) {
+            printf("lab6: wrong no of arguments for test_int() \n");
             return 1;
         }
+        
+        if ((duration = parse_ulong(argv[2], 10)) == ULONG_MAX)
+            return 1;
 
-        printf("lab6: test_period()\n");
+        printf("lab6: test_int()\n");
 
-        ret = test_period();
+        ret = test_int(duration);
 
         if (ret != 0)
-            printf("lab6: test_period() return error code %d \n", ret);
+            printf("lab6: test_int() return error code %d \n", ret);
         else
-            printf("lab6: test_period() return code %d \n", ret);
+            printf("lab6: test_int() return code %d \n", ret);
 
         return ret;
 

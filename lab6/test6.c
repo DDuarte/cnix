@@ -34,7 +34,7 @@ int test_date(void) {
 	/* To be completed */
 }
 
-int test_period(/* to be defined in class */) { 
+int test_int(unsigned long duration) { 
 	/* To be completed */
 }
 
