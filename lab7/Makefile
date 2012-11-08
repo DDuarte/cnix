@@ -4,8 +4,8 @@ COMPILER_TYPE= gnu
 
 CC=gcc
 
-PROG=	lab6
-SRCS=	lab6.c test6.c interrupt.c rtc.c rtc_asm.S
+PROG=	lab7
+SRCS=	lab7.c test7.c uart.c
 
 CCFLAGS= -Wall
 
