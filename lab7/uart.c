@@ -27,12 +27,13 @@ int uart_write(unsigned long port_addr, unsigned long offset, unsigned long valu
 }
 
 int uart_get_config(unsigned long port, uart_config_t* dest) {
-    unsigned long lcr;
+    unsigned long lcr, ier;
     ushort_t dl;
 
     if (!dest)
         return -1;
 
+    /* LCR */
     if (uart_read(port, UART_LCR_REG, &lcr) != 0) {
         return 1;
     }
@@ -45,6 +46,15 @@ int uart_get_config(unsigned long port, uart_config_t* dest) {
         return 1;
     }
     dest->bitRate = BitRate(dl.w.value);
+
+    /* IER */
+    if (uart_read(port, UART_IER_REG, &ier) != 0) {
+        return 1;
+    }
+
+    dest->receivedDataInterrupt = bit_isset(ier, IER_ENABLE_RECEIVED_DATA_INTERRUPT) != 0;
+    dest->transmitterEmptyInterrupt = bit_isset(ier, IER_ENABLE_TRANSMITTER_EMPTY_INTERRUPT) != 0;
+    dest->receiverLineStatusInterrupt = bit_isset(ier, IER_ENABLE_RECEIVER_LINE_STATUS_INTERRUPT) != 0;
 
     return 0;
 }

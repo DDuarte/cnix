@@ -87,6 +87,9 @@ typedef struct {
     unsigned long stop;
     unsigned long bits;
     unsigned long bitRate;
+    unsigned int receivedDataInterrupt : 1;
+    unsigned int transmitterEmptyInterrupt : 1;
+    unsigned int receiverLineStatusInterrupt : 1;
 } uart_config_t;
 
 typedef union {

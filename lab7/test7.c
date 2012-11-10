@@ -15,6 +15,11 @@ int test_conf(unsigned short base_addr) {
             conf.stop,
             conf.bitRate);
 
+    printf("Received Data Interrupt enabled: %u\nTransmitter Transmitter Empty Interrupt enabled: %u\nReceiver Line Status Interrupt enabled: %u\n",
+        conf.receivedDataInterrupt,
+        conf.transmitterEmptyInterrupt,
+        conf.receiverLineStatusInterrupt);
+
     return 0;
 }
 
