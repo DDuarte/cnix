@@ -12,9 +12,9 @@ static long parse_long(char *str, int base);
 static void print_usage(char *argv[]);
 
 int main(int argc, char **argv) {
-    
+
     sef_startup();
-    
+
     if (argc == 1)
         print_usage(argv);
     else
@@ -48,7 +48,7 @@ static int proc_args(int argc, char *argv[]) {
 
         if ((base_addr = parse_ulong(argv[2], 16)) == ULONG_MAX)
             return 1;
-        
+
         printf("lab7: test-conf(0x%X)\n", base_addr);
 
         ret = test_conf(base_addr);
@@ -65,23 +65,23 @@ static int proc_args(int argc, char *argv[]) {
             printf("lab7: wrong no of arguments for test of test_set() \n");
             return 1;
         }
-        
+
         if ((base_addr = parse_ulong(argv[2], 16)) == ULONG_MAX)
             return 1;
-            
+
         if ((bits = parse_ulong(argv[2], 16)) == ULONG_MAX)
             return 1;
-            
+
         if ((stop = parse_ulong(argv[2], 16)) == ULONG_MAX)
             return 1;
-            
+
         if ((parity = parse_long(argv[2], 16)) == ULONG_MAX)
             return 1;
-            
+
         if ((rate = parse_ulong(argv[2], 16)) == ULONG_MAX)
             return 1;
-        
-        
+
+
         printf("lab7: test_set(0x%X, 0x%X, 0x%X, 0x%X, 0x%X)\n", base_addr, bits, stop, parity, rate);
 
         ret = test_set(base_addr, bits, stop, parity, rate);
@@ -98,7 +98,7 @@ static int proc_args(int argc, char *argv[]) {
             printf("lab7: wrong no of arguments for test_poll() \n");
             return 1;
         }
-        
+
 
         printf("lab7: test_poll()\n");
 
@@ -116,7 +116,7 @@ static int proc_args(int argc, char *argv[]) {
             printf("lab7: wrong no of arguments for test_int() \n");
             return 1;
         }
-        
+
 
         printf("lab7: test_int()\n");
 
@@ -134,7 +134,7 @@ static int proc_args(int argc, char *argv[]) {
             printf("lab7: wrong no of arguments for test_fifo() \n");
             return 1;
         }
-        
+
 
         printf("lab7: test_fifo()\n");
 
@@ -142,7 +142,7 @@ static int proc_args(int argc, char *argv[]) {
 
         if (ret != 0)
             printf("lab7: test_fifo() return error code %d \n", ret);
-        else     
+        else
             printf("lab7: test_fifo() return code %d \n", ret);
 
         return ret;
