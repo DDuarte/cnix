@@ -1,8 +1,10 @@
 #include <minix/drivers.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "test7.h"
+#include "uart.h"
 
 #define DEBUG
 
@@ -25,8 +27,8 @@ int main(int argc, char **argv) {
 
 static void print_usage(char *argv[]) {
     printf("Usage: one of the following:\n"
-       "\t service run %s -args \"test-conf <base_addr>\" \n"
-       "\t service run %s -args \"test-set <base_addr> <bits> <stop> <parity> <rate>\" \n"
+       "\t service run %s -args \"test-conf COM1|COM2\" \n"
+       "\t service run %s -args \"test-set COM1|COM2 <bits> <stop> <parity> <rate>\" \n"
        "\t service run %s -args \"test-poll \" \n"
        "\t service run %s -args \"test-int \" \n"
        "\t service run %s -args \"test-fifo \" \n",
@@ -36,60 +38,73 @@ static void print_usage(char *argv[]) {
 static int proc_args(int argc, char *argv[]) {
     int ret;
     unsigned short base_addr;
-    unsigned long bits, stop, rate;
-	long parity;
 
     /* check the function to test: if the first characters match, accept it */
     if (strncmp(argv[1], "test-conf", strlen("test-conf")) == 0) {
+        char* com_str;
+
         if(argc != 3) {
             printf("lab7: wrong no of arguments for test of test-conf() \n");
             return 1;
         }
 
-        if ((base_addr = parse_ulong(argv[2], 16)) == ULONG_MAX)
+        com_str = argv[2];
+        if (strcmp(com_str, "COM1") != 0 && strcmp(com_str, "COM2") != 0) {
+            printf("lab7: first argument needs to be COM1 or COM2 \n");
             return 1;
+        }
+
+        base_addr = strcmp(com_str, "COM1") == 0 ? UART_COM1_ADDR : UART_COM2_ADDR;
 
         printf("lab7: test-conf(0x%X)\n", base_addr);
 
         ret = test_conf(base_addr);
 
         if (ret != 0)
-            printf("lab7: test-conf() return error code %d \n", ret);
+            printf("lab7: test-conf(0x%X) return error code %d \n", base_addr, ret);
         else
-            printf("lab7: test-conf() return code %d \n", ret);
+            printf("lab7: test-conf(0x%X) return code %d \n", base_addr, ret);
 
         return ret;
 
     } else if (strncmp(argv[1], "test-set", strlen("test-set")) == 0) {
+        char* com_str;
+        long parity;
+        unsigned long bits, stop, rate;
+
         if (argc != 7) {
             printf("lab7: wrong no of arguments for test of test_set() \n");
             return 1;
         }
 
-        if ((base_addr = parse_ulong(argv[2], 16)) == ULONG_MAX)
+        com_str = argv[2];
+        if (strcmp(com_str, "COM1") != 0 && strcmp(com_str, "COM2") != 0) {
+            printf("lab7: first argument needs to be COM1 or COM2 \n");
+            return 1;
+        }
+
+        base_addr = strcmp(com_str, "COM1") == 0 ? UART_COM1_ADDR : UART_COM2_ADDR;
+
+        if ((bits = parse_ulong(argv[3], 10)) == ULONG_MAX)
             return 1;
 
-        if ((bits = parse_ulong(argv[2], 16)) == ULONG_MAX)
+        if ((stop = parse_ulong(argv[4], 10)) == ULONG_MAX)
             return 1;
 
-        if ((stop = parse_ulong(argv[2], 16)) == ULONG_MAX)
+        if ((parity = parse_long(argv[5], 10)) == ULONG_MAX)
             return 1;
 
-        if ((parity = parse_long(argv[2], 16)) == ULONG_MAX)
+        if ((rate = parse_ulong(argv[6], 10)) == ULONG_MAX)
             return 1;
 
-        if ((rate = parse_ulong(argv[2], 16)) == ULONG_MAX)
-            return 1;
-
-
-        printf("lab7: test_set(0x%X, 0x%X, 0x%X, 0x%X, 0x%X)\n", base_addr, bits, stop, parity, rate);
+        printf("lab7: test_set(0x%X, %lu, %lu, %lu, %lu)\n", base_addr, bits, stop, parity, rate);
 
         ret = test_set(base_addr, bits, stop, parity, rate);
 
         if (ret != 0)
-            printf("lab7: test_set(0x%X, 0x%X, 0x%X, 0x%X, 0x%X) return error code %d \n", base_addr, bits, stop, parity, rate, ret);
+            printf("lab7: test_set(0x%X, %lu, %lu, %lu, %lu) return error code %d \n", base_addr, bits, stop, parity, rate, ret);
         else
-            printf("lab7: test_set(0x%X, 0x%X, 0x%X, 0x%X, 0x%X) return code %d \n", base_addr, bits, stop, parity, rate, ret);
+            printf("lab7: test_set(0x%X, %lu, %lu, %lu, %lu) return code %d \n", base_addr, bits, stop, parity, rate, ret);
 
         return ret;
 
@@ -98,7 +113,6 @@ static int proc_args(int argc, char *argv[]) {
             printf("lab7: wrong no of arguments for test_poll() \n");
             return 1;
         }
-
 
         printf("lab7: test_poll()\n");
 
@@ -117,7 +131,6 @@ static int proc_args(int argc, char *argv[]) {
             return 1;
         }
 
-
         printf("lab7: test_int()\n");
 
         ret = test_int();
@@ -134,7 +147,6 @@ static int proc_args(int argc, char *argv[]) {
             printf("lab7: wrong no of arguments for test_fifo() \n");
             return 1;
         }
-
 
         printf("lab7: test_fifo()\n");
 

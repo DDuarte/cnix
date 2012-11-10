@@ -1,6 +1,7 @@
 #ifndef __UART_H__
 #define __UART_H__
 
+/* UART REGS */
 #define UART_RBR_REG 0
 #define UART_THR_REG 0
 #define UART_IER_REG 1
@@ -11,6 +12,7 @@
 #define UART_DL_LSB 0
 #define UART_DL_MSB 1
 
+/* UART COMs */
 #define UART_COM1_ADDR 0x3F8
 #define UART_COM2_ADDR 0x2F8
 #define UART_COM1_IRQ 0x4
@@ -26,9 +28,7 @@
 #define LCR_SET_BREAK_ENABLE_BIT 6
 #define LCR_DLAB_BIT 7
 
-
 /* LSR BITS */
-
 #define LSR_RECEIVER_READY_BIT 0
 #define LSR_OVERRUN_ERROR_BIT 1
 #define LSR_PARITY_ERROR_BIT 2
@@ -37,16 +37,13 @@
 #define LSR_TRANSMITTER_HOLDING_REGISTER_EMPTY_BIT 5
 #define LSR_TRANSMITTER_EMPTY_BIT 6
 
-
- /* IER BITS */
-
+/* IER BITS */
 #define IER_ENABLE_RECEIVED_DATA_INTERRUPT 0
 #define IER_ENABLE_TRANSMITTER_EMPTY_INTERRUPT 1
 #define IER_ENABLE_RECEIVER_LINE_STATUS_INTERRUPT 2
 #define IER_ENABLE_MODEM_STATUS_INTERRUPT 3
 
 /* IIR BITS */
-
 #define IIR_INTERRUPT_STATUS_BIT 0
 #define IIR_INTERRUPT_ORIGIN0_BIT 1
 #define IIR_INTERRUPT_ORIGIN1_BIT 2
@@ -56,7 +53,6 @@
 #define IIR_FIFO_STATUS1_BIT 7
 
 /* FCR BITS */
-
 #define FCR_ENABLE_FIFO_BIT 0
 #define FCR_CLEAR_RECEIVE_FIFO_BIT 1
 #define FCR_CLEAR_TRANSMIT_FIFO_BIT 2
@@ -65,13 +61,16 @@
 #define FCR_FIFO_INTERRUPT_TRIGGER_LEVEL0_BIT 6
 #define FCR_FIFO_INTERRUPT_TRIGGER_LEVEL1_BIT 7
 
+
 #define FREQ 115200
 #define BitRate(DL) (FREQ)/(DL)
 #define DL(bitRate) (FREQ)/(bitRate)
 
-#define NumBitsPerChar(lcr) (((lcr) & 0x3) + 5)
-#define NumStopBits(lcr) (((lcr) & 0x4) + 1)
-#define Parity(lcr) (((lcr) & 0x38) >> 3)
+#define UART_LCR_SET_BITS_PER_CHAR(lcr, bits)
+
+#define UART_LCR_GET_BITS_PER_CHAR(lcr) (((lcr) & 0x3) + 5)
+#define UART_LCR_GET_STOP_BITS(lcr) (((lcr) >> 2) + 1)
+#define UART_LCR_GET_PARITY(lcr) (((lcr) & 0x38) >> 3)
 
 typedef enum {
     UART_NO_PARITY = 0,
@@ -101,7 +100,12 @@ typedef union {
 
 int uart_read(unsigned long port_addr, unsigned long offset, unsigned long* value);
 int uart_write(unsigned long port_addr, unsigned long offset, unsigned long value);
-int getConfig(unsigned long port, uart_config_t* dest);
+int uart_get_config(unsigned long port, uart_config_t* dest);
+int uart_set_config(unsigned long port, uart_config_t src);
 
+int uart_set_dlab(unsigned long port);
+int uart_unset_dlab(unsigned long port);
+int uart_get_divisor_latch(unsigned long port, ushort_t* dl);
+int uart_set_divisor_latch(unsigned long port, ushort_t dl);
 
 #endif
