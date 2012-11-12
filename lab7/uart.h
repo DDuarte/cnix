@@ -69,7 +69,7 @@
 #define UART_LCR_SET_BITS_PER_CHAR(lcr, bits)
 
 #define UART_LCR_GET_BITS_PER_CHAR(lcr) (((lcr) & 0x3) + 5)
-#define UART_LCR_GET_STOP_BITS(lcr) (((lcr) >> 2) + 1)
+#define UART_LCR_GET_STOP_BITS(lcr) ((((lcr) & 0x4) >> 2) + 1)
 #define UART_LCR_GET_PARITY(lcr) (((lcr) & 0x38) >> 3)
 
 typedef enum {

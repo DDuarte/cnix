@@ -46,7 +46,7 @@ void wait_to_be_ready(unsigned short base_addr) {
     unsigned long lsr;
     do {
         uart_read(base_addr, UART_LSR_REG, &lsr);
-        tickdelay(20);
+        tickdelay(2);
     } while(!bit_isset(lsr, LSR_TRANSMITTER_HOLDING_REGISTER_EMPTY_BIT));
 }
 

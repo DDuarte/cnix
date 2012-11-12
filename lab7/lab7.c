@@ -150,7 +150,7 @@ static int proc_args(int argc, char *argv[]) {
         if ((stop = parse_ulong(argv[5], 10)) == ULONG_MAX)
             return 1;
 
-        parity_str = argv[5];
+        parity_str = argv[6];
         if (strcmp(parity_str, "even") == 0)
             parity = 0;
         else if (strcmp(parity_str, "odd") == 0)
@@ -222,7 +222,7 @@ static int proc_args(int argc, char *argv[]) {
         if ((stop = parse_ulong(argv[5], 10)) == ULONG_MAX)
             return 1;
 
-        parity_str = argv[5];
+        parity_str = argv[6];
         if (strcmp(parity_str, "even") == 0)
             parity = 0;
         else if (strcmp(parity_str, "odd") == 0)
