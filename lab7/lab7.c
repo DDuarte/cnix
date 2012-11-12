@@ -29,9 +29,8 @@ static void print_usage(char *argv[]) {
     printf("Usage: one of the following:\n"
        "\t service run %s -args \"test-conf COM1|COM2\" \n"
        "\t service run %s -args \"test-set COM1|COM2 <bits> <stop> <parity> <rate>\" \n"
-       "\t service run %s -args \"test-poll \" \n"
-       "\t service run %s -args \"test-int \" \n"
-       "\t service run %s -args \"test-fifo \" \n",
+       "\t service run %s -args \"test-poll COM1|COM2 tx|rx <bits> <stop> <parity> <rate> <string>*\" \n"
+       "\t service run %s -args \"test-fifo COM1|COM2 tx|rx <bits> <stop> <parity> <rate> <string>*\" \n",
        argv[0], argv[0], argv[0], argv[0], argv[0]);
 }
 
@@ -109,53 +108,128 @@ static int proc_args(int argc, char *argv[]) {
         return ret;
 
     } else if (strncmp(argv[1], "test-poll", strlen("test-poll")) == 0) {
-        if(argc != 2) {
+        char* com_str, *tx_str;
+        long parity;
+        unsigned long bits, stop, rate;
+        int stringc;
+        char** strings;
+        unsigned char tx;
+
+        if (argc < 8) {
             printf("lab7: wrong no of arguments for test_poll() \n");
             return 1;
         }
 
-        printf("lab7: test_poll()\n");
-
-        ret = test_poll();
-
-        if (ret != 0)
-            printf("lab7: test_poll() return error code %d \n", ret);
-        else
-            printf("lab7: test_poll() return code %d \n", ret);
-
-        return ret;
-
-    } else if (strncmp(argv[1], "test-int", strlen("test-int")) == 0) {
-        if(argc != 2) {
-            printf("lab7: wrong no of arguments for test_int() \n");
+        com_str = argv[2];
+        if (strcmp(com_str, "COM1") != 0 && strcmp(com_str, "COM2") != 0) {
+            printf("lab7: first argument needs to be COM1 or COM2 \n");
             return 1;
         }
 
-        printf("lab7: test_int()\n");
+        base_addr = strcmp(com_str, "COM1") == 0 ? UART_COM1_ADDR : UART_COM2_ADDR;
 
-        ret = test_int();
+        tx_str = argv[3];
+        if (strcmp(tx_str, "tx") != 0 && strcmp(tx_str, "rx") != 0) {
+            printf("lab7: second argument needs to be tx or rx \n");
+            return 1;
+        }
+
+        tx = strcmp(tx_str, "tx") == 0 ? TRUE : FALSE;
+
+        if ((bits = parse_ulong(argv[4], 10)) == ULONG_MAX)
+            return 1;
+
+        if ((stop = parse_ulong(argv[5], 10)) == ULONG_MAX)
+            return 1;
+
+        if ((parity = parse_long(argv[6], 10)) == ULONG_MAX)
+            return 1;
+
+        if ((rate = parse_ulong(argv[7], 10)) == ULONG_MAX)
+            return 1;
+
+        stringc = argc - 8;
+        strings = NULL;
+        if (stringc) {
+            int i;
+            strings = malloc(sizeof(char*) * stringc);
+            for (i = 0; i < stringc; ++i) {
+                strings[i] = malloc(sizeof(char) * strlen(argv[8 + i]));
+                strcpy(strings[i], argv[8 + i]);
+            }
+        }
+
+        printf("lab7: test_poll(0x%X, %d, %lu, %lu, %lu, %lu, %d, char**)\n", base_addr, tx, bits, stop, parity, rate, stringc);
+
+        ret = test_poll(base_addr, tx, bits, stop, parity, rate, stringc, strings);
 
         if (ret != 0)
-            printf("lab7: test_int() return error code %d \n", ret);
+            printf("lab7: test_poll(0x%X, %d, %lu, %lu, %lu, %lu, %d, char**) return error code %d \n", base_addr, tx, bits, stop, parity, rate, stringc, ret);
         else
-            printf("lab7: test_int() return code %d \n", ret);
+            printf("lab7: test_poll(0x%X, %d, %lu, %lu, %lu, %lu, %d, char**) return code %d \n", base_addr, tx, bits, stop, parity, rate, stringc, ret);
 
         return ret;
 
     } else if (strncmp(argv[1], "test-fifo", strlen("test-fifo")) == 0) {
-        if(argc != 2) {
+        char* com_str, *tx_str;
+        long parity;
+        unsigned long bits, stop, rate;
+        int stringc;
+        char** strings;
+        unsigned char tx;
+
+        if (argc < 8) {
             printf("lab7: wrong no of arguments for test_fifo() \n");
             return 1;
         }
 
-        printf("lab7: test_fifo()\n");
+        com_str = argv[2];
+        if (strcmp(com_str, "COM1") != 0 && strcmp(com_str, "COM2") != 0) {
+            printf("lab7: first argument needs to be COM1 or COM2 \n");
+            return 1;
+        }
 
-        ret = test_fifo();
+        base_addr = strcmp(com_str, "COM1") == 0 ? UART_COM1_ADDR : UART_COM2_ADDR;
+
+        tx_str = argv[3];
+        if (strcmp(tx_str, "tx") != 0 && strcmp(tx_str, "rx") != 0) {
+            printf("lab7: second argument needs to be tx or rx \n");
+            return 1;
+        }
+
+        tx = strcmp(tx_str, "tx") == 0 ? TRUE : FALSE;
+
+        if ((bits = parse_ulong(argv[4], 10)) == ULONG_MAX)
+            return 1;
+
+        if ((stop = parse_ulong(argv[5], 10)) == ULONG_MAX)
+            return 1;
+
+        if ((parity = parse_long(argv[6], 10)) == ULONG_MAX)
+            return 1;
+
+        if ((rate = parse_ulong(argv[7], 10)) == ULONG_MAX)
+            return 1;
+
+        stringc = argc - 8;
+        strings = NULL;
+        if (stringc) {
+            int i;
+            strings = malloc(sizeof(char*) * stringc);
+            for (i = 0; i < stringc; ++i) {
+                strings[i] = malloc(sizeof(char) * strlen(argv[8 + i]));
+                strcpy(strings[i], argv[8 + i]);
+            }
+        }
+
+        printf("lab7: test_fifo(0x%X, %d, %lu, %lu, %lu, %lu, %d, char**)\n", base_addr, tx, bits, stop, parity, rate, stringc);
+
+        ret = test_fifo(base_addr, tx, bits, stop, parity, rate, stringc, strings);
 
         if (ret != 0)
-            printf("lab7: test_fifo() return error code %d \n", ret);
+            printf("lab7: test_fifo(0x%X, %d, %lu, %lu, %lu, %lu, %d, char**) return error code %d \n", base_addr, tx, bits, stop, parity, rate, stringc, ret);
         else
-            printf("lab7: test_fifo() return code %d \n", ret);
+            printf("lab7: test_fifo(0x%X, %d, %lu, %lu, %lu, %lu, %d, char**) return code %d \n", base_addr, tx, bits, stop, parity, rate, stringc, ret);
 
         return ret;
 
