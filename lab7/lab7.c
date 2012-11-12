@@ -176,14 +176,14 @@ static int proc_args(int argc, char *argv[]) {
             }
         }
 
-        printf("lab7: test_poll(0x%X, %d, %lu, %lu, %lu, %lu, %d, char**)\n", base_addr, tx, bits, stop, parity, rate, stringc);
+        printf("lab7: test_poll(0x%X, %d, %lu, %lu, %d, %lu, %d, char**)\n", base_addr, tx, bits, stop, parity, rate, stringc);
 
         ret = test_poll(base_addr, tx, bits, stop, parity, rate, stringc, strings);
 
         if (ret != 0)
-            printf("lab7: test_poll(0x%X, %d, %lu, %lu, %lu, %lu, %d, char**) return error code %d \n", base_addr, tx, bits, stop, parity, rate, stringc, ret);
+            printf("lab7: test_poll(0x%X, %d, %lu, %lu, %d, %lu, %d, char**) return error code %d \n", base_addr, tx, bits, stop, parity, rate, stringc, ret);
         else
-            printf("lab7: test_poll(0x%X, %d, %lu, %lu, %lu, %lu, %d, char**) return code %d \n", base_addr, tx, bits, stop, parity, rate, stringc, ret);
+            printf("lab7: test_poll(0x%X, %d, %lu, %lu, %d, %lu, %d, char**) return code %d \n", base_addr, tx, bits, stop, parity, rate, stringc, ret);
 
         return ret;
 
@@ -248,14 +248,14 @@ static int proc_args(int argc, char *argv[]) {
             }
         }
 
-        printf("lab7: test_fifo(0x%X, %d, %lu, %lu, %lu, %lu, %d, char**)\n", base_addr, tx, bits, stop, parity, rate, stringc);
+        printf("lab7: test_fifo(0x%X, %d, %lu, %lu, %d, %lu, %d, char**)\n", base_addr, tx, bits, stop, parity, rate, stringc);
 
         ret = test_fifo(base_addr, tx, bits, stop, parity, rate, stringc, strings);
 
         if (ret != 0)
-            printf("lab7: test_fifo(0x%X, %d, %lu, %lu, %lu, %lu, %d, char**) return error code %d \n", base_addr, tx, bits, stop, parity, rate, stringc, ret);
+            printf("lab7: test_fifo(0x%X, %d, %lu, %lu, %d, %lu, %d, char**) return error code %d \n", base_addr, tx, bits, stop, parity, rate, stringc, ret);
         else
-            printf("lab7: test_fifo(0x%X, %d, %lu, %lu, %lu, %lu, %d, char**) return code %d \n", base_addr, tx, bits, stop, parity, rate, stringc, ret);
+            printf("lab7: test_fifo(0x%X, %d, %lu, %lu, %d, %lu, %d, char**) return code %d \n", base_addr, tx, bits, stop, parity, rate, stringc, ret);
 
         return ret;
 
