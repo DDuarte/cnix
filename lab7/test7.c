@@ -105,6 +105,51 @@ int test_poll(unsigned short base_addr, unsigned char tx, unsigned long bits, un
 }
 
 int test_fifo(unsigned short base_addr, unsigned char tx, unsigned long bits, unsigned long stop, long parity, unsigned long rate, int stringc, char *strings[]) {
-    printf("DEBUG: NOT IMPLEMENTED.\n");
-    return 1;
+    static uart_parity_t parities[] = { UART_NO_PARITY, UART_EVEN_PARITY, UART_ODD_PARITY };
+    uart_config_t prevConfig, newConfig;
+    unsigned long lsr, chr, previer, prevfcr;
+    unsigned int i, j, strLength;
+
+    uart_get_config(base_addr, &prevConfig);
+    newConfig = prevConfig;
+
+    newConfig.bits = bits;
+    newConfig.stop = stop;
+    newConfig.bitRate = rate;
+    newConfig.parity = parities[parity-1];
+
+
+    uart_read(base_addr, UART_IER_REG, &previer);
+    uart_write(base_addr, UART_IER_REG, 0);
+
+    uart_read(base_addr, UART_FCR_REG, &prevfcr);
+    uart_write(base_addr, UART_FCR_REG, prevfcr | (FCR_ENABLE_FIFO_BIT | FCR_CLEAR_RECEIVE_FIFO_BIT | FCR_CLEAR_TRANSMIT_FIFO_BIT));
+    uart_set_config(base_addr, newConfig);
+
+
+    if (tx == 0) { /* reciving */
+        tickdelay(micros_to_ticks(1000000));
+        do {
+            printf("%c", (char)chr);
+            if ((char)chr == ' ') tickdelay(micros_to_ticks(1000000));
+        } while((char)chr != '.');
+        printf("\n");
+
+    } else {
+        for (i = 0; i < stringc; i++) {
+            strLength = strlen(strings[i]);
+            for (j = 0; j < strLength; j++) {
+                uart_write(base_addr, UART_RBR_REG, (unsigned long)strings[i][j]);
+            }
+            wait_to_be_ready(base_addr);
+            uart_write(base_addr, UART_RBR_REG, (unsigned long)' ');
+        }
+        uart_write(base_addr, UART_RBR_REG, (unsigned long)'.');
+    }
+
+    uart_write(base_addr, UART_IER_REG, previer);
+    uart_write(base_addr, UART_FCR_REG, prevfcr);
+    uart_set_config(base_addr, prevConfig);
+
+    return 0;
 }
