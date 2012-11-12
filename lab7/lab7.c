@@ -10,7 +10,6 @@
 
 static int proc_args(int argc, char *argv[]);
 static unsigned long parse_ulong(char *str, int base);
-static long parse_long(char *str, int base);
 static void print_usage(char *argv[]);
 
 int main(int argc, char **argv) {
@@ -28,10 +27,10 @@ int main(int argc, char **argv) {
 static void print_usage(char *argv[]) {
     printf("Usage: one of the following:\n"
        "\t service run %s -args \"test-conf COM1|COM2\" \n"
-       "\t service run %s -args \"test-set COM1|COM2 <bits> <stop> <parity> <rate>\" \n"
-       "\t service run %s -args \"test-poll COM1|COM2 tx|rx <bits> <stop> <parity> <rate> <string>*\" \n"
-       "\t service run %s -args \"test-fifo COM1|COM2 tx|rx <bits> <stop> <parity> <rate> <string>*\" \n",
-       argv[0], argv[0], argv[0], argv[0], argv[0]);
+       "\t service run %s -args \"test-set COM1|COM2 <bits> <stop> even|odd|none <rate>\" \n"
+       "\t service run %s -args \"test-poll COM1|COM2 tx|rx <bits> <stop> even|odd|none <rate> <string>*\" \n"
+       "\t service run %s -args \"test-fifo COM1|COM2 tx|rx <bits> <stop> even|odd|none <rate> <string>*\" \n",
+       argv[0], argv[0], argv[0], argv[0]);
 }
 
 static int proc_args(int argc, char *argv[]) {
@@ -67,7 +66,7 @@ static int proc_args(int argc, char *argv[]) {
         return ret;
 
     } else if (strncmp(argv[1], "test-set", strlen("test-set")) == 0) {
-        char* com_str;
+        char* com_str, *parity_str;
         long parity;
         unsigned long bits, stop, rate;
 
@@ -90,8 +89,17 @@ static int proc_args(int argc, char *argv[]) {
         if ((stop = parse_ulong(argv[4], 10)) == ULONG_MAX)
             return 1;
 
-        if ((parity = parse_long(argv[5], 10)) == ULONG_MAX)
+        parity_str = argv[5];
+        if (strcmp(parity_str, "even") == 0)
+            parity = 0;
+        else if (strcmp(parity_str, "odd") == 0)
+            parity = 1;
+        else if (strcmp(parity_str, "none") == 0)
+            parity = -1;
+        else {
+            printf("lab7: third argument needs to be even, odd or none \n");
             return 1;
+        }
 
         if ((rate = parse_ulong(argv[6], 10)) == ULONG_MAX)
             return 1;
@@ -108,7 +116,7 @@ static int proc_args(int argc, char *argv[]) {
         return ret;
 
     } else if (strncmp(argv[1], "test-poll", strlen("test-poll")) == 0) {
-        char* com_str, *tx_str;
+        char* com_str, *tx_str, *parity_str;
         long parity;
         unsigned long bits, stop, rate;
         int stringc;
@@ -142,8 +150,17 @@ static int proc_args(int argc, char *argv[]) {
         if ((stop = parse_ulong(argv[5], 10)) == ULONG_MAX)
             return 1;
 
-        if ((parity = parse_long(argv[6], 10)) == ULONG_MAX)
+        parity_str = argv[5];
+        if (strcmp(parity_str, "even") == 0)
+            parity = 0;
+        else if (strcmp(parity_str, "odd") == 0)
+            parity = 1;
+        else if (strcmp(parity_str, "none") == 0)
+            parity = -1;
+        else {
+            printf("lab7: fouth argument needs to be even, odd or none \n");
             return 1;
+        }
 
         if ((rate = parse_ulong(argv[7], 10)) == ULONG_MAX)
             return 1;
@@ -171,7 +188,7 @@ static int proc_args(int argc, char *argv[]) {
         return ret;
 
     } else if (strncmp(argv[1], "test-fifo", strlen("test-fifo")) == 0) {
-        char* com_str, *tx_str;
+        char* com_str, *tx_str, *parity_str;
         long parity;
         unsigned long bits, stop, rate;
         int stringc;
@@ -205,8 +222,17 @@ static int proc_args(int argc, char *argv[]) {
         if ((stop = parse_ulong(argv[5], 10)) == ULONG_MAX)
             return 1;
 
-        if ((parity = parse_long(argv[6], 10)) == ULONG_MAX)
+        parity_str = argv[5];
+        if (strcmp(parity_str, "even") == 0)
+            parity = 0;
+        else if (strcmp(parity_str, "odd") == 0)
+            parity = 1;
+        else if (strcmp(parity_str, "none") == 0)
+            parity = -1;
+        else {
+            printf("lab7: fouth argument needs to be even, odd or none \n");
             return 1;
+        }
 
         if ((rate = parse_ulong(argv[7], 10)) == ULONG_MAX)
             return 1;
@@ -260,24 +286,3 @@ static unsigned long parse_ulong(char *str, int base) {
     /* Successful conversion */
     return val;
 }
-
-static long parse_long(char *str, int base) {
-    char *endptr;
-    unsigned long val;
-
-    val = strtol(str, &endptr, base);
-
-    if ((errno == ERANGE && (val == LONG_MAX || val == LONG_MIN)) || (errno != 0 && val == 0)) {
-        perror("strtol");
-        return LONG_MAX;
-    }
-
-    if (endptr == str) {
-        printf("lab7/parse_long: no digits were found in %s \n", str);
-        return LONG_MAX;
-    }
-
-    /* Successful conversion */
-    return val;
-}
-
