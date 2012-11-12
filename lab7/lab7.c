@@ -119,7 +119,7 @@ static int proc_args(int argc, char *argv[]) {
         char* com_str, *tx_str, *parity_str;
         long parity;
         unsigned long bits, stop, rate;
-        int stringc;
+        int stringc, i;
         char** strings;
         unsigned char tx;
 
@@ -168,7 +168,6 @@ static int proc_args(int argc, char *argv[]) {
         stringc = argc - 8;
         strings = NULL;
         if (stringc) {
-            int i;
             strings = malloc(sizeof(char*) * stringc);
             for (i = 0; i < stringc; ++i) {
                 strings[i] = malloc(sizeof(char) * strlen(argv[8 + i]));
@@ -185,13 +184,17 @@ static int proc_args(int argc, char *argv[]) {
         else
             printf("lab7: test_poll(0x%X, %d, %lu, %lu, %d, %lu, %d, char**) return code %d \n", base_addr, tx, bits, stop, parity, rate, stringc, ret);
 
+        for (i = 0; i < stringc; ++i)
+            free(strings[i]);
+        free(strings);
+
         return ret;
 
     } else if (strncmp(argv[1], "test-fifo", strlen("test-fifo")) == 0) {
         char* com_str, *tx_str, *parity_str;
         long parity;
         unsigned long bits, stop, rate;
-        int stringc;
+        int stringc, i;
         char** strings;
         unsigned char tx;
 
@@ -240,7 +243,6 @@ static int proc_args(int argc, char *argv[]) {
         stringc = argc - 8;
         strings = NULL;
         if (stringc) {
-            int i;
             strings = malloc(sizeof(char*) * stringc);
             for (i = 0; i < stringc; ++i) {
                 strings[i] = malloc(sizeof(char) * strlen(argv[8 + i]));
@@ -251,6 +253,10 @@ static int proc_args(int argc, char *argv[]) {
         printf("lab7: test_fifo(0x%X, %d, %lu, %lu, %d, %lu, %d, char**)\n", base_addr, tx, bits, stop, parity, rate, stringc);
 
         ret = test_fifo(base_addr, tx, bits, stop, parity, rate, stringc, strings);
+
+        for (i = 0; i < stringc; ++i)
+            free(strings[i]);
+        free(strings);
 
         if (ret != 0)
             printf("lab7: test_fifo(0x%X, %d, %lu, %lu, %d, %lu, %d, char**) return error code %d \n", base_addr, tx, bits, stop, parity, rate, stringc, ret);
