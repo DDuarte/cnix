@@ -60,9 +60,6 @@ int test_poll(unsigned short base_addr, unsigned char tx, unsigned long bits, un
     uart_read(base_addr, UART_IER_REG, &previer);
     uart_write(base_addr, UART_IER_REG, 0);
     
-    uart_read(base_addr, UART_FCR_REG, &prevfcr);
-    uart_write(base_addr, UART_FCR_REG, prevfcr & ~FCR_ENABLE_FIFO_BIT);
-    
     uart_set_config(base_addr, newConfig);
     
     if (tx == 0) { 
@@ -74,13 +71,7 @@ int test_poll(unsigned short base_addr, unsigned char tx, unsigned long bits, un
                 printf("%c", (char)chr);
             }
         } while((char)chr != '.');
-        printf("\n");
     } else {
-    
-        do {
-            uart_read(base_addr, UART_LSR_REG, &lsr);
-        } while(bit_isset(lsr, LSR_TRANSMITTER_HOLDING_REGISTER_EMPTY_BIT));
-        
         for (i = 0; i < stringc; i++) {
             strLength = strlen(strings[i]);
             for (j = 0; j < strLength; j++) {
@@ -91,7 +82,6 @@ int test_poll(unsigned short base_addr, unsigned char tx, unsigned long bits, un
     }
     
     uart_write(base_addr, UART_IER_REG, previer);
-    uart_write(base_addr, UART_FCR_REG, prevfcr);
     uart_set_config(base_addr, prevConfig);
     
     return 0;
