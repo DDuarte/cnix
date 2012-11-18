@@ -144,9 +144,11 @@ long vg_get_pixel(unsigned long x, unsigned long y) {
 }
 
 int vg_draw_line(unsigned long xi, unsigned long yi, unsigned long xf,
-        unsigned long yf, unsigned long color) {
+    unsigned long yf, unsigned long color)
+{
     long i;
-    long m;
+    double m, yt;
+    yt = yi;
 
     if (xi > h_res || yi > v_res || xf > h_res || yf > v_res) {
         return ERR;
@@ -156,31 +158,30 @@ int vg_draw_line(unsigned long xi, unsigned long yi, unsigned long xf,
         if (yi > yf) {
             for (i = yi; i >= yf; i--)
                 vg_set_pixel(xi, i, color);
-        } else {
+        }
+        else {
             for (i = yi; i < yf; i++)
                 vg_set_pixel(xi, i, color);
         }
 
     } else if (xi < xf) {
-
-        m = (yf - yi) / (xf - xi);
-        for (i = xi; i <= xf; i++) {
-            vg_set_pixel(i, yi, color);
-            yi += m;
+        m = (double)(yf - yi) / (double)(xf - xi);
+        for (i = xi; i <= xf; i++)
+        {
+            vg_set_pixel(i, (unsigned long)yt, color);
+            yt += m;
         }
-
     } else if (xi > xf) {
         m = (yi - yf) / (xi - xf);
         for (i = xi; i >= xf; i--) {
-            vg_set_pixel(i, yi, color);
-            yi += m;
+            vg_set_pixel(i, (unsigned long)yt, color);
+            yt += m;
         }
-    }
-    else {
+    } else {
         return ERR;
     }
 
-    return 0;
+    return OK;
 }
 
 int vg_draw_rectangle(unsigned long x1, unsigned long y1, unsigned long x2,
