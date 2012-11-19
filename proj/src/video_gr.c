@@ -1,5 +1,6 @@
 #include <minix/syslib.h>
 #include <minix/drivers.h>
+#include <minix/bitmap.h>
 #include <machine/int86.h>
 #include <sys/mman.h>
 #include <sys/types.h>
@@ -32,6 +33,29 @@ static unsigned v_res; /* Vertical screen resolution in pixels */
 static unsigned bits_per_pixel; /* Number of VRAM bits per pixel */
 static unsigned bytes_per_pixel; /* Number of VRAM bytes per pixel (at least one) */
 static vbe_mode_info_t vmi_p;
+
+static struct {
+	unsigned long redMask;
+	unsigned long greenMask;
+	unsigned long blueMask;
+	unsigned long redPosition;
+	unsigned long greenPosition;
+	unsigned long bluePosition;
+} gr_color;
+
+unsigned long bitSetAll(int n) {
+    unsigned long result = 0x0;
+    for (;n >= 0; n--)
+        bit_set(result,n);
+    return result;
+}
+
+unsigned long vg_color_rgb(unsigned long r, unsigned long g, unsigned long b) {
+    return  (0x0 | 
+            (((b * gr_color.blueMask)  / 255) << gr_color.bluePosition)    | 
+            (((g * gr_color.greenMask) / 255) << gr_color.greenPosition)   | 
+            (((r * gr_color.redMask)   / 255) << gr_color.redPosition)     );
+}
 
 void* vg_init(unsigned long mode)
 {
@@ -79,6 +103,13 @@ void* vg_init(unsigned long mode)
     }
 
 	temp_video_mem = (char*)malloc(vram_size);
+	
+	gr_color.redMask = bitSetAll(vmi_p.RedMaskSize);
+	gr_color.greenMask = bitSetAll(vmi_p.GreenMaskSize);
+	gr_color.blueMask = bitSetAll(vmi_p.BlueMaskSize);
+	gr_color.redPosition = vmi_p.RedFieldPosition;
+	gr_color.greenPosition = vmi_p.GreenFieldPosition;
+	gr_color.bluePosition = vmi_p.BlueFieldPosition;
 	
     return video_mem;
 }
@@ -168,14 +199,22 @@ int vg_draw_line(unsigned long xi, unsigned long yi, unsigned long xf,
         }
 
     } else if (xi < xf) {
-        m = (double)(yf - yi) / (double)(xf - xi);
+        if (yi > yf)
+            m = (double)(yf - yi) / (double)(xi - xf);
+        else
+            m = (double)(yf - yi) / (double)(xf - xi);
+            
         for (i = xi; i <= xf; i++)
         {
             vg_set_pixel(i, (unsigned long)yt, color);
             yt += m;
         }
     } else if (xi > xf) {
-        m = (yi - yf) / (xi - xf);
+        if (yi < yf)
+            m = (double)(yi - yf) / (double)(xf - xi);
+        else
+            m = (double)(yi - yf) / (double)(xi - xf);
+
         for (i = xi; i >= xf; i--) {
             vg_set_pixel(i, (unsigned long)yt, color);
             yt += m;

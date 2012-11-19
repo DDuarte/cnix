@@ -110,6 +110,8 @@ void vg_swap_buffer(void);
  */
 void _vg_swap_buffer(char* src, char* dst, unsigned int size);
 
+unsigned long vg_color_rgb(unsigned long r, unsigned long g, unsigned long b);
+
  /**
  * @brief Returns to default Minix 3 text mode (0x03: 25 x 80, 16 colors)
  *
