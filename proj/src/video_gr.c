@@ -24,17 +24,18 @@
 /* Private global variables */
 
 static char *video_mem; /* Process address to which VRAM is mapped */
+static char *temp_video_mem; /* address of the temporary buffer */
+static unsigned int vram_size;
 
 static unsigned h_res; /* Horizontal screen resolution in pixels */
 static unsigned v_res; /* Vertical screen resolution in pixels */
 static unsigned bits_per_pixel; /* Number of VRAM bits per pixel */
 static unsigned bytes_per_pixel; /* Number of VRAM bytes per pixel (at least one) */
+static vbe_mode_info_t vmi_p;
 
 void* vg_init(unsigned long mode)
 {
-    unsigned int vram_size;
     struct mem_range mr;
-    vbe_mode_info_t vmi_p;
     struct reg86u r;
 
     r.u.b.intno = BIOS_VIDEO_SERVICE;
@@ -60,7 +61,7 @@ void* vg_init(unsigned long mode)
     bytes_per_pixel = ((bits_per_pixel / 8) > 0) ? (bits_per_pixel / 8) : 1;
 
     vram_size = h_res * v_res * bytes_per_pixel;
-
+	
     mr.mr_base = vmi_p.PhysBasePtr;
     mr.mr_limit = mr.mr_base + vram_size;
     if (sys_privctl(SELF, SYS_PRIV_ADD_MEM, &mr))
@@ -77,6 +78,8 @@ void* vg_init(unsigned long mode)
         return NULL;
     }
 
+	temp_video_mem = (char*)malloc(vram_size);
+	
     return video_mem;
 }
 
@@ -85,7 +88,7 @@ int vg_fill(unsigned long color) {
     unsigned long colorTemp;
     char* ptr;
 
-    ptr = video_mem;
+    ptr = temp_video_mem;
 
     for (i = 0; i < h_res * v_res; ++i)
     {
@@ -111,7 +114,7 @@ int vg_set_pixel(unsigned long x, unsigned long y, unsigned long color) {
 
     i = (y * h_res + x) * bytes_per_pixel;
 
-    vptr = &video_mem[i];
+    vptr = &temp_video_mem[i];
 
     for (i = 0; i < bytes_per_pixel; i++) {
         *vptr = (char) color;
@@ -134,7 +137,7 @@ long vg_get_pixel(unsigned long x, unsigned long y) {
     }
 
     i = (y * h_res + x) * bytes_per_pixel;
-    vptr = &video_mem[i];
+    vptr = &temp_video_mem[i];
     for (i = 0; i < bytes_per_pixel; i++) {
         res <<= 8;
         res |= *vptr;
@@ -263,7 +266,11 @@ int vg_draw_circle(int x0, int y0, int radius, unsigned long color)
   return 0;
 }
 
-int vg_exit() {
+void vg_swap_buffer(void) {
+	_vg_swap_buffer(temp_video_mem, video_mem, vram_size);
+}
+
+int vg_exit(void) {
     struct reg86u reg86;
 
     reg86.u.b.intno = BIOS_VIDEO_SERVICE; /* BIOS video services */
@@ -271,6 +278,8 @@ int vg_exit() {
     reg86.u.b.ah = VIDEO_MODE; /* Set Video Mode function */
     reg86.u.b.al = SET_TEXT_MODE; /* 80x25 text mode*/
 
+	free(temp_video_mem);
+	
     if (sys_int86(&reg86) != OK) {
         printf("lab2/vg_exit: sys_int86() failed \n");
         return ERR;

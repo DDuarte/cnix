@@ -100,6 +100,16 @@ int vg_draw_rectangle(unsigned long x1, unsigned long y1, unsigned long x2,
  */
 int vg_draw_circle(int x0, int y0, int radius, unsigned long color);
 
+/**
+ * @brief Copies the virtual buffer to the physical buffer
+ */
+void vg_swap_buffer(void);
+
+/**
+ * @brief Assembly implemented function that copies size bytes of the src char* to the dst char*
+ */
+void _vg_swap_buffer(char* src, char* dst, unsigned int size);
+
  /**
  * @brief Returns to default Minix 3 text mode (0x03: 25 x 80, 16 colors)
  *

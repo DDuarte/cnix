@@ -1,9 +1,9 @@
 #include <minix/syslib.h>
 #include <minix/drivers.h>
 #include <machine/int86.h>
-#include <lmlib.h>
 
 #include "vbe.h"
+#include "lmlib.h"
 
 #define LINEAR_MODEL_BIT 14
 #define BIT(n) (0x1 << (n))
