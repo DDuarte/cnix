@@ -1,6 +1,8 @@
 #ifndef __VIDEO_GR_H
 #define __VIDEO_GR_H
 
+unsigned int getYResolution();
+unsigned int getXResolution();
 /** @defgroup video_gr video_gr
  * @{
  *
