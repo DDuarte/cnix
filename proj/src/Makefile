@@ -3,7 +3,7 @@ COMPILER_TYPE = gnu
 CC = gcc
 
 PROG = cnix
-SRCS = cnix.c vbe.c video_gr.c video_gr_a.S
+SRCS = cnix.c vbe.c video_gr.c video_gr_a.S utilities.c
 
 CFLAGS = -I./../dep/include -I/usr/local/include
 LDFLAGS = -L. -L./../dep/lib -L/usr/local/lib

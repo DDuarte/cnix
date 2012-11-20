@@ -6,11 +6,10 @@
 #include <sys/types.h>
 
 #include "vbe.h"
+#include "video_gr.h"
+#include "utilities.h"
 
 #define LINEAR_MODEL_BIT 14
-#define BIT(n) (0x1 << (n))
-
-#define min(x,y) ((x) < (y) : (x) ? (y))
 
 #define VBE_MODE 0x4F
 #define VIDEO_MODE 0x00
@@ -19,8 +18,6 @@
 #define SET_TEXT_MODE 0x03
 
 #define BIOS_VIDEO_SERVICE 0x10
-
-#define ERR -1
 
 /* Private global variables */
 
@@ -35,29 +32,22 @@ static unsigned bytes_per_pixel; /* Number of VRAM bytes per pixel (at least one
 static vbe_mode_info_t vmi_p;
 
 static struct {
-	unsigned long redMask;
-	unsigned long greenMask;
-	unsigned long blueMask;
-	unsigned long redPosition;
-	unsigned long greenPosition;
-	unsigned long bluePosition;
+    unsigned long redMask;
+    unsigned long greenMask;
+    unsigned long blueMask;
+    unsigned long redPosition;
+    unsigned long greenPosition;
+    unsigned long bluePosition;
 } gr_color;
 
-unsigned long bitSetAll(int n) {
-    unsigned long result = 0x0;
-    for (;n >= 0; n--)
-        bit_set(result,n);
-    return result;
-}
 
 unsigned long vg_color_rgb(unsigned long r, unsigned long g, unsigned long b) {
-    return  (0x0 | 
-            (((b * gr_color.blueMask)  / 255) << gr_color.bluePosition)    | 
-            (((g * gr_color.greenMask) / 255) << gr_color.greenPosition)   | 
-            (((r * gr_color.redMask)   / 255) << gr_color.redPosition)     );
+    return ((((b * gr_color.blueMask)  / 255) << gr_color.bluePosition)  |
+            (((g * gr_color.greenMask) / 255) << gr_color.greenPosition) |
+            (((r * gr_color.redMask)   / 255) << gr_color.redPosition));
 }
 
-void* vg_init(unsigned long mode)
+void* vg_init(unsigned short mode)
 {
     struct mem_range mr;
     struct reg86u r;
@@ -73,9 +63,9 @@ void* vg_init(unsigned long mode)
         return NULL;
     }
 
-    if (vbe_get_mode_info(mode, &vmi_p) == ERR)
+    if (vbe_get_mode_info(mode, &vmi_p) < 0)
     {
-        printf("lab2/vg_init: failed in vbe_get_mode_info");
+        printf("vg_init: failed in vbe_get_mode_info");
         return NULL;
     }
 
@@ -85,12 +75,12 @@ void* vg_init(unsigned long mode)
     bytes_per_pixel = ((bits_per_pixel / 8) > 0) ? (bits_per_pixel / 8) : 1;
 
     vram_size = h_res * v_res * bytes_per_pixel;
-	
+
     mr.mr_base = vmi_p.PhysBasePtr;
     mr.mr_limit = mr.mr_base + vram_size;
     if (sys_privctl(SELF, SYS_PRIV_ADD_MEM, &mr))
     {
-        printf("lab2/vg_init: failed in sys_privctl");
+        printf("vg_init: failed in sys_privctl");
         return NULL;
     }
 
@@ -98,19 +88,19 @@ void* vg_init(unsigned long mode)
 
     if (video_mem == MAP_FAILED)
     {
-        printf("lab2/vg_init: failed in vm_map_phys");
+        printf("vg_init: failed in vm_map_phys");
         return NULL;
     }
 
-	temp_video_mem = (char*)malloc(vram_size);
-	
-	gr_color.redMask = bitSetAll(vmi_p.RedMaskSize);
-	gr_color.greenMask = bitSetAll(vmi_p.GreenMaskSize);
-	gr_color.blueMask = bitSetAll(vmi_p.BlueMaskSize);
-	gr_color.redPosition = vmi_p.RedFieldPosition;
-	gr_color.greenPosition = vmi_p.GreenFieldPosition;
-	gr_color.bluePosition = vmi_p.BlueFieldPosition;
-	
+    temp_video_mem = (char*)malloc(vram_size);
+
+    gr_color.redMask = bit_set_all(vmi_p.RedMaskSize);
+    gr_color.greenMask = bit_set_all(vmi_p.GreenMaskSize);
+    gr_color.blueMask = bit_set_all(vmi_p.BlueMaskSize);
+    gr_color.redPosition = vmi_p.RedFieldPosition;
+    gr_color.greenPosition = vmi_p.GreenFieldPosition;
+    gr_color.bluePosition = vmi_p.BlueFieldPosition;
+
     return video_mem;
 }
 
@@ -164,7 +154,7 @@ long vg_get_pixel(unsigned long x, unsigned long y) {
     res = 0;
 
     if (x > h_res || y > v_res) {
-        return ERR;
+        return -1;
     }
 
     i = (y * h_res + x) * bytes_per_pixel;
@@ -185,7 +175,7 @@ int vg_draw_line(unsigned long xi, unsigned long yi, unsigned long xf,
     yt = yi;
 
     if (xi > h_res || yi > v_res || xf > h_res || yf > v_res) {
-        return ERR;
+        return -1;
     }
 
     if (xi == xf) {
@@ -203,7 +193,7 @@ int vg_draw_line(unsigned long xi, unsigned long yi, unsigned long xf,
             m = (double)(yf - yi) / (double)(xi - xf);
         else
             m = (double)(yf - yi) / (double)(xf - xi);
-            
+
         for (i = xi; i <= xf; i++)
         {
             vg_set_pixel(i, (unsigned long)yt, color);
@@ -220,7 +210,7 @@ int vg_draw_line(unsigned long xi, unsigned long yi, unsigned long xf,
             yt += m;
         }
     } else {
-        return ERR;
+        return -1;
     }
 
     return OK;
@@ -231,7 +221,7 @@ int vg_draw_rectangle(unsigned long x1, unsigned long y1, unsigned long x2,
     int x, y;
 
     if (x1 > h_res || y1 > v_res || x2 > h_res || y2 > v_res) {
-        return ERR;
+        return -1;
     }
 
     if (x1 < x2 && y1 < y2)
@@ -306,7 +296,7 @@ int vg_draw_circle(int x0, int y0, int radius, unsigned long color)
 }
 
 void vg_swap_buffer(void) {
-	_vg_swap_buffer(temp_video_mem, video_mem, vram_size);
+    _vg_swap_buffer(temp_video_mem, video_mem, vram_size);
 }
 
 int vg_exit(void) {
@@ -317,11 +307,12 @@ int vg_exit(void) {
     reg86.u.b.ah = VIDEO_MODE; /* Set Video Mode function */
     reg86.u.b.al = SET_TEXT_MODE; /* 80x25 text mode*/
 
-	free(temp_video_mem);
-	
+
+    free(temp_video_mem);
+
     if (sys_int86(&reg86) != OK) {
-        printf("lab2/vg_exit: sys_int86() failed \n");
-        return ERR;
+        printf("vg_exit: sys_int86() failed \n");
+        return -1;
     } else
         return OK;
 }

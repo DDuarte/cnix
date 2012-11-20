@@ -110,6 +110,13 @@ void vg_swap_buffer(void);
  */
 void _vg_swap_buffer(char* src, char* dst, unsigned int size);
 
+/**
+ * @brief Converts a RGB color to the color supported by VBE
+ * @param r Red component of the color
+ * @param g Green component of the color
+ * @param b Blue component of the color
+ * @return Computed color
+ */
 unsigned long vg_color_rgb(unsigned long r, unsigned long g, unsigned long b);
 
  /**
