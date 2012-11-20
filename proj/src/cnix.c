@@ -31,6 +31,11 @@ int main(int argc, char const *argv[])
     vg_draw_line(997, 8, 1011, 22, vg_color_rgb(255, 255, 255));
     vg_draw_line(1011, 8, 997, 22, vg_color_rgb(255, 255, 255));
 
+    /* borders */
+    vg_draw_rectangle(994, 5, 1014, 25,     vg_color_rgb(230, 0, 0));
+    vg_draw_line(997, 8, 1011, 22,          vg_color_rgb(255,255,255));
+    vg_draw_line(1011, 8, 997, 22,          vg_color_rgb(255,255,255));
+    
     vg_swap_buffer();
 
     sleep(5); /* placeholder */

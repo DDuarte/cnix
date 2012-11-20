@@ -148,12 +148,12 @@ int vg_set_pixel(unsigned long x, unsigned long y, unsigned long color) {
     int i;
     char* vptr;
 
-    x = vg_scale_x(x);
-    y = vg_scale_y(y);
-
-    if (x > h_res || y > v_res) {
+    if (x > BASE_H_RES || y > BASE_V_RES) {
         return -1;
     }
+    
+    x = vg_scale_x(x);
+    y = vg_scale_y(y);
 
     i = (y * h_res + x) * bytes_per_pixel;
 
@@ -173,14 +173,14 @@ long vg_get_pixel(unsigned long x, unsigned long y) {
     long res;
     char* vptr;
 
+    if (x > BASE_H_RES || y > BASE_V_RES) {
+        return -1;
+    }
+    
     x = vg_scale_x(x);
     y = vg_scale_y(y);
 
     res = 0;
-
-    if (x > BASE_H_RES || y > BASE_V_RES) {
-        return -1;
-    }
 
     i = (y * h_res + x) * bytes_per_pixel;
     vptr = &temp_video_mem[i];
