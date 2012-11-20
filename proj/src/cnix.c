@@ -21,15 +21,15 @@ int main(int argc, char const *argv[])
     }
 
     /* background */
-    vg_fill(vg_color_rgb(255,255,255));
+    vg_fill(vg_color_rgb(255, 255, 255));
 
     /* menu bar background */
     vg_draw_rectangle(0, 0, 1024, 30, vg_color_rgb(90, 90, 90));
 
     /* close button, cross */
     vg_draw_rectangle(994, 5, 1014, 25, vg_color_rgb(230, 0, 0));
-    vg_draw_line(997, 8, 1011, 22, vg_color_rgb(255,255,255));
-    vg_draw_line(1011, 8, 997, 22, vg_color_rgb(255,255,255));
+    vg_draw_line(997, 8, 1011, 22, vg_color_rgb(255, 255, 255));
+    vg_draw_line(1011, 8, 997, 22, vg_color_rgb(255, 255, 255));
 
     vg_swap_buffer();
 

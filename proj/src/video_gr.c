@@ -19,6 +19,9 @@
 
 #define BIOS_VIDEO_SERVICE 0x10
 
+static unsigned BASE_H_RES = 1024;
+static unsigned BASE_V_RES = 768;
+
 /* Private global variables */
 
 static char *video_mem; /* Process address to which VRAM is mapped */
@@ -125,9 +128,28 @@ int vg_fill(unsigned long color) {
     return 0;
 }
 
+unsigned long vg_scale_x(unsigned long x)
+{
+    if (h_res == BASE_H_RES)
+        return x;
+
+    return (((double)h_res * (double)x) / (double)BASE_H_RES);
+}
+
+unsigned long vg_scale_y(unsigned long y)
+{
+    if (v_res == BASE_V_RES)
+        return y;
+
+    return (((double)v_res * (double)y) / (double)BASE_V_RES);
+}
+
 int vg_set_pixel(unsigned long x, unsigned long y, unsigned long color) {
     int i;
     char* vptr;
+
+    x = vg_scale_x(x);
+    y = vg_scale_y(y);
 
     if (x > h_res || y > v_res) {
         return -1;
@@ -151,9 +173,12 @@ long vg_get_pixel(unsigned long x, unsigned long y) {
     long res;
     char* vptr;
 
+    x = vg_scale_x(x);
+    y = vg_scale_y(y);
+
     res = 0;
 
-    if (x > h_res || y > v_res) {
+    if (x > BASE_H_RES || y > BASE_V_RES) {
         return -1;
     }
 
@@ -174,7 +199,7 @@ int vg_draw_line(unsigned long xi, unsigned long yi, unsigned long xf,
     double m, yt;
     yt = yi;
 
-    if (xi > h_res || yi > v_res || xf > h_res || yf > v_res) {
+    if (xi > BASE_H_RES || yi > BASE_V_RES || xf > BASE_H_RES || yf > BASE_V_RES) {
         return -1;
     }
 
@@ -220,7 +245,7 @@ int vg_draw_rectangle(unsigned long x1, unsigned long y1, unsigned long x2,
         unsigned long y2, unsigned long color) {
     int x, y;
 
-    if (x1 > h_res || y1 > v_res || x2 > h_res || y2 > v_res) {
+    if (x1 > BASE_H_RES || y1 > BASE_V_RES || x2 > BASE_H_RES || y2 > BASE_V_RES) {
         return -1;
     }
 
@@ -241,7 +266,7 @@ int vg_draw_rectangle(unsigned long x1, unsigned long y1, unsigned long x2,
             for (y = y2; y <= y1; y++)
                 vg_set_pixel(x, y, color);
 
-    return OK;
+    return 0;
 }
 
 int vg_draw_circle(int x0, int y0, int radius, unsigned long color)

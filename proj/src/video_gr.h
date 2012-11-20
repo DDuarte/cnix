@@ -126,6 +126,9 @@ unsigned long vg_color_rgb(unsigned long r, unsigned long g, unsigned long b);
  */
 int vg_exit(void);
 
+unsigned long vg_scale_x(unsigned long x);
+unsigned long vg_scale_y(unsigned long y);
+
  /** @} end of video_gr */
 
 #endif /* __VIDEO_GR_H */
