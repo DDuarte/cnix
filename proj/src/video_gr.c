@@ -29,6 +29,8 @@ static char *video_mem; /* Process address to which VRAM is mapped */
 static char *temp_video_mem; /* address of the temporary buffer */
 static unsigned int vram_size;
 
+static int _vg_set_absolute_pixel(long x, long y, unsigned long color);
+
 static unsigned h_res; /* Horizontal screen resolution in pixels */
 static unsigned v_res; /* Vertical screen resolution in pixels */
 static unsigned bits_per_pixel; /* Number of VRAM bits per pixel */
@@ -129,7 +131,7 @@ int vg_fill(unsigned long color) {
     return 0;
 }
 
-unsigned long vg_scale_x(unsigned long x)
+long vg_scale_x(long x)
 {
     if (h_res == BASE_H_RES)
         return x;
@@ -139,7 +141,7 @@ unsigned long vg_scale_x(unsigned long x)
     return (((double)h_res * (double)x) / (double)BASE_H_RES);
 }
 
-unsigned long vg_scale_y(unsigned long y)
+long vg_scale_y(long y)
 {
     if (v_res == BASE_V_RES)
         return y;
@@ -149,35 +151,23 @@ unsigned long vg_scale_y(unsigned long y)
     return (((double)v_res * (double)y) / (double)BASE_V_RES);
 }
 
-int vg_set_pixel(unsigned long x, unsigned long y, unsigned long color) {
-    int i;
-    char* vptr;
+int vg_set_pixel(long x, long y, unsigned long color) {
 
-    if (x > BASE_H_RES || y > BASE_V_RES) {
+    if (x > BASE_H_RES || y > BASE_V_RES || x < 0 || y < 0) {
         return -1;
     }
     
     x = vg_scale_x(x);
     y = vg_scale_y(y);
 
-    i = (y * h_res + x) * bytes_per_pixel;
-
-    vptr = &temp_video_mem[i];
-
-    for (i = 0; i < bytes_per_pixel; i++) {
-        *vptr = (char) color;
-        vptr++;
-        color >>= 8;
-    }
-
-    return 0;
+    return _vg_set_absolute_pixel(x, y, color);
 }
 
-static int _vg_set_absolute_pixel(unsigned long x, unsigned long y, unsigned long color) {
+static int _vg_set_absolute_pixel(long x, long y, unsigned long color) {
     int i;
     char* vptr;
 
-    if (x > h_res || y > v_res) {
+    if (x > h_res || y > v_res || x < 0 || y < 0) {
         return -1;
     }
 
@@ -194,12 +184,12 @@ static int _vg_set_absolute_pixel(unsigned long x, unsigned long y, unsigned lon
     return 0;
 }
 
-long vg_get_pixel(unsigned long x, unsigned long y) {
+long vg_get_pixel(long x, long y) {
     int i;
     long res;
     char* vptr;
 
-    if (x > BASE_H_RES || y > BASE_V_RES) {
+    if (x > BASE_H_RES || y > BASE_V_RES || x < 0 || y < 0) {
         return -1;
     }
     
@@ -218,13 +208,13 @@ long vg_get_pixel(unsigned long x, unsigned long y) {
     return res;
 }
 
-int _vg_draw_absolute_line(unsigned long xi, unsigned long yi, unsigned long xf,
-    unsigned long yf, unsigned long color)
+int _vg_draw_absolute_line(long xi, long yi, long xf,
+    long yf, unsigned long color)
 {
     long i;
     double m, yt;
 
-    if (xi > h_res || yi > v_res || xf > h_res || yf > v_res) {
+    if (xi > h_res && yi > v_res && xf > h_res && yf > v_res) {
         return -1;
     }
 
@@ -268,13 +258,10 @@ int _vg_draw_absolute_line(unsigned long xi, unsigned long yi, unsigned long xf,
     return OK;
 }
 
-int vg_draw_line(unsigned long xi, unsigned long yi, unsigned long xf,
-    unsigned long yf, unsigned long color)
+int vg_draw_line(long xi, long yi, long xf,
+    long yf, unsigned long color)
 {
-    long i;
-    double m, yt;
-
-    if (xi > BASE_H_RES || yi > BASE_V_RES || xf > BASE_H_RES || yf > BASE_V_RES) {
+    if (xi > BASE_H_RES && yi > BASE_V_RES && xf > BASE_H_RES && yf > BASE_V_RES) {
         return -1;
     }
     
@@ -283,50 +270,14 @@ int vg_draw_line(unsigned long xi, unsigned long yi, unsigned long xf,
     xf = vg_scale_x(xf);
     yf = vg_scale_y(yf);
 
-    yt = yi;
-    
-    if (xi == xf) {
-        if (yi > yf) {
-            for (i = yi; i >= yf; i--)
-                _vg_set_absolute_pixel(xi, i, color);
-        }
-        else {
-            for (i = yi; i < yf; i++)
-                _vg_set_absolute_pixel(xi, i, color);
-        }
-
-    } else if (xi < xf) {
-        if (yi > yf)
-            m = (double)(yf - yi) / (double)(xi - xf);
-        else
-            m = (double)(yf - yi) / (double)(xf - xi);
-
-        for (i = xi; i <= xf; i++) {
-            _vg_set_absolute_pixel(i, (unsigned long)yt, color);
-            yt += m;
-        }
-    } else if (xi > xf) {
-        if (yi < yf)
-            m = (double)(yf - yi) / (double)(xi - xf);
-        else
-            m = (double)(yi - yf) / (double)(xi - xf);
-
-        for (i = xi; i >= xf; i--) {
-            _vg_set_absolute_pixel(i, (unsigned long)yt, color);
-            yt += m;
-        }
-    } else {
-        return -1;
-    }
-
-    return OK;
+    return _vg_draw_absolute_line(xi, yi, xf, yf, color);
 }
 
-int vg_draw_rectangle(unsigned long x1, unsigned long y1, unsigned long x2,
-        unsigned long y2, unsigned long color) {
+int vg_draw_rectangle(long x1, long y1, long x2,
+        long y2, unsigned long color) {
     int x, y;
 
-    if (x1 > BASE_H_RES || y1 > BASE_V_RES || x2 > BASE_H_RES || y2 > BASE_V_RES) {
+    if (x1 > BASE_H_RES && y1 > BASE_V_RES && x2 > BASE_H_RES && y2 > BASE_V_RES) {
         return -1;
     }
 

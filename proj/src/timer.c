@@ -12,6 +12,24 @@
 
 static list_t* _events;
 static int interrupt = -1;
+static unsigned int ticks = 0;
+
+void* event_copy(void* data) {
+    event_t* newEvent = (event_t*)malloc(sizeof(event_t));
+    
+    event_t* oldEvent = (event_t*)data;
+    
+    if (!newEvent)
+        return NULL;
+        
+    *newEvent = *oldEvent;
+    
+    return newEvent;
+}
+
+void event_destroy(void* data) {
+    free((event_t*)data);
+}
 
 int timer_set_square(unsigned long timer, unsigned long freq) {
     /* change Timer timer to mode 3 */
@@ -26,9 +44,10 @@ int timer_set_square(unsigned long timer, unsigned long freq) {
     return 0;
 }
 
-int timer_init(void) {
+int timer_init(void) {    
+    _events = list_new(NULL, event_copy, event_destroy);
     
-    _events = list_new(NULL);
+    timer_set_square(0, 60);
     
     interrupt = int_subscribe(TIMER0_IRQ, IRQ_REENABLE, timer_int_handler);
     if (interrupt == -1)
@@ -47,48 +66,41 @@ int timer_terminate() {
 }
 
 void timer_int_handler() {
-    list_node_t* elem = _events->root;
+    list_node_t* elem;
     
-    while(elem != NULL) {
-        ((event_t*)(elem->val))->time_left--;
-        elem = elem->next;
-    }
+    ticks++;
     
     elem = _events->root;
     
     while(elem != NULL){
         event_t* event = (event_t*)(elem->val);
-        if (event->time_left == 0) {
+        if (event->due_ticks == ticks) {
             event->callback(event);
-            if (event->time_left == 0) {
+            if (!(event->recursive)) {
                 elem = list_remove(_events, elem);
                 continue;
+            } else {
+                event_reset(event);
             }
         }
         elem = elem->next;
     }
 }
 
-int timer_add_event(unsigned int dur_f, void (*callback)(event_t*)) {
-    event_t* event = (event_t*)malloc(sizeof(event_t));
+int _timer_add_event(unsigned int dur_f, void (*callback)(event_t*), unsigned int recursive) {
     
-    if (!event)
+    event_t event = { dur_f + ticks, dur_f, recursive, callback };
+    
+    if (!list_add_elem(_events, (void*)(&event)))
         return 1;
     
-    event->duration = dur_f;
-    event->time_left = dur_f;
-    event->callback = callback;
-    
-    if (!list_add_elem(_events, (void*)event))
-        return 1;
-        
     return 0;
 }
 
-int timer_add_event_s(unsigned int dur_s, void (*callback)(event_t*)) {
-    return timer_add_event(dur_s * 60, callback);
+int _timer_add_event_s(unsigned int dur_s, void (*callback)(event_t*), unsigned int recursive) {
+    return _timer_add_event(dur_s * 60, callback, recursive);
 }
 
 void event_reset(event_t* me) {
-    me->time_left = me->duration;
+    me->due_ticks = me->duration + ticks;
 }

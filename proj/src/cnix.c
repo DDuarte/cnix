@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <minix/drivers.h>
+#include <time.h>
 
 #include "utilities.h"
 #include "video_gr.h"
@@ -10,6 +11,7 @@
 static struct {
     char* video_mem;
     unsigned short video_mode;
+    unsigned int x;
 } myApplication;
 
 /* Functions */
@@ -28,22 +30,31 @@ int main(int argc, char const *argv[])
 {
     int error;
     
+    time_t start;
+    struct tm * ptm;
+    
+    
+    
     parse_args(argc, argv);
     
     if (init() != 0) {
         return 1;
     }
     
-    draw();
-
+    time(&start);
     int_start_handler();
-
+    start = time(NULL)-start;
+    
     if (error = vg_exit())
     {
         printf("vg_exit failed with error code %i.\n", error);
         return 1;
     }
-
+    
+    ptm = gmtime(&start);
+    
+    printf("%2d:%02d:%02d\n", ptm->tm_hour, ptm->tm_min, ptm->tm_sec );
+    
     return 0;
 }
 
@@ -72,7 +83,10 @@ int init() {
     
     timer_init();
     
-    timer_add_event_s(5, AppClose);
+    timer_add_event(600, AppClose);
+    timer_add_event_r(1, draw);
+    
+    myApplication.x = 10;
     
     return 0;
 }
@@ -93,6 +107,8 @@ void draw() {
     vg_draw_rectangle(994, 5, 1014, 25, vg_color_rgb(230, 0, 0));
     vg_draw_line(997, 8, 1011, 22, vg_color_rgb(255, 255, 255));
     vg_draw_line(1011, 8, 997, 22, vg_color_rgb(255, 255, 255));
+    
+    vg_draw_circle(100, 100, myApplication.x++, vg_color_rgb(0,0,0));
     
     /* must be last line */
     vg_swap_buffer();

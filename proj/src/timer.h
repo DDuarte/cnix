@@ -1,11 +1,15 @@
 #ifndef __TIMER_H
 #define __TIMER_H
 
-
+#define timer_add_event_r(dur_f, callback) _timer_add_event((dur_f),(callback),1)
+#define timer_add_event(dur_f, callback) _timer_add_event((dur_f),(callback),0)
+#define timer_add_event_s_r(dur_f, callback) _timer_add_event_s((dur_f),(callback),1)
+#define timer_add_event_s(dur_f, callback) _timer_add_event_s((dur_f),(callback),0)
 
 typedef struct _event{
-    unsigned int time_left;
+    unsigned int due_ticks;
     unsigned int duration;
+    unsigned int recursive;
     void (*callback)(struct _event*);
 } event_t;
 
@@ -38,8 +42,8 @@ int timer_init(void );
  */
 int timer_terminate();
 
-int timer_add_event(unsigned int dur_f, void (*callback)(event_t*));
-int timer_add_event_s(unsigned int dur_s, void (*callback)(event_t*));
+int _timer_add_event(unsigned int dur_f, void (*callback)(event_t*), unsigned int recursive);
+int _timer_add_event_s(unsigned int dur_s, void (*callback)(event_t*), unsigned int recursive);
 
 void event_reset(event_t* me);
 

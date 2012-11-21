@@ -41,7 +41,7 @@ int vg_fill(unsigned long color);
  * @param color color to set the pixel
  * @return 0 on success, non-zero otherwise
  */
-int vg_set_pixel(unsigned long x, unsigned long y, unsigned long color);
+int vg_set_pixel(long x, long y, unsigned long color);
 
 /**
  * @brief Returns the color of the input pixel
@@ -53,7 +53,7 @@ int vg_set_pixel(unsigned long x, unsigned long y, unsigned long color);
  * @param y vertical coordinate, starts at 0 (top pixel)
  * @return color of the pixel at coordinates (x,y), or -1 if some input argument is not valid
  */
-long vg_get_pixel(unsigned long x, unsigned long y);
+long vg_get_pixel(long x, long y);
 
 
 /**
@@ -69,8 +69,8 @@ long vg_get_pixel(unsigned long x, unsigned long y);
  * @param color color of the line segment to draw
  * @return 0 upon success, non-zero upon failure
  */
-int vg_draw_line(unsigned long xi, unsigned long yi,
-                   unsigned long xf, unsigned long yf, unsigned long color);
+int vg_draw_line(long xi, long yi,
+                   long xf, long yf, unsigned long color);
 
 /**
  * @brief Draw filled rectangle with the specifed end points and color
@@ -85,8 +85,8 @@ int vg_draw_line(unsigned long xi, unsigned long yi,
  * @param color color of the line segment to draw and rectangle fill
  * @return 0 upon success, non-zero upon failure
  */
-int vg_draw_rectangle(unsigned long x1, unsigned long y1, unsigned long x2,
-        unsigned long y2, unsigned long color);
+int vg_draw_rectangle(long x1, long y1, long x2,
+        long y2, unsigned long color);
 
 /**
  * @brief Draw circle with the specifed center point, radius and line color
@@ -128,8 +128,8 @@ unsigned long vg_color_rgb(unsigned long r, unsigned long g, unsigned long b);
  */
 int vg_exit(void);
 
-unsigned long vg_scale_x(unsigned long x);
-unsigned long vg_scale_y(unsigned long y);
+long vg_scale_x(long x);
+long vg_scale_y(long y);
 
  /** @} end of video_gr */
 

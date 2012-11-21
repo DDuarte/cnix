@@ -124,7 +124,7 @@ static int int_handle(void) {
                 case HARDWARE:
                 {
                     for (i = 0; i < NUM_OF_INTERRUPTS; i++)
-                        if (int_data[i].hook_id != -1 && int_data[r].callback != NULL)
+                        if (int_data[i].hook_id != -1 && int_data[i].callback != NULL)
                             if (bit_isset(msg.NOTIFY_ARG, i))
                                 int_data[i].callback();
                     break;
