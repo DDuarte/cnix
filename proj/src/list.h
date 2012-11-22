@@ -20,5 +20,6 @@ list_t* list_new(unsigned int (*cmp)(void*,void*), void* (*cpy)(void*), void (*d
 unsigned int list_add_elem(list_t* me, void* newElem);
 list_node_t* list_find(list_t* me, void* data);
 list_node_t* list_remove(list_t* me, list_node_t* elem);
+void list_remove_all(list_t* me);
 
 #endif

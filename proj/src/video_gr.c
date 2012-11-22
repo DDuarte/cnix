@@ -5,6 +5,8 @@
 #include <sys/mman.h>
 #include <sys/types.h>
 
+//#define NGRAPHICS
+
 #include "vbe.h"
 #include "video_gr.h"
 #include "utilities.h"
@@ -30,9 +32,14 @@ static char *temp_video_mem; /* address of the temporary buffer */
 static unsigned int vram_size;
 
 static int _vg_set_absolute_pixel(long x, long y, unsigned long color);
+#ifndef NGRAPHICS
+static long h_res; /* Horizontal screen resolution in pixels */
+static long v_res; /* Vertical screen resolution in pixels */
+#else 
+static long h_res = 1024; /* Horizontal screen resolution in pixels */
+static long v_res = 768; 
+#endif
 
-static unsigned h_res; /* Horizontal screen resolution in pixels */
-static unsigned v_res; /* Vertical screen resolution in pixels */
 static unsigned bits_per_pixel; /* Number of VRAM bits per pixel */
 static unsigned bytes_per_pixel; /* Number of VRAM bytes per pixel (at least one) */
 static vbe_mode_info_t vmi_p;
@@ -208,6 +215,95 @@ long vg_get_pixel(long x, long y) {
     return res;
 }
 
+int _vg_draw_absolute_line(long xi, long yi, long xf, long yf, unsigned long color) {
+    int i;
+    
+    if ((xi > xf) || (xi == xf && yi > yf)) {
+        swapl(&xi, &xf);
+        swapl(&yi, &yf);
+    }
+    
+    
+    if ((xi < 0 && xf < 0) || (yi < 0 && yf < 0) || (xi > h_res && xf > h_res) || (yi > v_res && yf > v_res)) {
+        return -1;
+    }
+    
+    if (xi == xf) {
+        if (yi < 0)
+            yi = 0;
+            
+        if (yf > v_res)
+            yf = v_res;
+            
+        for (i = yi; i < yf; i++)
+                _vg_set_absolute_pixel(xi, i, color);
+    } else if (yi == yf) {
+        xf = (xf > h_res ? h_res : xf);
+        for (i = (xi < 0 ? 0 : xi); i <= xf; i++)
+            _vg_set_absolute_pixel(i, (unsigned long)yi, color);
+    } else {
+        double m = (double)(yf - yi) / (double)(xf - xi);
+        double b = (double)yi - m * (double)xi;
+        
+        if (m != 0) {
+            if (xi < 0 || yi < 0) {
+                if (m > 0) {
+                    if (b >= 0) {
+                        xi = 0;
+                        yi = b;
+                    } else {
+                        xi = - b / m;
+                        yi = 0;
+                    }
+                } else if (m > 0) {
+                    if (xi < 0) {
+                        xi = 0;
+                        yi = b;
+                    }
+                    if (yf < 0) {
+                        xf = - b / m;
+                        yf = 0;
+                    }
+                }
+            }
+            if (xf > h_res) {
+                xf = h_res;
+                yf = m * h_res + b;
+            }
+            
+            if (yf > v_res) {
+                xf = (v_res - b) / m;
+                yf = v_res;
+            }
+        } else {
+            if (xi < 0)
+                xi = 0;
+                
+            if (xf > h_res)
+                xf = h_res;
+        }
+        
+        if (abs(m) <= 1) {
+            double yt = yi;
+            for (i = xi; i <= xf; i++) {
+                _vg_set_absolute_pixel(i, (unsigned long)yt, color);
+                yt += m;
+            }
+        } else {
+            double xt = xi;
+            double invm = 1.0 / m;
+            for (i = yi; i <= yf; i++) {
+                _vg_set_absolute_pixel(xt, (unsigned long)i, color);
+                xt += invm;
+            }
+        }
+        
+    }
+    
+    return 0;
+}
+
+/*
 int _vg_draw_absolute_line(long xi, long yi, long xf,
     long yf, unsigned long color)
 {
@@ -217,6 +313,8 @@ int _vg_draw_absolute_line(long xi, long yi, long xf,
     if (xi > h_res && yi > v_res && xf > h_res && yf > v_res) {
         return -1;
     }
+    
+    if (xi < 0 && xf < 0 || yi < 0 && yf < 0) { return -1; }
 
     yt = yi;
     
@@ -257,7 +355,7 @@ int _vg_draw_absolute_line(long xi, long yi, long xf,
 
     return OK;
 }
-
+*/
 int vg_draw_line(long xi, long yi, long xf,
     long yf, unsigned long color)
 {

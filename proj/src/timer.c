@@ -4,15 +4,15 @@
 #include <minix/bitmap.h>
 
 #include "i8254.h"
-#include "list.h"
+#include "priority_list.h"
 #include "interrupt.h"
 #include "timer.h"
 
 
 
-static list_t* _events;
+
 static int interrupt = -1;
-static unsigned int ticks = 0;
+
 
 void* event_copy(void* data) {
     event_t* newEvent = (event_t*)malloc(sizeof(event_t));
@@ -45,9 +45,11 @@ int timer_set_square(unsigned long timer, unsigned long freq) {
 }
 
 int timer_init(void) {    
-    _events = list_new(NULL, event_copy, event_destroy);
+    _events = priority_list_new(NULL, event_copy, event_destroy);
     
     timer_set_square(0, 60);
+    
+    ticks = 0;
     
     interrupt = int_subscribe(TIMER0_IRQ, IRQ_REENABLE, timer_int_handler);
     if (interrupt == -1)
@@ -59,14 +61,14 @@ int timer_init(void) {
 int timer_terminate() {
 
     int_unsubscribe(interrupt);
-    
+    priority_list_remove_all(_events);
     interrupt = -1;
-    
 	return 0;
 }
 
 void timer_int_handler() {
-    list_node_t* elem;
+
+    priority_list_node_t* elem;
     
     ticks++;
     
@@ -75,9 +77,13 @@ void timer_int_handler() {
     while(elem != NULL){
         event_t* event = (event_t*)(elem->val);
         if (event->due_ticks == ticks) {
-            event->callback(event);
+            //printf("DEBUG: %s, %d, ticks: %d - ", __FILE__, __LINE__, ticks);
+            if (!event->callback(event)) {
+                timer_terminate();
+                return;
+            }
             if (!(event->recursive)) {
-                elem = list_remove(_events, elem);
+                elem = priority_list_remove(_events, elem);
                 continue;
             } else {
                 event_reset(event);
@@ -87,20 +93,34 @@ void timer_int_handler() {
     }
 }
 
-int _timer_add_event(unsigned int dur_f, void (*callback)(event_t*), unsigned int recursive) {
+int _timer_add_event(unsigned int dur_f, int (*callback)(event_t*), unsigned int priority, unsigned int recursive) {
     
     event_t event = { dur_f + ticks, dur_f, recursive, callback };
     
-    if (!list_add_elem(_events, (void*)(&event)))
+    if (!priority_list_add_elem(_events, (void*)(&event), priority))
         return 1;
     
     return 0;
 }
 
-int _timer_add_event_s(unsigned int dur_s, void (*callback)(event_t*), unsigned int recursive) {
-    return _timer_add_event(dur_s * 60, callback, recursive);
+int _timer_add_event_s(unsigned int dur_s, int (*callback)(event_t*), unsigned int priority, unsigned int recursive) {
+    return _timer_add_event(dur_s * 60, callback, priority, recursive);
 }
 
 void event_reset(event_t* me) {
     me->due_ticks = me->duration + ticks;
+}
+
+int timer_num_events() {
+    priority_list_node_t* elem = _events->root;
+    int num = 0;
+    
+    while (elem != NULL) {
+        event_t* event = (event_t*)(elem->val);
+        if (event->due_ticks == ticks)
+            num++;
+        elem = elem->next;
+    }
+    
+    return num;
 }

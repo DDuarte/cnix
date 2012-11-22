@@ -30,3 +30,9 @@ unsigned long parse_ulong(const char *str, int base) {
     /* Successful conversion */
     return val;
 }
+
+void swapl(long* a, long* b) {
+    long aux = *a;
+    *a = *b;
+    *b = aux;
+}

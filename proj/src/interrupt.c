@@ -7,8 +7,7 @@
 #include <minix/type.h>
 #include <stdio.h>
 
-typedef struct
-{
+typedef struct {
     int hook_id;
     void (*callback)();
 } interrupt;

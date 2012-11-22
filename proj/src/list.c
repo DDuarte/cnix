@@ -48,6 +48,7 @@ unsigned int list_add_elem(list_t* me, void* val) {
     
     if (me->root == NULL) {
         me->root = elem;
+        elem->previous = NULL;
         me->last = me->root;
         me->size += 1;
     } else {
@@ -91,5 +92,21 @@ list_node_t* list_remove(list_t* me, list_node_t* elem) {
     free(elem);
     
     return result;
+}
+
+void list_remove_all(list_t* me) {
+    list_node_t* obj = me->last;
+    
+    while (obj != NULL) {
+        me->destroy(obj->val);
+        if (obj->previous != NULL) {
+            obj = obj->previous;
+            free(obj->next);
+            list_remove(me, obj->next);
+        } else {
+            free(obj);
+            obj == NULL;
+        }
+    }
 }
 
