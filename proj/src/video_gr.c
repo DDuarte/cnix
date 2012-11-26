@@ -142,6 +142,7 @@ void* vg_init(unsigned short mode)
     gr_color.blueMask = bit_set_all(vmi_p.BlueMaskSize);
     gr_color.redPosition = vmi_p.RedFieldPosition;
     gr_color.greenPosition = vmi_p.GreenFieldPosition;
+
     gr_color.bluePosition = vmi_p.BlueFieldPosition;
 
     if (_init_FreeType()) {
@@ -273,7 +274,7 @@ int _vg_draw_absolute_line(long xi, long yi, long xf, long yf, unsigned long col
                 _vg_set_absolute_pixel(xi, i, color);
     } else if (yi == yf) {
         xf = (xf > h_res ? h_res : xf);
-        for (i = (xi < 0 ? 0 : xi); i <= xf; i++)
+        for (i = ((xi < 0) ? 0 : xi); i <= xf; i++)
             _vg_set_absolute_pixel(i, (unsigned long)yi, color);
     } else {
         double m = (double)(yf - yi) / (double)(xf - xi);
@@ -460,7 +461,7 @@ int vg_exit(void) {
         return OK;
 }
 
-int vg_ft_draw_bitmap(FT_Bitmap* bitmap, int x, int y) {
+int vg_ft_draw_bitmap(FT_Bitmap* bitmap, int x, int y, unsigned long color) {
     int i, j, p, q;
 
     int x_max = x + bitmap->width;
@@ -468,9 +469,13 @@ int vg_ft_draw_bitmap(FT_Bitmap* bitmap, int x, int y) {
 
     for (i = x, p = 0; i < x_max; i++, p++) {
         for (j = y, q = 0; j < y_max; j++, q++) {
+            if (i < 0 || j < 0 || i >= h_res || j >= v_res) {
+                continue;
+            }
+
             unsigned char c = bitmap->buffer[q * bitmap->width + p];
             if (c != 0) /* 0 is background */
-                vg_set_pixel(i, j, vg_color_rgb(0, 0, 0)); /* black color */
+                vg_set_pixel(i, j, color);
         }
     }
 
@@ -514,7 +519,7 @@ int vg_draw_string(char* str, int size, unsigned long x,
         if (error)
             continue;
 
-        vg_ft_draw_bitmap(&slot->bitmap, pen_x + slot->bitmap_left, pen_y - slot->bitmap_top);
+        vg_ft_draw_bitmap(&slot->bitmap, pen_x + slot->bitmap_left, pen_y - slot->bitmap_top, color);
         pen_x += slot->advance.x >> 6;
         previous = glyph_index;
     }

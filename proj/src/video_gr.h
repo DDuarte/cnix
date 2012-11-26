@@ -134,7 +134,7 @@ int vg_exit(void);
 long vg_scale_x(long x);
 long vg_scale_y(long y);
 
-int vg_ft_draw_bitmap(FT_Bitmap* bitmap, int x, int y);
+int vg_ft_draw_bitmap(FT_Bitmap* bitmap, int x, int y, unsigned long color);
 int vg_draw_string(char* str, int size, unsigned long x,
         unsigned long y, unsigned long color);
 
