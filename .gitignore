@@ -30,3 +30,6 @@ _ReSharper*/
 *.*sdf
 *.vcxproj*
 *.sln
+*.sublime-*
+*.settings
+*.json

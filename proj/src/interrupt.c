@@ -1,5 +1,6 @@
 #include "interrupt.h"
 
+#include <minix/driver.h>
 #include <minix/drivers.h>
 #include <minix/syslib.h>
 #include <minix/com.h>
@@ -36,7 +37,7 @@ int int_subscribe(int irq_line, int policy, void (*callback)()) {
     int r, bit = 0;
 
     while (int_data[bit].hook_id != -1 && bit < NUM_OF_INTERRUPTS) { bit++; }
-    
+
     if (bit == NUM_OF_INTERRUPTS) {
         printf("int_subscribe: Can't subscribe more than 32 interruptions\n");
         return -1;
@@ -65,16 +66,16 @@ int int_subscribe(int irq_line, int policy, void (*callback)()) {
         _int_reset_interrupt(bit);
         return -1;
     }
-    
+
     int_data[bit].callback = callback;
-    
-    return bit;        
+
+    return bit;
 }
 
 int int_unsubscribe(int bit)
 {
     int r;
-    
+
     r = sys_irqdisable(&int_data[bit].hook_id);
     if (r != 0) {
         if (r == EINVAL)
@@ -99,25 +100,25 @@ int int_unsubscribe(int bit)
 }
 
 static int int_handle(void) {
-    
+
     message msg;
     int ipc_status;
     int r = 0, i;
-    
+
     while (r < NUM_OF_INTERRUPTS && int_data[r].hook_id == -1) { r++; }
-    
+
     if (r == NUM_OF_INTERRUPTS) {
         printf("int_handle: no interrupts where subscribed\n");
         return -1;
     }
-    
+
     while(executing != 0) {
         r = driver_receive(ANY, &msg, &ipc_status);
         if (r != 0) {
             printf("int_handle: driver_receive failed with: %d\n", r);
             continue;
         }
-        
+
         if (is_ipc_notify(ipc_status)) {
             switch (_ENDPOINT_P(msg.m_source)) {
                 case HARDWARE:
@@ -131,7 +132,7 @@ static int int_handle(void) {
             }
         }
     }
-    
+
     return 0;
 }
 

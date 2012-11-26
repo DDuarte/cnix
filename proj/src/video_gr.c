@@ -35,9 +35,9 @@ static int _vg_set_absolute_pixel(long x, long y, unsigned long color);
 #ifndef NGRAPHICS
 static long h_res; /* Horizontal screen resolution in pixels */
 static long v_res; /* Vertical screen resolution in pixels */
-#else 
+#else
 static long h_res = 1024; /* Horizontal screen resolution in pixels */
-static long v_res = 768; 
+static long v_res = 768;
 #endif
 
 static unsigned bits_per_pixel; /* Number of VRAM bits per pixel */
@@ -69,7 +69,7 @@ void* vg_init(unsigned short mode)
     r.u.b.ah = VBE_MODE;
     r.u.b.al = SET_VBE_MODE;
     r.u.w.bx = BIT(LINEAR_MODEL_BIT) | mode;
-    
+
     if (sys_int86(&r))
     {
         printf("lab2/vg_init: failed in sys_int86");
@@ -163,7 +163,7 @@ int vg_set_pixel(long x, long y, unsigned long color) {
     if (x > BASE_H_RES || y > BASE_V_RES || x < 0 || y < 0) {
         return -1;
     }
-    
+
     x = vg_scale_x(x);
     y = vg_scale_y(y);
 
@@ -199,7 +199,7 @@ long vg_get_pixel(long x, long y) {
     if (x > BASE_H_RES || y > BASE_V_RES || x < 0 || y < 0) {
         return -1;
     }
-    
+
     x = vg_scale_x(x);
     y = vg_scale_y(y);
 
@@ -217,24 +217,24 @@ long vg_get_pixel(long x, long y) {
 
 int _vg_draw_absolute_line(long xi, long yi, long xf, long yf, unsigned long color) {
     int i;
-    
+
     if ((xi > xf) || (xi == xf && yi > yf)) {
         swapl(&xi, &xf);
         swapl(&yi, &yf);
     }
-    
-    
+
+
     if ((xi < 0 && xf < 0) || (yi < 0 && yf < 0) || (xi > h_res && xf > h_res) || (yi > v_res && yf > v_res)) {
         return -1;
     }
-    
+
     if (xi == xf) {
         if (yi < 0)
             yi = 0;
-            
+
         if (yf > v_res)
             yf = v_res;
-            
+
         for (i = yi; i < yf; i++)
                 _vg_set_absolute_pixel(xi, i, color);
     } else if (yi == yf) {
@@ -244,7 +244,7 @@ int _vg_draw_absolute_line(long xi, long yi, long xf, long yf, unsigned long col
     } else {
         double m = (double)(yf - yi) / (double)(xf - xi);
         double b = (double)yi - m * (double)xi;
-        
+
         if (m != 0) {
             if (xi < 0 || yi < 0) {
                 if (m > 0) {
@@ -270,13 +270,18 @@ int _vg_draw_absolute_line(long xi, long yi, long xf, long yf, unsigned long col
                 xf = h_res;
                 yf = m * h_res + b;
             }
-            
+
             if (yf > v_res) {
                 xf = (v_res - b) / m;
                 yf = v_res;
-            }
+        } else {
+            if (xi < 0)
+                xi = 0;
+
+            if (xf > h_res)
+                xf = h_res;
         }
-        
+
         if (abs(m) <= 1) {
             double yt = yi;
             for (i = xi; i <= xf; i++) {
@@ -291,9 +296,9 @@ int _vg_draw_absolute_line(long xi, long yi, long xf, long yf, unsigned long col
                 xt += invm;
             }
         }
-        
+
     }
-    
+
     return 0;
 }
 
@@ -307,11 +312,11 @@ int _vg_draw_absolute_line(long xi, long yi, long xf,
     if (xi > h_res && yi > v_res && xf > h_res && yf > v_res) {
         return -1;
     }
-    
+
     if (xi < 0 && xf < 0 || yi < 0 && yf < 0) { return -1; }
 
     yt = yi;
-    
+
     if (xi == xf) {
         if (yi > yf) {
             for (i = yi; i >= yf; i--)
@@ -356,7 +361,7 @@ int vg_draw_line(long xi, long yi, long xf,
     if (xi > BASE_H_RES && yi > BASE_V_RES && xf > BASE_H_RES && yf > BASE_V_RES) {
         return -1;
     }
-    
+
     xi = vg_scale_x(xi);
     yi = vg_scale_y(yi);
     xf = vg_scale_x(xf);
@@ -377,7 +382,7 @@ int vg_draw_rectangle(long x1, long y1, long x2,
     y1 = vg_scale_y(y1);
     x2 = vg_scale_x(x2);
     y2 = vg_scale_y(y2);
-    
+
     if (x1 < x2 && y1 < y2)
         for (x = x1; x <= x2; x++)
             for (y = y1; y <= y2; y++)
@@ -403,17 +408,17 @@ int vg_draw_circle(int x0, int y0, int radius, unsigned long color)
   /* Based on a sample code from Wikipedia */
 
   int f, ddF_x, ddF_y, x, y;
-  
+
   x0 = vg_scale_x(x0);
   y0 = vg_scale_y(y0);
   radius = vg_scale_x(radius);
-  
+
   f = 1 - radius;
   ddF_x = 1;
   ddF_y = -2 * radius;
   x = 0;
   y = radius;
-  
+
   _vg_set_absolute_pixel(x0, y0 + radius, color);
   _vg_set_absolute_pixel(x0, y0 - radius, color);
   _vg_draw_absolute_line(x0, y0 + radius, x0, y0 - radius, color);
