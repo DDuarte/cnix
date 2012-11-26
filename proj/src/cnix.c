@@ -1,13 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <minix/drivers.h>
 #include <time.h>
+#include <minix/drivers.h>
 
-//#define NGRAPHICS
+//#define NGRAPHICS /* disables graphic mode */
 
 #include "utilities.h"
 #include "video_gr.h"
 #include "timer.h"
+#include "interrupt.h"
 /* Variables */
 
 
@@ -35,37 +36,45 @@ int update(event_t * dummie);
 int main(int argc, char const *argv[])
 {
     int error;
-    
+
     time_t start;
     struct tm * ptm;
-    
+
     parse_args(argc, argv);
-    
-    if (init() != 0) {
-        return 1;
+
+    error = init();
+
+    if (error) {
+        printf("main: init failed with error code %i.\n", error);
+        return error;
     }
-    
+
     time(&start);
-    int_start_handler();
+    error = int_start_handler();
+    if (error) {
+        printf("main: int_start_handler failed with error code %i.\n", error);
+        return error;
+    }
     start = time(NULL)-start;
-    
+
     #ifndef NGRAPHICS
-    if (error = vg_exit())
+    error = vg_exit();
+    if (error)
     {
-        printf("vg_exit failed with error code %i.\n", error);
-        return 1;
+        printf("main: vg_exit failed with error code %i.\n", error);
+        return error;
     }
     #endif
-    
+
     ptm = gmtime(&start);
-    
+
     printf("%2d:%02d:%02d\n", ptm->tm_hour, ptm->tm_min, ptm->tm_sec );
-    
+
     return 0;
 }
 
 void parse_args(int argc, char const *argv[]) {
-    myApplication.video_mode = 0x117;
+    myApplication.video_mode = 0x117; /* default */
     if (argc == 2) {
         unsigned long temp_mode;
         temp_mode = parse_ulong(argv[1], 16);
@@ -75,30 +84,37 @@ void parse_args(int argc, char const *argv[]) {
 }
 
 int init() {
+    int error;
+
     sef_startup();
-    
+
     #ifndef NGRAPHICS
     /* initialize graphics card in video mode */
     myApplication.video_mem = vg_init(myApplication.video_mode);
     if (!myApplication.video_mem)
     {
-        printf("main: vg_init failed.\n");
+        printf("init: vg_init failed.\n");
         return 1;
     }
     #endif
-    
+
     int_init();
-    
-    timer_init();
-    
+
+    error = timer_init();
+
+    if (error < 0) {
+        printf("init: timer_init failed with error code %i.\n", error);
+        return error;
+    }
+
     timer_add_event_r(1, draw, 90001);
     timer_add_event_s(EXECUTION_TIME, AppClose, 0);
     timer_add_event_r(1, update, 9000);
-    
-    
+
+
     myApplication.x = 10;
     myApplication.redraw = 0;
-    
+
     return 0;
 }
 
@@ -106,33 +122,33 @@ int draw(event_t * dummie) {
     int numev = timer_num_events();
 
     //printf("%d ", numev);
-    
+
     if (myApplication.redraw && (numev == 2)) {
         //printf("draw %d", myApplication.redraw);
-        
+
         /* background */
         vg_fill(vg_color_rgb(255, 255, 255));
-        
+
         /* menu bar background */
         vg_draw_rectangle(0, 0, 1024, 30, vg_color_rgb(90, 90, 90));
-        
+
         /* borders */
         vg_draw_rectangle(0, 763, 1024, 768,    vg_color_rgb(90, 90, 90));
         vg_draw_rectangle(0, 30, 5, 763,        vg_color_rgb(90, 90, 90));
         vg_draw_rectangle(1019, 30, 1024, 763,  vg_color_rgb(90, 90, 90));
-        
+
         /* close button, cross */
         vg_draw_rectangle(994, 5, 1014, 25, vg_color_rgb(230, 0, 0));
         vg_draw_line(997, 8, 1011, 22, vg_color_rgb(255, 255, 255));
         vg_draw_line(1011, 8, 997, 22, vg_color_rgb(255, 255, 255));
-        
+
         //vg_draw_circle(100, 100, myApplication.x, vg_color_rgb(0,0,0));
-        
+
         /* must be last line */
-        vg_swap_buffer();  
+        vg_swap_buffer();
         myApplication.redraw = 0;
     }
-    
+
     return 1;
 }
 
