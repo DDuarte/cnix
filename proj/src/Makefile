@@ -5,12 +5,12 @@ CC = gcc
 PROG = cnix
 SRCS = cnix.c vbe.c video_gr.c video_gr_a.S utilities.c timer.c interrupt.c list.c priority_list.c
 
-CFLAGS = -I./../dep/include -I/usr/local/include
+CFLAGS = -I./../dep/include -I/usr/local/include/freetype2 -I/usr/local/include
 LDFLAGS = -L. -L./../dep/lib -L/usr/local/lib
 CCFLAGS = -Wall
 
 DPADD+= ${LIBDRIVER} ${LIBSYS}
-LDADD+= -llm -ldriver -lsys
+LDADD+= -llm -ldriver -lsys -lfreetype
 
 MAN=
 

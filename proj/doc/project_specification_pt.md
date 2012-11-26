@@ -96,7 +96,7 @@ Será também possível compilar o código e mostrar resultado da compilação n
     int vg_draw_circle(int x0, int y0, int radius, unsigned long color);
     int vg_draw_character(char c, double scale, unsigned long x,
         unsigned long y, unsigned long color);
-    int vg_draw_string(char** str, double scale, unsigned long x,
+    int vg_draw_string(char* str, double scale, unsigned long x,
         unsigned long y, unsigned long color);
     int vg_draw_bitmap(bitmap* bm, double scale, double rotation,
         unsigned long x, unsigned long y);

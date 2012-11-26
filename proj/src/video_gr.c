@@ -11,6 +11,9 @@
 #include "video_gr.h"
 #include "utilities.h"
 
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
 #define LINEAR_MODEL_BIT 14
 
 #define VBE_MODE 0x4F
@@ -44,6 +47,10 @@ static unsigned bits_per_pixel; /* Number of VRAM bits per pixel */
 static unsigned bytes_per_pixel; /* Number of VRAM bytes per pixel (at least one) */
 static vbe_mode_info_t vmi_p;
 
+/* Font related variables */
+static FT_Library _library;
+static FT_Face _face;
+static FT_Bool _use_kerning;
 
 static struct {
     unsigned long redMask;
@@ -58,6 +65,29 @@ unsigned long vg_color_rgb(unsigned long r, unsigned long g, unsigned long b) {
     return ((((b * gr_color.blueMask)  / 255) << gr_color.bluePosition)  |
             (((g * gr_color.greenMask) / 255) << gr_color.greenPosition) |
             (((r * gr_color.redMask)   / 255) << gr_color.redPosition));
+}
+
+int _init_FreeType(void) {
+    int error;
+
+    error = FT_Init_FreeType(&_library);
+    if (error) {
+        printf("_init_FreeType: FT_Init_FreeType failed with error code %d.\n", error);
+        return error;
+    }
+
+    error = FT_New_Face(_library, "/root/arial.ttf", 0, &_face);
+    if (error == FT_Err_Unknown_File_Format) {
+        printf("_init_FreeType: FT_New_Face - font format unsupported.\n");
+        return error;
+    } else if (error) {
+        printf("_init_FreeType: FT_New_Face failed with error code %d.\n", error);
+        return error;
+    }
+
+    _use_kerning = FT_HAS_KERNING(_face);
+
+    return 0;
 }
 
 void* vg_init(unsigned short mode)
@@ -113,6 +143,10 @@ void* vg_init(unsigned short mode)
     gr_color.redPosition = vmi_p.RedFieldPosition;
     gr_color.greenPosition = vmi_p.GreenFieldPosition;
     gr_color.bluePosition = vmi_p.BlueFieldPosition;
+
+    if (_init_FreeType()) {
+        return NULL;
+    }
 
     return video_mem;
 }
@@ -424,4 +458,66 @@ int vg_exit(void) {
         return -1;
     } else
         return OK;
+}
+
+int vg_ft_draw_bitmap(FT_Bitmap* bitmap, int x, int y) {
+    int i, j, p, q;
+
+    int x_max = x + bitmap->width;
+    int y_max = y + bitmap->rows;
+
+    for (i = x, p = 0; i < x_max; i++, p++) {
+        for (j = y, q = 0; j < y_max; j++, q++) {
+            unsigned char c = bitmap->buffer[q * bitmap->width + p];
+            if (c != 0) /* 0 is background */
+                vg_set_pixel(i, j, vg_color_rgb(0, 0, 0)); /* black color */
+        }
+    }
+
+    return 0;
+}
+
+int vg_draw_string(char* str, int size, unsigned long x,
+        unsigned long y, unsigned long color) {
+    int error;
+
+    error = FT_Set_Pixel_Sizes(_face, 0, size);
+    if (error) {
+        printf("vg_draw_string: FT_Set_Pixel_Sizes failed with error code %d.\n", error);
+        return error;
+    }
+
+    FT_GlyphSlot slot = _face->glyph;
+    FT_UInt previous;
+    int pen_x, pen_y, n;
+    FT_UInt glyph_index;
+    int num_chars;
+
+    pen_x = x;
+    pen_y = y;
+    previous = 0;
+    num_chars = strlen(str);
+
+    for (n = 0; n < num_chars; n++) {
+
+        glyph_index = FT_Get_Char_Index(_face, str[n]);
+
+        if (_use_kerning && previous && glyph_index) {
+            FT_Vector delta;
+
+            FT_Get_Kerning(_face, previous, glyph_index, FT_KERNING_DEFAULT, &delta);
+
+            pen_x += delta.x >> 6;
+        }
+
+        error = FT_Load_Glyph(_face, glyph_index, FT_LOAD_RENDER);
+        if (error)
+            continue;
+
+        vg_ft_draw_bitmap(&slot->bitmap, pen_x + slot->bitmap_left, pen_y - slot->bitmap_top);
+        pen_x += slot->advance.x >> 6;
+        previous = glyph_index;
+    }
+
+    return 0;
 }

@@ -12,7 +12,7 @@
 /* Variables */
 
 
-#define EXECUTION_TIME 20
+#define EXECUTION_TIME 5
 static struct {
     char* video_mem;
     unsigned short video_mode;
@@ -141,6 +141,8 @@ int draw(event_t * dummie) {
         vg_draw_rectangle(994, 5, 1014, 25, vg_color_rgb(230, 0, 0));
         vg_draw_line(997, 8, 1011, 22, vg_color_rgb(255, 255, 255));
         vg_draw_line(1011, 8, 997, 22, vg_color_rgb(255, 255, 255));
+
+        vg_draw_string("LCOM", 64, 500, 500, 0);
 
         //vg_draw_circle(100, 100, myApplication.x, vg_color_rgb(0,0,0));
 
