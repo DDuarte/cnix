@@ -274,12 +274,13 @@ int _vg_draw_absolute_line(long xi, long yi, long xf, long yf, unsigned long col
             if (yf > v_res) {
                 xf = (v_res - b) / m;
                 yf = v_res;
-        } else {
-            if (xi < 0)
-                xi = 0;
+            } else {
+                if (xi < 0)
+                    xi = 0;
 
-            if (xf > h_res)
-                xf = h_res;
+                if (xf > h_res)
+                    xf = h_res;
+            }
         }
 
         if (abs(m) <= 1) {
@@ -296,67 +297,12 @@ int _vg_draw_absolute_line(long xi, long yi, long xf, long yf, unsigned long col
                 xt += invm;
             }
         }
-
     }
 
     return 0;
 }
 
-/*
-int _vg_draw_absolute_line(long xi, long yi, long xf,
-    long yf, unsigned long color)
-{
-    long i;
-    double m, yt;
-
-    if (xi > h_res && yi > v_res && xf > h_res && yf > v_res) {
-        return -1;
-    }
-
-    if (xi < 0 && xf < 0 || yi < 0 && yf < 0) { return -1; }
-
-    yt = yi;
-
-    if (xi == xf) {
-        if (yi > yf) {
-            for (i = yi; i >= yf; i--)
-                _vg_set_absolute_pixel(xi, i, color);
-        }
-        else {
-            for (i = yi; i < yf; i++)
-                _vg_set_absolute_pixel(xi, i, color);
-        }
-
-    } else if (xi < xf) {
-        if (yi > yf)
-            m = (double)(yf - yi) / (double)(xi - xf);
-        else
-            m = (double)(yf - yi) / (double)(xf - xi);
-
-        for (i = xi; i <= xf; i++)
-        {
-            _vg_set_absolute_pixel(i, (unsigned long)yt, color);
-            yt += m;
-        }
-    } else if (xi > xf) {
-        if (yi < yf)
-            m = (double)(yi - yf) / (double)(xf - xi);
-        else
-            m = (double)(yi - yf) / (double)(xi - xf);
-
-        for (i = xi; i >= xf; i--) {
-            _vg_set_absolute_pixel(i, (unsigned long)yt, color);
-            yt += m;
-        }
-    } else {
-        return -1;
-    }
-
-    return OK;
-}
-*/
-int vg_draw_line(long xi, long yi, long xf,
-    long yf, unsigned long color)
+int vg_draw_line(long xi, long yi, long xf, long yf, unsigned long color)
 {
     if (xi > BASE_H_RES && yi > BASE_V_RES && xf > BASE_H_RES && yf > BASE_V_RES) {
         return -1;
