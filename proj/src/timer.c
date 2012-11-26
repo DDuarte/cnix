@@ -16,14 +16,14 @@ static int interrupt = -1;
 
 void* event_copy(void* data) {
     event_t* newEvent = (event_t*)malloc(sizeof(event_t));
-
+    
     event_t* oldEvent = (event_t*)data;
-
+    
     if (!newEvent)
         return NULL;
-
+        
     *newEvent = *oldEvent;
-
+    
     return newEvent;
 }
 
@@ -44,17 +44,17 @@ int timer_set_square(unsigned long timer, unsigned long freq) {
     return 0;
 }
 
-int timer_init(void) {
+int timer_init(void) {    
     _events = priority_list_new(NULL, event_copy, event_destroy);
-
+    
     timer_set_square(0, 60);
-
+    
     ticks = 0;
-
+    
     interrupt = int_subscribe(TIMER0_IRQ, IRQ_REENABLE, timer_int_handler);
     if (interrupt == -1)
         return interrupt;
-
+    
 	return interrupt;
 }
 
@@ -69,11 +69,11 @@ int timer_terminate() {
 void timer_int_handler() {
 
     priority_list_node_t* elem;
-
+    
     ticks++;
-
+    
     elem = _events->root;
-
+    
     while(elem != NULL){
         event_t* event = (event_t*)(elem->val);
         if (event->due_ticks == ticks) {
@@ -94,12 +94,12 @@ void timer_int_handler() {
 }
 
 int _timer_add_event(unsigned int dur_f, int (*callback)(event_t*), unsigned int priority, unsigned int recursive) {
-
+    
     event_t event = { dur_f + ticks, dur_f, recursive, callback };
-
+    
     if (!priority_list_add_elem(_events, (void*)(&event), priority))
         return 1;
-
+    
     return 0;
 }
 
@@ -114,13 +114,13 @@ void event_reset(event_t* me) {
 int timer_num_events() {
     priority_list_node_t* elem = _events->root;
     int num = 0;
-
+    
     while (elem != NULL) {
         event_t* event = (event_t*)(elem->val);
         if (event->due_ticks == ticks)
             num++;
         elem = elem->next;
     }
-
+    
     return num;
 }

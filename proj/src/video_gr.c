@@ -255,7 +255,7 @@ int _vg_draw_absolute_line(long xi, long yi, long xf, long yf, unsigned long col
                         xi = - b / m;
                         yi = 0;
                     }
-                } else if (m > 0) {
+                } else {
                     if (xi < 0) {
                         xi = 0;
                         yi = b;
@@ -275,12 +275,6 @@ int _vg_draw_absolute_line(long xi, long yi, long xf, long yf, unsigned long col
                 xf = (v_res - b) / m;
                 yf = v_res;
             }
-        } else {
-            if (xi < 0)
-                xi = 0;
-                
-            if (xf > h_res)
-                xf = h_res;
         }
         
         if (abs(m) <= 1) {

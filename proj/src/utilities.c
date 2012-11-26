@@ -2,8 +2,6 @@
 #include <minix/bitmap.h>
 #include <errno.h>
 #include <limits.h>
-#include <stdlib.h>
-#include <stdio.h>
 
 unsigned long bit_set_all(int n) {
     unsigned long result = 0x0;
