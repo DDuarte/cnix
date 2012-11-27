@@ -4,13 +4,14 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-unsigned int getYResolution();
-unsigned int getXResolution();
 /** @defgroup video_gr video_gr
  * @{
  *
  * Functions for outputing data to screen in graphics mode
  */
+
+int vg_get_h_res(void);
+int vg_get_v_res(void);
 
 /**
  * @brief Initializes the video module in graphics mode

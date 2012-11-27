@@ -7,7 +7,7 @@
 #include <minix/drivers.h>
 #include <minix/syslib.h>
 #include <minix/bitmap.h>
- 
+
 static int _bit;
 
 static int(*_periodicHandler)(void) = NULL;
@@ -30,7 +30,7 @@ void rtc_init(void) {
 
 void rtc_terminate(void) {
     int_unsubscribe(_bit);
-    
+
     priority_list_remove_all(_rtc_events);
     free(_rtc_events);
     _rtc_events = NULL;
@@ -41,12 +41,12 @@ static void _rtcIntHandler(void) {
     unsigned long regC;
     event_t* event;
     priority_list_node_t* elem;
-    
+
     sys_outb(RTC_ADDR_REG, RTC_REG_C);
     cause = sys_inb(RTC_DATA_REG, &regC);
-    
+
     printf("DEBUG: %s, %s\n", __FILE__, __FUNCTION__);
-    
+
     if(bit_isset(regC, RTC_PF_BIT) && _periodicHandler) {
         ticks++;
         printf("DEBUG: %s, %s, ticks: %d", __FILE__, __FUNCTION__, ticks);
@@ -80,19 +80,19 @@ static int _rtc_subscribe(void) {
     bit_set(regB, RTC_PIE_BIT);
     bit_unset(regB, RTC_AIE_BIT);
     bit_unset(regB, RTC_UIE_BIT);
-    
+
     rtc_write_register(RTC_REG_B, regB);
-    
+
     rtc_read_register(RTC_REG_A, &regA);
-    
+
     bit_unset(regA, RTC_RS0_BIT);
     bit_set(regA, RTC_RS1_BIT);
     bit_set(regA, RTC_RS2_BIT);
     bit_unset(regA, RTC_RS3_BIT);
-    
+
     rtc_write_register(RTC_REG_A, regA);
-    
-    return _bit;       
+
+    return _bit;
 }
 
 unsigned long bcd_to_decimal(unsigned long bcd) {
@@ -141,7 +141,7 @@ int rtc_read_register(unsigned long reg, unsigned long* value) {
         printf("rtc_read_register: sys_inb failed.\n");
         return res;
     }
-    
+
     if (value != NULL)
         *value = val_temp;
 
@@ -170,9 +170,9 @@ int rtc_write_register(unsigned long reg, unsigned long value) {
 
 int rtc_add_event(unsigned int dur_ms, int (*callback)(event_t*), unsigned int priority, unsigned int recursive) {
     event_t event = { dur_ms + ticks, dur_ms, recursive, callback };
-    
+
     if (!priority_list_add_elem(_rtc_events, (void*)(&event), priority))
         return 1;
-        
+
     return 0;
 }

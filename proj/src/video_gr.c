@@ -61,6 +61,9 @@ static struct {
     unsigned long bluePosition;
 } gr_color;
 
+int vg_get_h_res(void) { return h_res; }
+int vg_get_v_res(void) { return v_res; }
+
 unsigned long vg_color_rgb(unsigned long r, unsigned long g, unsigned long b) {
     return ((((b * gr_color.blueMask)  / 255) << gr_color.bluePosition)  |
             (((g * gr_color.greenMask) / 255) << gr_color.greenPosition) |
@@ -142,7 +145,6 @@ void* vg_init(unsigned short mode)
     gr_color.blueMask = bit_set_all(vmi_p.BlueMaskSize);
     gr_color.redPosition = vmi_p.RedFieldPosition;
     gr_color.greenPosition = vmi_p.GreenFieldPosition;
-
     gr_color.bluePosition = vmi_p.BlueFieldPosition;
 
     if (_init_FreeType()) {

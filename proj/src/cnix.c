@@ -9,16 +9,17 @@
 #include "video_gr.h"
 #include "timer.h"
 #include "interrupt.h"
-/* Variables */
+#include "window.h"
 
+/* Variables */
 
 #define EXECUTION_TIME 5
 static struct {
-    char* video_mem;
     unsigned short video_mode;
-    unsigned int x;
     unsigned int redraw;
 } myApplication;
+
+static window_t myWindow;
 
 /* Functions */
 
@@ -31,7 +32,7 @@ int AppClose(event_t* ev);
 int draw(event_t * dummie);
 int update(event_t * dummie);
 
-/* Impementation */
+/* Implementation */
 
 int main(int argc, char const *argv[])
 {
@@ -90,8 +91,7 @@ int init() {
 
     #ifndef NGRAPHICS
     /* initialize graphics card in video mode */
-    myApplication.video_mem = vg_init(myApplication.video_mode);
-    if (!myApplication.video_mem)
+    if (!vg_init(myApplication.video_mode))
     {
         printf("init: vg_init failed.\n");
         return 1;
@@ -111,9 +111,10 @@ int init() {
     timer_add_event_s(EXECUTION_TIME, AppClose, 0);
     timer_add_event_r(1, update, 9000);
 
-
-    myApplication.x = 10;
     myApplication.redraw = 0;
+
+    window_set_title(&myWindow, "cnix %s", "0.1");
+    window_set_size(&myWindow, vg_get_h_res(), vg_get_v_res());
 
     return 0;
 }
@@ -121,32 +122,10 @@ int init() {
 int draw(event_t * dummie) {
     int numev = timer_num_events();
 
-    //printf("%d ", numev);
-
     if (myApplication.redraw && (numev == 2)) {
-        //printf("draw %d", myApplication.redraw);
 
-        /* background */
-        vg_fill(vg_color_rgb(255, 255, 255));
+        window_draw(&myWindow);
 
-        /* menu bar background */
-        vg_draw_rectangle(0, 0, 1024, 30, vg_color_rgb(90, 90, 90));
-
-        /* borders */
-        vg_draw_rectangle(0, 763, 1024, 768,    vg_color_rgb(90, 90, 90));
-        vg_draw_rectangle(0, 30, 5, 763,        vg_color_rgb(90, 90, 90));
-        vg_draw_rectangle(1019, 30, 1024, 763,  vg_color_rgb(90, 90, 90));
-
-        /* close button, cross */
-        vg_draw_rectangle(994, 5, 1014, 25, vg_color_rgb(230, 0, 0));
-        vg_draw_line(997, 8, 1011, 22, vg_color_rgb(255, 255, 255));
-        vg_draw_line(1011, 8, 997, 22, vg_color_rgb(255, 255, 255));
-
-        vg_draw_string("LCOM", 64, 500, 500, 0);
-
-        //vg_draw_circle(100, 100, myApplication.x, vg_color_rgb(0,0,0));
-
-        /* must be last line */
         vg_swap_buffer();
         myApplication.redraw = 0;
     }
@@ -155,14 +134,11 @@ int draw(event_t * dummie) {
 }
 
 int AppClose(event_t* ev) {
-    //printf("AppClose");
     int_stop_handler();
     return 0;
 }
 
 int update(event_t * dummie) {
-    //printf("update");
-    myApplication.x++;
     myApplication.redraw = 1;
     return 1;
 }
