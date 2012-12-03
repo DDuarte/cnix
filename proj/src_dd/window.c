@@ -3,9 +3,10 @@
 #include "interrupt.h"
 #include "timer.h"
 #include "mouse.h"
+#include "kbc.h"
 #include "utilities.h"
-#include <minix/drivers.h>
 
+#include <minix/drivers.h>
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
@@ -204,7 +205,7 @@ int window_uninstall_mouse(window_t* window) {
 }
 
 void mouseCallback(void) {
-    static mouse_state_m_t mouseState = MSI;
+    //static mouse_state_m_t mouseState = MSI;
     static unsigned char packet[3] = { 0, 0, 0 };
     static short counter = 0;
 
@@ -216,7 +217,7 @@ void mouseCallback(void) {
 
     packet[counter] = datatemp;
 
-    if (counter == 0 && bit_isset(packet[0], 3))
+    if (counter == 0 && !bit_isset(packet[0], 3))
         return;
 
     counter = (counter + 1) % 3;
@@ -230,6 +231,11 @@ void mouseCallback(void) {
     mouse_state.ovfx  = !!bit_isset(packet[0], 6); // XOV
     mouse_state.ovfy  = !!bit_isset(packet[0], 7); // YOV
 
+    mouse_state.diffx = !bit_isset(packet[0], 4) ? packet[1] : (char)(packet[1]);
+    mouse_state.diffy = !bit_isset(packet[0], 5) ? packet[2] : (char)(packet[2]);
+
+
+/*
     mouse_state.diffx = packet[1];
     mouse_state.diffy = packet[2];
 

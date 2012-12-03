@@ -5,13 +5,13 @@
 
 int write_kbc(unsigned long port, unsigned char byte) {
     unsigned long stat, counter = 0;
-    
+
     while (counter < TIMEOUT_COUNTER) {
         if (sys_inb(STAT_REG, &stat) != 0) {
             printf("write_kbc: sys_inb failed.\n");
             return -1;
         }
-        
+
         if(!(stat & IBF)) {
             if (sys_outb(port, byte) != 0) {
                 printf("write_kbc: sys_outb failed.\n");
@@ -27,14 +27,14 @@ int write_kbc(unsigned long port, unsigned char byte) {
         }
         counter++;
     }
-    
+
     printf("write_kbc: time out.\n");
     return -1;
 }
 
 int read_kbc(void) {
     unsigned long stat, data, counter = 0;
-    
+
     while (counter < TIMEOUT_COUNTER) {
         if (sys_inb(STAT_REG, &stat) != 0) {
             printf("read_kbc: sys_inb (1) failed.\n");
@@ -63,6 +63,6 @@ int read_kbc(void) {
         }
         counter++;
     }
-    
+
     return -1;
 }

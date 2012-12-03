@@ -1,8 +1,6 @@
 #ifndef KBC_H_
 #define KBC_H_
 
-#include "utilities.h"
-
 #define DELAY_US 20000
 
 #define TIMEOUT_COUNTER 3
@@ -12,6 +10,8 @@
 #define CMD_REG  0x64
 
 #define LEDS_SWITCH 0xED
+
+#define BIT(n) (0x01<<n)
 
 #define OBF        BIT(0)
 #define IBF        BIT(1)

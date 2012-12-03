@@ -1,4 +1,5 @@
 #include "mouse.h"
+#include "kbc.h"
 
 #include <stdio.h>
 #include <minix/syslib.h>
