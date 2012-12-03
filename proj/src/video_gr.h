@@ -12,6 +12,7 @@
 
 int vg_get_h_res(void);
 int vg_get_v_res(void);
+int vg_init_FreeType(void);
 
 /**
  * @brief Initializes the video module in graphics mode

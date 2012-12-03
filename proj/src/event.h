@@ -1,18 +1,44 @@
-#ifndef EVENT_H_
-#define EVENT_H_
+#ifndef EVENT_H
+#define EVENT_H
 
-typedef struct _event{
-    unsigned int due_ticks;
-    unsigned int duration;
-    unsigned int recursive;
-    int (*callback)(struct _event*);
+enum {
+    EVENT_KEY_DOWN,
+    EVENT_KEY_UP,
+
+    EVENT_MOUSE_MOVE,
+    EVENT_MOUSE_BUTTON_DOWN,
+    EVENT_MOUSE_BUTTON_UP,
+
+    EVENT_TIMER
+};
+
+typedef struct {
+
+    int keycode;
+    char key;
+
+} keyboard_event_t;
+
+typedef struct {
+
+    int diffx;
+    int diffy;
+    int button;
+
+} mouse_event_t;
+
+typedef struct {
+    /* TODO */
+} timer_event_t;
+
+typedef union {
+
+    int type;
+
+    keyboard_event_t keyboard;
+    mouse_event_t mouse;
+    timer_event_t timer;
+
 } event_t;
-
-
-void* event_copy(void* data);
-
-void event_destroy(void* data);
-
-void event_reset(event_t* me, unsigned int ticks);
 
 #endif

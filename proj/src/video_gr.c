@@ -70,7 +70,7 @@ unsigned long vg_color_rgb(unsigned long r, unsigned long g, unsigned long b) {
             (((r * gr_color.redMask)   / 255) << gr_color.redPosition));
 }
 
-int _init_FreeType(void) {
+int vg_init_FreeType(void) {
     int error;
 
     error = FT_Init_FreeType(&_library);
@@ -105,7 +105,7 @@ void* vg_init(unsigned short mode)
 
     if (sys_int86(&r))
     {
-        printf("lab2/vg_init: failed in sys_int86");
+        printf("vg_init: failed in sys_int86");
         return NULL;
     }
 
@@ -146,10 +146,6 @@ void* vg_init(unsigned short mode)
     gr_color.redPosition = vmi_p.RedFieldPosition;
     gr_color.greenPosition = vmi_p.GreenFieldPosition;
     gr_color.bluePosition = vmi_p.BlueFieldPosition;
-
-    if (_init_FreeType()) {
-        return NULL;
-    }
 
     return video_mem;
 }
@@ -388,57 +384,57 @@ int vg_draw_rectangle(long x1, long y1, long x2,
 
 int vg_draw_circle(int x0, int y0, int radius, unsigned long color)
 {
-  /* Based on a sample code from Wikipedia */
+    /* Based on a sample code from Wikipedia */
 
-  int f, ddF_x, ddF_y, x, y;
+    int f, ddF_x, ddF_y, x, y;
 
-  x0 = vg_scale_x(x0);
-  y0 = vg_scale_y(y0);
-  radius = vg_scale_x(radius);
+    x0 = vg_scale_x(x0);
+    y0 = vg_scale_y(y0);
+    radius = vg_scale_x(radius);
 
-  f = 1 - radius;
-  ddF_x = 1;
-  ddF_y = -2 * radius;
-  x = 0;
-  y = radius;
+    f = 1 - radius;
+    ddF_x = 1;
+    ddF_y = -2 * radius;
+    x = 0;
+    y = radius;
 
-  _vg_set_absolute_pixel(x0, y0 + radius, color);
-  _vg_set_absolute_pixel(x0, y0 - radius, color);
-  _vg_draw_absolute_line(x0, y0 + radius, x0, y0 - radius, color);
+    _vg_set_absolute_pixel(x0, y0 + radius, color);
+    _vg_set_absolute_pixel(x0, y0 - radius, color);
+    _vg_draw_absolute_line(x0, y0 + radius, x0, y0 - radius, color);
 
-  _vg_set_absolute_pixel(x0 + radius, y0, color);
-  _vg_set_absolute_pixel(x0 - radius, y0, color);
-  _vg_draw_absolute_line(x0 + radius, y0, x0 - radius, y0, color);
+    _vg_set_absolute_pixel(x0 + radius, y0, color);
+    _vg_set_absolute_pixel(x0 - radius, y0, color);
+    _vg_draw_absolute_line(x0 + radius, y0, x0 - radius, y0, color);
 
-  while(x < y)
-  {
-    if (f >= 0) {
-      y--;
-      ddF_y += 2;
-      f += ddF_y;
+    while(x < y)
+    {
+        if (f >= 0) {
+            y--;
+            ddF_y += 2;
+            f += ddF_y;
+        }
+
+        x++;
+        ddF_x += 2;
+        f += ddF_x;
+        /* vg_set_pixel(x0 + x, y0 + y, color); */
+        /* vg_set_pixel(x0 - x, y0 + y, color); */
+        _vg_draw_absolute_line(x0 + x, y0 + y, x0 - x, y0 + y, color);
+
+        /* vg_set_pixel(x0 + x, y0 - y, color); */
+        /* vg_set_pixel(x0 - x, y0 - y, color); */
+        _vg_draw_absolute_line(x0 + x, y0 - y, x0 - x, y0 - y, color);
+
+        /* vg_set_pixel(x0 + y, y0 + x, color); */
+        /* vg_set_pixel(x0 - y, y0 + x, color); */
+        _vg_draw_absolute_line(x0 + y, y0 + x, x0 - y, y0 + x, color);
+
+        /* vg_set_pixel(x0 + y, y0 - x, color); */
+        /* vg_set_pixel(x0 - y, y0 - x, color); */
+        _vg_draw_absolute_line(x0 + y, y0 - x, x0 - y, y0 - x, color);
     }
 
-    x++;
-    ddF_x += 2;
-    f += ddF_x;
-    /* vg_set_pixel(x0 + x, y0 + y, color); */
-    /* vg_set_pixel(x0 - x, y0 + y, color); */
-    _vg_draw_absolute_line(x0 + x, y0 + y, x0 - x, y0 + y, color);
-
-    /* vg_set_pixel(x0 + x, y0 - y, color); */
-    /* vg_set_pixel(x0 - x, y0 - y, color); */
-    _vg_draw_absolute_line(x0 + x, y0 - y, x0 - x, y0 - y, color);
-
-    /* vg_set_pixel(x0 + y, y0 + x, color); */
-    /* vg_set_pixel(x0 - y, y0 + x, color); */
-    _vg_draw_absolute_line(x0 + y, y0 + x, x0 - y, y0 + x, color);
-
-    /* vg_set_pixel(x0 + y, y0 - x, color); */
-    /* vg_set_pixel(x0 - y, y0 - x, color); */
-    _vg_draw_absolute_line(x0 + y, y0 - x, x0 - y, y0 - x, color);
-  }
-
-  return 0;
+    return 0;
 }
 
 void vg_swap_buffer(void) {

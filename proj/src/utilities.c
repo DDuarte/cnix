@@ -38,3 +38,11 @@ void swapl(long* a, long* b) {
     *a = *b;
     *b = aux;
 }
+
+int clamp(int x, int min, int max) {
+    if (x < min)
+        x = min;
+    else if (x > max)
+        x = max;
+    return x;
+}

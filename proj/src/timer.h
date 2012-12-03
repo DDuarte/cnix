@@ -1,20 +1,5 @@
 #ifndef __TIMER_H
 #define __TIMER_H
-#include "priority_list.h"
-#define timer_add_event_r(dur_f, callback, priority) _timer_add_event((dur_f),(callback), priority, 1)
-#define timer_add_event(dur_f, callback, priority) _timer_add_event((dur_f),(callback), priority, 0)
-#define timer_add_event_s_r(dur_f, callback, priority) _timer_add_event_s((dur_f),(callback), priority, 1)
-#define timer_add_event_s(dur_f, callback, priority) _timer_add_event_s((dur_f),(callback), priority, 0)
-
-typedef struct _event{
-    unsigned int due_ticks;
-    unsigned int duration;
-    unsigned int recursive;
-    int (*callback)(struct _event*);
-} event_t;
-
-priority_list_t* _events;
-unsigned int ticks;
 
 /** @defgroup timer timer
  * @{
@@ -36,29 +21,20 @@ int timer_set_square(unsigned long timer, unsigned long freq);
  *
  * @return Returns bit order in interrupt mask; negative value on failure
  */
-int timer_init(void );
+int timer_init(void (*callback)());
 
 /**
  * @brief Unsubscribes Timer 0 interrupts
  *
  * @return Return 0 upon success and non-zero otherwise
  */
-int timer_terminate();
-
-int _timer_add_event(unsigned int dur_f, int (*callback)(event_t*), unsigned int priority, unsigned int recursive);
-int _timer_add_event_s(unsigned int dur_s, int (*callback)(event_t*), unsigned int priority, unsigned int recursive);
-
-void event_reset(event_t* me);
+int timer_terminate(void);
 
 /**
  * @brief Timer 0 interrupt handler
  *
  * Increments counter
  */
-void timer_int_handler();
-
-int timer_num_events();
-
-
+void timer_int_handler(void);
 
 #endif /* __TIMER_H */

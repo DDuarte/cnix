@@ -15,20 +15,9 @@ priority_list_t* priority_list_new(unsigned int (*cmp)(void*,void*), void* (*cpy
     newlist->last = NULL;
     newlist->size = 0;
 
-    if (cmp == NULL)
-        newlist->cmp = defaultCmp;
-    else
-        newlist->cmp = cmp;
-
-    if (cpy == NULL)
-        newlist->cpy = defaultCopy;
-    else
-        newlist->cpy = cpy;
-
-    if (destroy == NULL)
-        newlist->destroy = defaultDestroy;
-    else
-        newlist->destroy = destroy;
+    newlist->cmp = cmp ? cmp : defaultCmp;
+    newlist->cpy = cpy ? cpy : defaultCopy;
+    newlist->destroy = destroy ? destroy : defaultDestroy;
 
     return newlist;
 }
