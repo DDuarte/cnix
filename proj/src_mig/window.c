@@ -4,6 +4,7 @@
 #include "timer.h"
 #include "mouse.h"
 #include "kbc.h"
+#include "keyboard.h"
 #include "utilities.h"
 
 #include <minix/drivers.h>
@@ -57,6 +58,8 @@ int window_init(window_t* window) {
         printf("window_init: window_install_mouse failed with error code %d.\n", error);
         return error;
     }
+    
+    keyboard_install();
 
     return 0;
 }
@@ -113,7 +116,7 @@ int window_update(window_t* window /* ... */) {
 }
 
 int window_draw(window_t* window) {
-
+    char buff[20];
     /* background */
     vg_fill(vg_color_rgb(255, 255, 255));
 
@@ -136,7 +139,10 @@ int window_draw(window_t* window) {
 
     /* draw mouse */
     vg_draw_circle(window->mouse_x, window->mouse_y, 5, vg_color_rgb(0, 0, 0));
-
+    
+    /* write key */
+    sprintf(buff, "%lu", last_key_pressed);
+        vg_draw_string(buff, 32, 50, 100, vg_color_rgb(0, 0, 0));
     return 0;
 }
 
