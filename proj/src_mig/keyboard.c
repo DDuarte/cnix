@@ -10,6 +10,7 @@ static unsigned int bit;
 static void keyboard_handler(void);
 
 int keyboard_install(void) {
+    int res;
     memset(keys, 0, LAST_KEY * sizeof(unsigned char));
     bit = int_subscribe(KB_IRQ, IRQ_REENABLE | IRQ_EXCLUSIVE, &keyboard_handler);
     last_key_pressed = -1;
@@ -17,7 +18,6 @@ int keyboard_install(void) {
 
 static void keyboard_handler(void) {
     unsigned long long scancode = read_kbc();
-    printf("a\n");
   
     if (scancode == -1) {
         return;
@@ -34,15 +34,15 @@ static void keyboard_handler(void) {
         last_key_pressed = -1;
         return;
     }
-    
     if (scancode & 0x80) /* MSB means release code */
         {
-        last_key_pressed = scancode;
-        printf("%lu", last_key_pressed);
+        //last_key_pressed = scancode;
+        printf("%d\n", scancode);
     }
     else {
+        
         last_key_pressed = scancode;
-        printf("%lu", last_key_pressed);
+        printf("%d\n", scancode);
     }
 
     if (scancode == KEY_RELEASE(KEY_ESC)) /* ESC release */

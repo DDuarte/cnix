@@ -40,21 +40,29 @@ int read_kbc(void) {
             printf("read_kbc: sys_inb (1) failed.\n");
             return -1;
         }
-
+        
         if ((stat & OBF) != 0) {
             if (sys_inb(DATA_REG, &data) != 0) {
                 printf("read_kbc: sys_inb (2) failed.\n");
                 return -1;
             }
 
-            if ((stat & (PAR_ERR | TO_ERR)) == 0)
+            if ((stat & (PAR_ERR | TO_ERR)) == 0) {
+                printf("read_kbc: (stat & (PAR_ERR | TO_ERR)).\n");
                 return data;
-            else if (data == ERROR)
+            }
+            else if (data == ERROR) {
+                printf("read_kbc: ERROR.\n");
                 return data;
-            else if (data == REPEAT)
+            }
+            else if (data == REPEAT) {
+                printf("read_kbc: REPEAT.\n");
                 return data;
-            else
+            }
+            else {
+                printf("read_kbc: return -1.\n");
                 return -1;
+            }
         }
 
         if (tickdelay(micros_to_ticks(DELAY_US)) != 0) {
@@ -64,5 +72,6 @@ int read_kbc(void) {
         counter++;
     }
 
+    printf("read_kbc: time out.\n");
     return -1;
 }

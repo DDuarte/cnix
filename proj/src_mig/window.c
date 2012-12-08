@@ -15,6 +15,11 @@
 static int mouse_interrupt;
 void mouseCallback(void);
 
+static mouse_state_t prev_mouse_state;
+static int prev_mouse_x;
+static int prev_mouse_y;
+
+
 int window_init(window_t* window) {
 
     int error;
@@ -87,16 +92,20 @@ int window_destroy(window_t* window) {
 }
 
 int window_update(window_t* window /* ... */) {
-
-    static int a = 0;
-
-    a++;
-
+    
+    static unsigned int lastk = 0;
+    
+    if (last_key_pressed != lastk) {
+        window->redraw = 1;
+    }
+    
+    lastk = last_key_pressed;
+    
     if (mouse_state.up) {
         mouse_state.up = 0;
         window->redraw = 1;
         window->mouse_x += mouse_state.diffx;
-        window->mouse_y += mouse_state.diffy;
+        window->mouse_y -= mouse_state.diffy;
 
         window->mouse_x = clamp(window->mouse_x, 0, window->width);
         window->mouse_y = clamp(window->mouse_y, 0, window->height);
@@ -106,12 +115,16 @@ int window_update(window_t* window /* ... */) {
         window->mouse_y,
         window->width,
         window->height);
+        
+        if (window->mouse_x <= 1014 && window->mouse_x >= 914 && window->mouse_y < 25 && window->mouse_y > 5 && !mouse_state.ldown && 
+            prev_mouse_x <= 1014 && prev_mouse_x >= 914 && prev_mouse_y < 25 && prev_   mouse_y > 5 &&prev_mouse_state.ldown)
+            window->done = 1;
+            
+        prev_mouse_state = mouse_state;
+        prev_mouse_x = window->mouse_x;
+        prev_mouse_y = window->mouse_y;
     }
-
-
-    if (a == 600)
-        window->done = 1;
-
+    
     return 0;
 }
 
@@ -141,7 +154,7 @@ int window_draw(window_t* window) {
     vg_draw_circle(window->mouse_x, window->mouse_y, 5, vg_color_rgb(0, 0, 0));
     
     /* write key */
-    sprintf(buff, "%lu", last_key_pressed);
+    sprintf(buff, "0x%X", last_key_pressed);
         vg_draw_string(buff, 32, 50, 100, vg_color_rgb(0, 0, 0));
     return 0;
 }
