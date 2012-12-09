@@ -73,17 +73,14 @@ void parse_args(int argc, char const *argv[]) {
     _window.video_mode = 0x117;
     _window.draw = 1;
 
-    if (argc >= 2) {
+    if (argc == 2) {
         unsigned long temp_mode;
         temp_mode = parse_ulong(argv[1], 16);
-        if (temp_mode != ULONG_MAX)
-            _window.video_mode = (unsigned short)temp_mode;
-    }
-
-    if (argc >= 3) {
-        unsigned long temp_draw;
-        temp_draw = parse_ulong(argv[2], 10);
-        if (temp_draw != ULONG_MAX)
-            _window.draw = (int)temp_draw;
+        if (temp_mode != ULONG_MAX) {
+            if (temp_mode == 0)
+                _window.draw = 0;
+            else
+                _window.video_mode = (unsigned short)temp_mode;
+        }
     }
 }
