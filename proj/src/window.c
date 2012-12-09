@@ -93,7 +93,7 @@ int window_update(window_t* window /* ... */) {
         mouse_state.up = 0;
         window->redraw = 1;
         window->mouse_x += mouse_state.diffx;
-        window->mouse_y += mouse_state.diffy;
+        window->mouse_y -= mouse_state.diffy;
 
         window->mouse_x = clamp(window->mouse_x, 0, window->width);
         window->mouse_y = clamp(window->mouse_y, 0, window->height);
@@ -169,16 +169,10 @@ int window_set_size(window_t* window, int width, int height) {
 int window_install_mouse(window_t* window) {
 
     int error;
-    unsigned long val;
 
     mouse_state.up = 0;
     window->mouse_x = 0;
     window->mouse_y = 0;
-
-    mouse_write(0xFF);
-    sleep(1);
-    mouse_read(&val);
-    printf("0x%x \n", val);
 
     error = mouse_enable_stream_mode();
     if (error) {
@@ -211,7 +205,7 @@ int window_uninstall_mouse(window_t* window) {
 }
 
 void mouseCallback(void) {
-    static unsigned char packet[3] = { 0, 0, 0 };
+    static unsigned char packet[] = { 0, 0, 0 };
     static short counter = 0;
 
     unsigned long datatemp;
@@ -231,13 +225,12 @@ void mouseCallback(void) {
         return;
 
     mouse_state.ldown = !!bit_isset(packet[0], 0); // LB
-    mouse_state.mdown = !!bit_isset(packet[0], 2); // MB
     mouse_state.rdown = !!bit_isset(packet[0], 1); // RB
-    mouse_state.ovfx  = !!bit_isset(packet[0], 6); // XOV
-    mouse_state.ovfy  = !!bit_isset(packet[0], 7); // YOV
-
+    mouse_state.mdown = !!bit_isset(packet[0], 2); // MB
     mouse_state.diffx = !bit_isset(packet[0], 4) ? packet[1] : (char)(packet[1]);
     mouse_state.diffy = !bit_isset(packet[0], 5) ? packet[2] : (char)(packet[2]);
+    mouse_state.ovfx  = !!bit_isset(packet[0], 6); // XOV
+    mouse_state.ovfy  = !!bit_isset(packet[0], 7); // YOV
 
     printf("B1=0x%02X B2=0x%02X B3=0x%02X LB=%d MB=%d RB=%d XOV=%d YOV=%d X=%04d Y=%04d\n",
         packet[0], // B1

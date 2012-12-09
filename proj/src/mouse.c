@@ -6,6 +6,8 @@
 
 int mouse_write(unsigned char command) {
 
+    unsigned long res;
+
     if (write_kbc(CMD_REG, WRITE_BYTE_TO_MOUSE) != 0) {/* Write Byte to Mouse */
         printf("mouse_write: write_kbc CMD failed.\n");
         return 1;
@@ -37,10 +39,10 @@ int mouse_enable_stream_mode() {
         return 1;
     }
 
-    /*if (res != ACK) {
+    if (res != ACK) {
         printf("mouse_enable_stream_mode: did not receive acknowledge byte (0x%X), exiting\n.", res);
         return 1;
-    }*/
+    }
 
     return 0;
 }
