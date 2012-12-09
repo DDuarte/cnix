@@ -54,10 +54,19 @@ char key_to_char(unsigned int scancode) {
 
     if (altgr)
         res = key_c[scancode][KEY_IDX_ALTGR];
-    else if (up)
-        res = key_c[scancode][KEY_IDX_UP];
-    else if (shift)
-        res = key_c[scancode][KEY_IDX_SHT];
+    else if (up || shift) {
+        if (isalpha(key_c[scancode][KEY_IDX_NONE])) {
+            if (up)
+                res = key_c[scancode][KEY_IDX_UP];
+            else if (shift)
+                res = key_c[scancode][KEY_IDX_SHT];
+        } else {
+            if (shift)
+                res = key_c[scancode][KEY_IDX_SHT];
+            else if (up)
+                res = key_c[scancode][KEY_IDX_UP];
+        }
+    }
     else
         res = key_c[scancode][KEY_IDX_NONE];
 
@@ -109,13 +118,13 @@ static void keyboard_handler(void) {
     } else {
 
         switch (scancode) {
-            case KEY_L_SHIFT: modifiers |= KEY_MOD_L_SHIFT; break;
-            case KEY_R_SHIFT: modifiers |= KEY_MOD_R_SHIFT; break;
-            case KEY_L_CTRL:  modifiers |= KEY_MOD_L_CTRL;  break;
-            case KEY_R_CTRL:  modifiers |= KEY_MOD_R_CTRL;  break;
-            case KEY_ALT:     modifiers |= KEY_MOD_ALT;     break;
-            case KEY_ALT_GR:  modifiers |= KEY_MOD_ALT_GR;  break;
-            case KEY_CAPS:    modifiers ^= KEY_MOD_CAPS;    break; /* toggle */
+            case KEY_PRESS(KEY_L_SHIFT): modifiers |= KEY_MOD_L_SHIFT; break;
+            case KEY_PRESS(KEY_R_SHIFT): modifiers |= KEY_MOD_R_SHIFT; break;
+            case KEY_PRESS(KEY_L_CTRL):  modifiers |= KEY_MOD_L_CTRL;  break;
+            case KEY_PRESS(KEY_R_CTRL):  modifiers |= KEY_MOD_R_CTRL;  break;
+            case KEY_PRESS(KEY_ALT):     modifiers |= KEY_MOD_ALT;     break;
+            case KEY_PRESS(KEY_ALT_GR):  modifiers |= KEY_MOD_ALT_GR;  break;
+            case KEY_PRESS(KEY_CAPS):    modifiers ^= KEY_MOD_CAPS;    break; /* toggle */
         }
 
         last_key_pressed = scancode;
