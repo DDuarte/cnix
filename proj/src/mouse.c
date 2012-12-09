@@ -6,8 +6,6 @@
 
 int mouse_write(unsigned char command) {
 
-    unsigned long res;
-
     if (write_kbc(CMD_REG, WRITE_BYTE_TO_MOUSE) != 0) {/* Write Byte to Mouse */
         printf("mouse_write: write_kbc CMD failed.\n");
         return 1;

@@ -41,7 +41,7 @@ int read_kbc(void) {
             return -1;
         }
 
-        if ((stat & OBF) != 0) {
+        if ((stat & (OBF | AUX)) != 0) {
             if (sys_inb(DATA_REG, &data) != 0) {
                 printf("read_kbc: sys_inb (2) failed.\n");
                 return -1;

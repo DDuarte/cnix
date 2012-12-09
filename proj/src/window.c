@@ -5,6 +5,7 @@
 #include "mouse.h"
 #include "kbc.h"
 #include "utilities.h"
+#include "keyboard.h"
 
 #include <minix/drivers.h>
 #include <stdio.h>
@@ -50,11 +51,15 @@ int window_init(window_t* window) {
     /* initialize interrupt handlers */
     int_init();
 
-    /* TODO: add keyboard, etc */
-
     error = window_install_mouse(window);
     if (error) {
         printf("window_init: window_install_mouse failed with error code %d.\n", error);
+        return error;
+    }
+
+    error = keyboard_install();
+    if (error) {
+        printf("window_init_ keyboard_install failed with error code %d.\n", error);
         return error;
     }
 
@@ -85,10 +90,6 @@ int window_destroy(window_t* window) {
 
 int window_update(window_t* window /* ... */) {
 
-    static int a = 0;
-
-    a++;
-
     if (mouse_state.up) {
         mouse_state.up = 0;
         window->redraw = 1;
@@ -99,20 +100,42 @@ int window_update(window_t* window /* ... */) {
         window->mouse_y = clamp(window->mouse_y, 0, window->height);
 
         window_set_title(window, "x: %d, y: %d, w: %d, h: %d",
-        window->mouse_x,
-        window->mouse_y,
-        window->width,
-        window->height);
+            window->mouse_x,
+            window->mouse_y,
+            window->width,
+            window->height);
     }
 
-
-    if (a == 600)
-        window->done = 1;
+    window->redraw = 1;
 
     return 0;
 }
 
+void append(char* s, char c)
+{
+        int len = strlen(s);
+        s[len] = c;
+        s[len+1] = '\0';
+}
+
+void deappend(char* s)
+{
+        int len = strlen(s);
+        s[len - 1] = '\0';
+}
+
 int window_draw(window_t* window) {
+
+    static int x = 0;
+    static int y = 0;
+    static char buff[200];
+    static unsigned int last_key = -1;
+
+    static int initedBuff = 0;
+    if (!initedBuff) {
+        memset(buff, 0, 200 * sizeof(char));
+        initedBuff = 1;
+    }
 
     /* background */
     vg_fill(vg_color_rgb(255, 255, 255));
@@ -136,6 +159,29 @@ int window_draw(window_t* window) {
 
     /* draw mouse */
     vg_draw_circle(window->mouse_x, window->mouse_y, 5, vg_color_rgb(0, 0, 0));
+
+    /* write key */
+    if (last_key != last_key_pressed) {
+        if (last_key_pressed > 0 && last_key_pressed < LAST_KEY) {
+
+            if (last_key_pressed == KEY_BKSP)
+                deappend(buff);
+            else
+                append(buff, key_to_char(last_key_pressed));
+            last_key_pressed = -1;
+
+            x += 5;
+
+            if ((50 + x) > window->width - 10) {
+                y += 10;
+                x = 0;
+            }
+        }
+    }
+
+    vg_draw_string(buff, 32, 50, 100 + y, vg_color_rgb(x, 0, x));
+
+    last_key = last_key_pressed;
 
     return 0;
 }
