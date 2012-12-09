@@ -111,29 +111,32 @@ int window_update(window_t* window /* ... */) {
     return 0;
 }
 
-void append(char* s, char c)
+int append(char* s, char c)
 {
         int len = strlen(s);
         s[len] = c;
         s[len+1] = '\0';
+        return len;
 }
 
-void deappend(char* s)
+int deappend(char* s)
 {
         int len = strlen(s);
         s[len - 1] = '\0';
+        return len;
 }
 
 int window_draw(window_t* window) {
 
-    static int x = 0;
-    static int y = 0;
-    static char buff[200];
+    static char buff[20][200];
     static unsigned int last_key = -1;
+    static int curline = 0;
 
     static int initedBuff = 0;
     if (!initedBuff) {
-        memset(buff, 0, 200 * sizeof(char));
+        int i;
+        for (i = 0; i < 20; ++i)
+            memset(buff[i], 0, 200 * sizeof(char));
         initedBuff = 1;
     }
 
@@ -160,28 +163,33 @@ int window_draw(window_t* window) {
     /* draw mouse */
     vg_draw_circle(window->mouse_x, window->mouse_y, 5, vg_color_rgb(0, 0, 0));
 
-    /* write key */
+    /* write key */ // *NOTE*: this is test code, will be removed.
     if (last_key != last_key_pressed) {
         if (last_key_pressed > 0 && last_key_pressed < LAST_KEY) {
 
-            if (last_key_pressed == KEY_BKSP)
-                deappend(buff);
-            else
-                append(buff, key_to_char(last_key_pressed));
-            last_key_pressed = -1;
+            if (last_key_pressed == KEY_ENTER)
+                curline++;
+            else {
+                if (last_key_pressed == KEY_BKSP) {
+                    int l = deappend(buff[curline]);
 
-            x += 5;
+                    if (l == 1)
+                        curline--;
 
-            if ((50 + x) > window->width - 10) {
-                y += 10;
-                x = 0;
+                    if (curline < 0)
+                        curline = 0;
+                }
+                else
+                    append(buff[curline], key_to_char(last_key_pressed));
             }
         }
     }
-
-    vg_draw_string(buff, 32, 50, 100 + y, vg_color_rgb(x, 0, x));
-
     last_key = last_key_pressed;
+    last_key_pressed = -1;
+
+    int i;
+    for (i = 0; i < 20; ++i)
+        vg_draw_string(buff[i], 32, 50, 100 + i*25, vg_color_rgb(0, 0, 0));
 
     return 0;
 }
