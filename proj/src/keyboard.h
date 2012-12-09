@@ -174,7 +174,7 @@ static char key_c[][4] = {
     { 'l', 'L', 'l',  0  }, // KEY_L
     {  0,   0,   0,   0  }, // KEY_C_CEDILLA (1: ç, 2: Ç, 3: ç)
     {  0,   0,   0,   0  }, // KEY_ORDINAL (1: º, 2: º, 3: ª)
-    { '\\', '\\', '|',  0  }, // KEY_BACKSLASH
+    { '\\', '\\', '|', 0 }, // KEY_BACKSLASH
     {  0,   0,   0,   0  }, // KEY_L_SHIFT
     { '~', '~', '^',  0  }, // KEY_TILDE
     { 'z', 'Z', 'z',  0  }, // KEY_Z

@@ -55,7 +55,7 @@ char key_to_char(unsigned int scancode) {
     if (altgr)
         res = key_c[scancode][KEY_IDX_ALTGR];
     else if (up || shift) {
-        if (isalpha(key_c[scancode][KEY_IDX_NONE])) {
+        if (isalpha((int)(key_c[scancode][KEY_IDX_NONE]))) {
             if (up)
                 res = key_c[scancode][KEY_IDX_UP];
             else if (shift)

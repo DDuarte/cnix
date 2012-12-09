@@ -79,7 +79,7 @@ int vg_init_FreeType(void) {
         return error;
     }
 
-    error = FT_New_Face(_library, "/root/arial.ttf", 0, &_face);
+    error = FT_New_Face(_library, "/root/Inconsolata.ttf", 0, &_face);
     if (error == FT_Err_Unknown_File_Format) {
         printf("_init_FreeType: FT_New_Face - font format unsupported.\n");
         return error;
@@ -475,6 +475,35 @@ int vg_ft_draw_bitmap(FT_Bitmap* bitmap, int x, int y, unsigned long color) {
             if (c != 0) /* 0 is background */
                 vg_set_pixel(i, j, color);
         }
+    }
+
+    return 0;
+}
+
+int vg_draw_char(char character, int size, unsigned long x, unsigned long y, unsigned long color) {
+        int error;
+
+    error = FT_Set_Pixel_Sizes(_face, 0, size);
+    if (error) {
+        printf("vg_draw_char: FT_Set_Pixel_Sizes failed with error code %d.\n", error);
+        return error;
+    }
+
+    FT_GlyphSlot slot = _face->glyph;
+    FT_UInt glyph_index;
+
+    glyph_index = FT_Get_Char_Index(_face, character);
+
+    error = FT_Load_Glyph(_face, glyph_index, FT_LOAD_RENDER);
+    if (error) {
+        printf("vg_draw_char: FT_Load_Glyph failed with error code %d for character %c.\n", error, character);
+        return error;
+    }
+
+    error = vg_ft_draw_bitmap(&slot->bitmap, x + slot->bitmap_left, y - slot->bitmap_top, color);
+    if (error) {
+        printf("vg_draw_char: vg_ft_draw_bitmap failed with error code %d for character %c.\n", error, character);
+        return error;
     }
 
     return 0;
