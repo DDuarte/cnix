@@ -16,10 +16,27 @@
 static int mouse_interrupt;
 void mouseCallback(void);
 
+button_t* new_btn;
+button_t* open_btn;
+button_t* save_btn;
+button_t* make_btn;
+button_t* run_btn;
 button_t* close_btn;
 
+void new_btn_draw(button_t* btn);
+void open_btn_draw(button_t* btn);
+void save_btn_draw(button_t* btn);
+void make_btn_draw(button_t* btn);
+void run_btn_draw(button_t* btn);
 void close_btn_draw(button_t* btn);
+
+void new_btn_click(button_t* btn);
+void open_btn_click(button_t* btn);
+void save_btn_click(button_t* btn);
+void make_btn_click(button_t* btn);
+void run_btn_click(button_t* btn);
 void close_btn_click(button_t* btn);
+
 int window_init(window_t* window) {
 
     int error;
@@ -68,6 +85,11 @@ int window_init(window_t* window) {
         return error;
     }
 
+    new_btn = new_button(869, 5, 20, 20, new_btn_draw, new_btn_click, 1);
+    open_btn = new_button(894, 5, 20, 20, open_btn_draw, open_btn_click, 1);
+    save_btn = new_button(919, 5, 20, 20, save_btn_draw, save_btn_click, 1);
+    make_btn = new_button(944, 5, 20, 20, make_btn_draw, make_btn_click, 1);
+    run_btn = new_button(969, 5, 20, 20, run_btn_draw, run_btn_click, 1);
     close_btn = new_button(994, 5, 20, 20, close_btn_draw, close_btn_click, 1);
     
     return 0;
@@ -112,6 +134,11 @@ int window_update(window_t* window /* ... */) {
             window->width,
             window->height);
         
+        button_update(new_btn, window->mouse_x, window->mouse_y, mouse_state.ldown);
+        button_update(open_btn, window->mouse_x, window->mouse_y, mouse_state.ldown);
+        button_update(save_btn, window->mouse_x, window->mouse_y, mouse_state.ldown);
+        button_update(make_btn, window->mouse_x, window->mouse_y, mouse_state.ldown);
+        button_update(run_btn, window->mouse_x, window->mouse_y, mouse_state.ldown);
         button_update(close_btn, window->mouse_x, window->mouse_y, mouse_state.ldown);
     }
 
@@ -167,28 +194,20 @@ int window_draw(window_t* window) {
         vg_draw_string(window->title, 32, 5, 25, vg_color_rgb(0, 0, 0));
     
     /* new button */
+    new_btn->draw(new_btn);
     
-    vg_draw_circle(879, 15, 10, vg_color_rgb(230, 0, 0));
-    vg_draw_rectangle(871, 13, 887, 17, vg_color_rgb(255, 255, 255));
-    vg_draw_rectangle(877, 7, 881, 23, vg_color_rgb(255, 255, 255));
     
     /* open button */
-    vg_draw_rectangle(896, 5, 904, 8, vg_color_rgb(255, 201, 14));
-    vg_draw_rectangle(894, 8, 914, 25, vg_color_rgb(255, 201, 14));
-    vg_draw_line(894, 14, 914, 14, vg_color_rgb(100, 100, 100));
+    open_btn->draw(open_btn);
 
     /* Save Button */
-    vg_draw_rectangle(919, 5, 939, 25, vg_color_rgb(50, 50, 50));
-    vg_draw_rectangle(924, 5, 934, 11, vg_color_rgb(255, 255, 255));
-    vg_draw_rectangle(925, 6, 926, 10, vg_color_rgb(0, 0, 0));
-    vg_draw_circle(929, 18, 2, vg_color_rgb(200, 200, 200));
-    vg_set_pixel(929, 18, vg_color_rgb(0, 0, 0));
+    save_btn->draw(save_btn);
+    
+    /* Make Button */
+    make_btn->draw(make_btn);
     
     /* Run Button */
-    vg_draw_rectangle(969, 5, 989, 25, vg_color_rgb(200, 100, 100));
-    vg_draw_line(974, 10, 984, 15, vg_color_rgb(0, 0, 0));
-    vg_draw_line(984, 15, 974, 20, vg_color_rgb(0, 0, 0));
-    vg_draw_line(974, 10, 974, 20, vg_color_rgb(0, 0, 0));
+    run_btn->draw(run_btn);
     
     /* draw mouse */
     vg_draw_circle(window->mouse_x, window->mouse_y, 5, vg_color_rgb(0, 0, 0));
@@ -331,10 +350,56 @@ void mouseCallback(void) {
     mouse_state.up = 1;
 }
 
+void new_btn_draw(button_t* btn){
+}
+
+void open_btn_draw(button_t* btn){
+}
+
+void save_btn_draw(button_t* btn){
+}
+
+void make_btn_draw(button_t* btn){
+}
+
+void run_btn_draw(button_t* btn){
+}
+
+
 void close_btn_draw(button_t* btn) {
     vg_draw_rectangle(btn->location_x, btn->location_y, btn->location_x + 20, btn->location_y + 20, vg_color_rgb(230, 0, 0));
     vg_draw_line(btn->location_x + 3, btn->location_y + 3, btn->location_x + 17, btn->location_y + 17, vg_color_rgb(255, 255, 255));
     vg_draw_line(btn->location_x + 17, btn->location_y + 3, btn->location_x + 3, btn->location_y + 17, vg_color_rgb(255, 255, 255));
+}
+
+void new_btn_click(button_t* btn){
+    vg_draw_circle(btn->location_x + 10, btn->location_y + 10, 10, vg_color_rgb(230, 0, 0));
+    vg_draw_rectangle(btn->location_x + 3, btn->location_y + 8, btn->location_x + 17, btn->location_y + 12, vg_color_rgb(255, 255, 255));
+    vg_draw_rectangle(btn->location_x + 8, btn->location_y + 3, btn->location_x + 12, btn->location_y + 17, vg_color_rgb(255, 255, 255));
+}
+
+void open_btn_click(button_t* btn){
+    vg_draw_rectangle(btn->location_x + 2, btn->location_y, btn->location_x + 10, btn->location_y + 3, vg_color_rgb(255, 201, 14));
+    vg_draw_rectangle(btn->location_x, btn->location_y + 3, btn->location_x + 20, btn->location_y + 20, vg_color_rgb(255, 201, 14));
+    vg_draw_line(btn->location_x, btn->location_y + 9, btn->location_x + 20, btn->location_y + 9, vg_color_rgb(100, 100, 100));
+}
+
+void save_btn_click(button_t* btn){
+    vg_draw_rectangle(btn->location_x, btn->location_y, btn->location_x + 20, btn->location_y + 20, vg_color_rgb(50, 50, 50));
+    vg_draw_rectangle(btn->location_x + 5, btn->location_y, btn->location_x + 15, btn->location_y + 6, vg_color_rgb(255, 255, 255));
+    vg_draw_rectangle(btn->location_x + 6, btn->location_y + 1, btn->location_x + 7, btn->location_y + 5, vg_color_rgb(0, 0, 0));
+    vg_draw_circle(btn->location_x + 10, btn->location_y + 13, 2, vg_color_rgb(200, 200, 200));
+    vg_set_pixel(btn->location_x + 10, btn->location_y + 13, vg_color_rgb(0, 0, 0));
+}
+
+void make_btn_click(button_t* btn){
+}
+
+void run_btn_click(button_t* btn){
+    vg_draw_rectangle(btn->location_x, btn->location_y, btn->location_x + 20, btn->location_y + 20, vg_color_rgb(200, 100, 100));
+    vg_draw_line(btn->location_x + 5, btn->location_y + 5, btn->location_x + 15, btn->location_y + 10, vg_color_rgb(0, 0, 0));
+    vg_draw_line(btn->location_x + 15, btn->location_y + 10, btn->location_x + 5, btn->location_y + 15, vg_color_rgb(0, 0, 0));
+    vg_draw_line(btn->location_x + 10, btn->location_y + 5, btn->location_x + 5, btn->location_y + 15, vg_color_rgb(0, 0, 0));
 }
 
 void close_btn_click(button_t* btn) {
