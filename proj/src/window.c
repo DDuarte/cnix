@@ -374,13 +374,13 @@ void make_btn_draw(button_t* btn){
     vg_draw_rectangle(btn->location_x, btn->location_y, btn->location_x + 20, btn->location_y + 20, vg_color_rgb(200, 100, 100));
     vg_draw_line(btn->location_x +  2, btn->location_y + 17, btn->location_x + 2 , btn->location_y + 14, vg_color_rgb(0, 0, 0));
     vg_draw_line(btn->location_x +  2, btn->location_y + 14, btn->location_x + 9 , btn->location_y + 7 , vg_color_rgb(0, 0, 0));
-    vg_draw_line(btn->location_x +  9, btn->location_y + 7 , btn->location_x + 4 , btn->location_y + 9 , vg_color_rgb(0, 0, 0));
-    vg_draw_line(btn->location_x +  4, btn->location_y + 9 , btn->location_x + 11, btn->location_y + 2 , vg_color_rgb(0, 0, 0));
+    vg_draw_line(btn->location_x +  9, btn->location_y + 7 , btn->location_x + 9 , btn->location_y + 4 , vg_color_rgb(0, 0, 0));
+    vg_draw_line(btn->location_x +  9, btn->location_y + 4 , btn->location_x + 11, btn->location_y + 2 , vg_color_rgb(0, 0, 0));
     vg_draw_line(btn->location_x + 11, btn->location_y + 2 , btn->location_x + 13, btn->location_y + 2 , vg_color_rgb(0, 0, 0));
     vg_draw_line(btn->location_x + 13, btn->location_y + 2 , btn->location_x + 14, btn->location_y + 3 , vg_color_rgb(0, 0, 0));
     vg_draw_line(btn->location_x + 14, btn->location_y + 3 , btn->location_x + 12, btn->location_y + 5 , vg_color_rgb(0, 0, 0));
-    vg_draw_line(btn->location_x + 12, btn->location_y + 5 , btn->location_x + 12, btn->location_y + 10, vg_color_rgb(0, 0, 0));
-    vg_draw_line(btn->location_x + 12, btn->location_y + 10, btn->location_x + 15, btn->location_y + 8 , vg_color_rgb(0, 0, 0));
+    vg_draw_line(btn->location_x + 12, btn->location_y + 5 , btn->location_x + 12, btn->location_y + 8, vg_color_rgb(0, 0, 0));
+    vg_draw_line(btn->location_x + 12, btn->location_y + 8, btn->location_x + 15, btn->location_y + 8 , vg_color_rgb(0, 0, 0));
     vg_draw_line(btn->location_x + 15, btn->location_y + 8 , btn->location_x + 17, btn->location_y + 6 , vg_color_rgb(0, 0, 0));
     vg_draw_line(btn->location_x + 17, btn->location_y + 6 , btn->location_x + 18, btn->location_y + 7 , vg_color_rgb(0, 0, 0));
     vg_draw_line(btn->location_x + 18, btn->location_y + 7 , btn->location_x + 18, btn->location_y + 9 , vg_color_rgb(0, 0, 0));
