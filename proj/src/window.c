@@ -178,6 +178,12 @@ int window_draw(window_t* window) {
     vg_draw_circle(929, 18, 2, vg_color_rgb(200, 200, 200));
     vg_set_pixel(929, 18, vg_color_rgb(0, 0, 0));
     
+    /* Run Button */
+    vg_draw_rectangle(969, 5, 989, 25, vg_color_rgb(255, 255, 255));
+    vg_draw_line(974, 10, 984, 15, vg_color_rgb(0, 0, 0));
+    vg_draw_line(984, 15, 974, 20, vg_color_rgb(0, 0, 0));
+    vg_draw_line(974, 10, 974, 20, vg_color_rgb(0, 0, 0));
+    
     /* draw mouse */
     vg_draw_circle(window->mouse_x, window->mouse_y, 5, vg_color_rgb(0, 0, 0));
 
