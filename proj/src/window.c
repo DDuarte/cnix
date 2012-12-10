@@ -377,7 +377,8 @@ void run_btn_draw(button_t* btn){
     vg_draw_rectangle(btn->location_x, btn->location_y, btn->location_x + 20, btn->location_y + 20, vg_color_rgb(200, 100, 100));
     vg_draw_line(btn->location_x + 5, btn->location_y + 5, btn->location_x + 15, btn->location_y + 10, vg_color_rgb(0, 0, 0));
     vg_draw_line(btn->location_x + 15, btn->location_y + 10, btn->location_x + 5, btn->location_y + 15, vg_color_rgb(0, 0, 0));
-    vg_draw_line(btn->location_x + 10, btn->location_y + 5, btn->location_x + 5, btn->location_y + 15, vg_color_rgb(0, 0, 0));
+    vg_draw_line(btn->location_x + 5, btn->location_y + 5, 
+btn->location_x + 5, btn->location_y + 15, vg_color_rgb(0, 0, 0));
 }
 
 
