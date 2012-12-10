@@ -168,9 +168,9 @@ int window_draw(window_t* window) {
     
     /* open button */
     vg_draw_rectangle(896, 5, 904, 8, vg_color_rgb(255, 201, 14));
-    vg_draw_rectangle(894, 8, 914, 14, vg_color_rgb(255, 201, 14));
-    vg_draw_rectangle(894, 14, 914, 25, vg_color_rgb(252, 171, 41));
-    
+    vg_draw_rectangle(894, 8, 914, 25, vg_color_rgb(255, 201, 14));
+    vg_draw_line(894, 14, 914, 14, vg_color_rgb(100, 100, 100));
+
     /* Save Button */
     vg_draw_rectangle(919, 5, 939, 25, vg_color_rgb(50, 50, 50));
     vg_draw_rectangle(924, 5, 934, 11, vg_color_rgb(255, 255, 255));
@@ -179,7 +179,7 @@ int window_draw(window_t* window) {
     vg_set_pixel(929, 18, vg_color_rgb(0, 0, 0));
     
     /* Run Button */
-    vg_draw_rectangle(969, 5, 989, 25, vg_color_rgb(255, 255, 255));
+    vg_draw_rectangle(969, 5, 989, 25, vg_color_rgb(200, 100, 100));
     vg_draw_line(974, 10, 984, 15, vg_color_rgb(0, 0, 0));
     vg_draw_line(984, 15, 974, 20, vg_color_rgb(0, 0, 0));
     vg_draw_line(974, 10, 974, 20, vg_color_rgb(0, 0, 0));
