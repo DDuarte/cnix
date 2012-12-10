@@ -1,6 +1,10 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
+#define TAB_COUNT 11
+
+#include "tab.h"
+
 typedef struct {
     char* title; /* window title bar */
 
@@ -14,6 +18,9 @@ typedef struct {
 
     int mouse_x;
     int mouse_y;
+
+    int current_tab;
+    tab_t* tabs[TAB_COUNT];
 
 } window_t;
 

@@ -112,9 +112,6 @@ static void keyboard_handler(void) {
             case KEY_RELEASE(KEY_ALT_GR):  modifiers &= ~KEY_MOD_ALT_GR;  break;
         }
 
-        //last_key_pressed = scancode;
-        //printf("%lu\n", scancode);
-        ;
     } else {
 
         switch (scancode) {
@@ -128,12 +125,7 @@ static void keyboard_handler(void) {
         }
 
         last_key_pressed = scancode;
-        //printf("0x%x\n", scancode);
-        //if (scancode < LAST_KEY)
-        //    printf("%c", key_c[scancode]);
     }
-
-    printf("0x%x\n", modifiers);
 
     if (scancode == KEY_RELEASE(KEY_ESC)) /* ESC release */
         int_stop_handler();

@@ -1,0 +1,35 @@
+#ifndef TAB_H
+#define TAB_H
+
+#include "keyboard.h"
+
+typedef struct {
+
+    int size;
+    int color;
+    char character;
+
+} char_screen;
+
+char_screen char_screen_create(char character, int color, int size);
+int char_screen_set_color(char_screen* cs, int color);
+int char_draw(char_screen* cs, int x, int y);
+
+typedef struct {
+
+    char* file_name;
+    char short_file_name[9];
+    char_screen** characters;
+
+    int current_line;
+    int current_column;
+
+} tab_t;
+
+tab_t* tab_create(char* file_name);
+int tab_draw(tab_t* tab, int tab_num, int selected);
+
+int tab_key_press(tab_t* tab, KEY key);
+int tab_mouse_press(tab_t* tab, unsigned long x, unsigned long y);
+
+#endif

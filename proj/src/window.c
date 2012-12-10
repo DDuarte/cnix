@@ -6,6 +6,7 @@
 #include "kbc.h"
 #include "utilities.h"
 #include "keyboard.h"
+#include "tab.h"
 #include "button.h"
 
 #include <minix/drivers.h>
@@ -40,6 +41,7 @@ void close_btn_click(button_t* btn);
 int window_init(window_t* window) {
 
     int error;
+    int i;
 
     if (window->draw) {
         /* initialize video */
@@ -49,6 +51,10 @@ int window_init(window_t* window) {
         }
     }
 
+    window->redraw = 0;
+    window->done = 0;
+
+    /* init font system */
     error = vg_init_FreeType();
     if (error) {
         printf("window_init: vg_init_FreeType failed with error code %d.\n", error);
@@ -67,8 +73,24 @@ int window_init(window_t* window) {
         return error;
     }
 
-    window->redraw = 0;
-    window->done = 0;
+    /* set up tabs */
+
+    window->current_tab = -1;
+    for (i = 0; i < TAB_COUNT; ++i)
+        window->tabs[i] = NULL;
+
+    window->tabs[0]  = tab_create("#1");
+    window->tabs[1]  = tab_create("#2");
+    window->tabs[2]  = tab_create("#3");
+    window->tabs[3]  = tab_create("#4");
+    window->tabs[4]  = tab_create("#5");
+    window->tabs[5]  = tab_create("#6");
+    window->tabs[6]  = tab_create("#7");
+    window->tabs[7]  = tab_create("#8");
+    window->tabs[8]  = tab_create("#9");
+    window->tabs[9]  = tab_create("#10");
+    window->tabs[10] = tab_create("#11");
+    window->current_tab = 0;
 
     /* initialize interrupt handlers */
     int_init();
@@ -85,13 +107,15 @@ int window_init(window_t* window) {
         return error;
     }
 
+    /* set up buttons */
+
     new_btn = new_button(869, 5, 20, 20, new_btn_draw, new_btn_click, 1);
     open_btn = new_button(894, 5, 20, 20, open_btn_draw, open_btn_click, 1);
     save_btn = new_button(919, 5, 20, 20, save_btn_draw, save_btn_click, 1);
     make_btn = new_button(944, 5, 20, 20, make_btn_draw, make_btn_click, 1);
     run_btn = new_button(969, 5, 20, 20, run_btn_draw, run_btn_click, 1);
     close_btn = new_button(994, 5, 20, 20, close_btn_draw, close_btn_click, 1);
-    
+
     return 0;
 }
 
@@ -133,7 +157,12 @@ int window_update(window_t* window /* ... */) {
             window->mouse_y,
             window->width,
             window->height);
-        
+
+        if (mouse_state.ldown)
+            if (window->mouse_y > 30 && window->mouse_y < 60)
+                if (window->mouse_x > 5 && window->mouse_x < (window->width - 5))
+                    window->current_tab = (window->mouse_x  - 5) / 92; /* dividing by size of label */
+
         button_update(new_btn, window->mouse_x, window->mouse_y, mouse_state.ldown);
         button_update(open_btn, window->mouse_x, window->mouse_y, mouse_state.ldown);
         button_update(save_btn, window->mouse_x, window->mouse_y, mouse_state.ldown);
@@ -163,7 +192,7 @@ int deappend(char* s)
 }
 
 int window_draw(window_t* window) {
-
+    int i;
     static char buff[20][200];
     static unsigned int last_key = -1;
     static int curline = 0;
@@ -192,23 +221,21 @@ int window_draw(window_t* window) {
     /* window title */
     if (window->title)
         vg_draw_string(window->title, 32, 5, 25, vg_color_rgb(0, 0, 0));
-    
-    /* new button */
-    new_btn->draw(new_btn);
-    
-    
-    /* open button */
-    open_btn->draw(open_btn);
 
-    /* Save Button */
-    save_btn->draw(save_btn);
-    
-    /* Make Button */
-    make_btn->draw(make_btn);
-    
-    /* Run Button */
-    run_btn->draw(run_btn);
-    
+    new_btn->draw(new_btn); /* new button */
+    open_btn->draw(open_btn); /* open button */
+    save_btn->draw(save_btn); /* save button */
+    make_btn->draw(make_btn); /* make button */
+    run_btn->draw(run_btn); /* run button */
+
+    /* draw tabs */
+    for (i = 0; i < TAB_COUNT; ++i) {
+        tab_t* tab = window->tabs[i];
+        if (tab) {
+            tab_draw(tab, i, window->current_tab == i);
+        }
+    }
+
     /* draw mouse */
     vg_draw_circle(window->mouse_x, window->mouse_y, 5, vg_color_rgb(0, 0, 0));
 
@@ -236,7 +263,6 @@ int window_draw(window_t* window) {
     last_key = last_key_pressed;
     last_key_pressed = -1;
 
-    int i;
     for (i = 0; i < 20; ++i)
         vg_draw_string(buff[i], 32, 50, 100 + i*25, vg_color_rgb(0, 0, 0));
 
@@ -258,7 +284,6 @@ int window_set_title(window_t* window, const char* format, ...) {
     strcpy(window->title, buffer);
 
     return 0;
-
 }
 
 int window_set_size(window_t* window, int width, int height) {
@@ -406,7 +431,7 @@ void close_btn_draw(button_t* btn) {
 }
 
 void new_btn_click(button_t* btn){
-    
+
 }
 
 void open_btn_click(button_t* btn){

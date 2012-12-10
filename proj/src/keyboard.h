@@ -107,7 +107,7 @@ typedef enum {
     KEY_INS          = 0xE052,
     KEY_DEL          = 0xE053,
     KEY_WIN          = 0xE05B,  // right side of alt
-    KEY_CNTX         = 0xE05D,  // right side of right ctrl
+    KEY_CNTX         = 0xE05D,  // left side of right ctrl
     KEY_END          = 0xE04F
 } KEY;
 
