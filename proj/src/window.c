@@ -6,6 +6,7 @@
 #include "kbc.h"
 #include "utilities.h"
 #include "keyboard.h"
+#include "button.h"
 
 #include <minix/drivers.h>
 #include <stdio.h>
@@ -15,6 +16,10 @@
 static int mouse_interrupt;
 void mouseCallback(void);
 
+button_t* close_btn;
+
+void close_btn_draw(button_t* btn);
+void close_btn_click(button_t* btn);
 int window_init(window_t* window) {
 
     int error;
@@ -63,6 +68,8 @@ int window_init(window_t* window) {
         return error;
     }
 
+    close_btn = new_button(994, 5, 20, 20, close_btn_draw, close_btn_click, 1);
+    
     return 0;
 }
 
@@ -104,6 +111,8 @@ int window_update(window_t* window /* ... */) {
             window->mouse_y,
             window->width,
             window->height);
+        
+        button_update(close_btn, window->mouse_x, window->mouse_y, mouse_state.ldown);
     }
 
     window->redraw = 1;
@@ -151,10 +160,7 @@ int window_draw(window_t* window) {
     vg_draw_rectangle(0, 30, 5, 763,        vg_color_rgb(90, 90, 90));
     vg_draw_rectangle(1019, 30, 1024, 763,  vg_color_rgb(90, 90, 90));
 
-    /* close button, cross */
-    vg_draw_rectangle(994, 5, 1014, 25, vg_color_rgb(230, 0, 0));
-    vg_draw_line(997, 8, 1011, 22,      vg_color_rgb(255, 255, 255));
-    vg_draw_line(1011, 8, 997, 22,      vg_color_rgb(255, 255, 255));
+    close_btn->draw(close_btn);
 
     /* window title */
     if (window->title)
@@ -323,4 +329,14 @@ void mouseCallback(void) {
         mouse_state.diffy); // Y
 
     mouse_state.up = 1;
+}
+
+void close_btn_draw(button_t* btn) {
+    vg_draw_rectangle(btn->location_x, btn->location_y, btn->location_x + 20, btn->location_y + 20, vg_color_rgb(230, 0, 0));
+    vg_draw_line(btn->location_x + 3, btn->location_y + 3, btn->location_x + 17, btn->location_y + 17, vg_color_rgb(255, 255, 255));
+    vg_draw_line(btn->location_x + 17, btn->location_y + 3, btn->location_x + 3, btn->location_y + 17, vg_color_rgb(255, 255, 255));
+}
+
+void close_btn_click(button_t* btn) {
+    int_stop_handler();
 }
