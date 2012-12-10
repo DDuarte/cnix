@@ -159,7 +159,25 @@ int window_draw(window_t* window) {
     /* window title */
     if (window->title)
         vg_draw_string(window->title, 32, 5, 25, vg_color_rgb(0, 0, 0));
-
+    
+    /* new button */
+    
+    vg_draw_circle(879, 15, 10, vg_color_rgb(230, 0, 0));
+    vg_draw_rectangle(871, 13, 887, 17, vg_color_rgb(255, 255, 255));
+    vg_draw_rectangle(877, 7, 881, 23, vg_color_rgb(255, 255, 255));
+    
+    /* open button */
+    vg_draw_rectangle(896, 5, 904, 8, vg_color_rgb(255, 201, 14));
+    vg_draw_rectangle(894, 8, 914, 14, vg_color_rgb(255, 201, 14));
+    vg_draw_rectangle(894, 14, 914, 25, vg_color_rgb(252, 171, 41));
+    
+    /* Save Button */
+    vg_draw_rectangle(919, 5, 939, 25, vg_color_rgb(50, 50, 50));
+    vg_draw_rectangle(924, 5, 934, 11, vg_color_rgb(255, 255, 255));
+    vg_draw_rectangle(925, 6, 926, 10, vg_color_rgb(0, 0, 0));
+    vg_draw_circle(929, 18, 2, vg_color_rgb(200, 200, 200));
+    vg_set_pixel(929, 18, vg_color_rgb(0, 0, 0));
+    
     /* draw mouse */
     vg_draw_circle(window->mouse_x, window->mouse_y, 5, vg_color_rgb(0, 0, 0));
 
