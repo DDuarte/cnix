@@ -243,7 +243,11 @@ int window_draw(window_t* window) {
     if (last_key != last_key_pressed) {
         if (last_key_pressed > 0 && last_key_pressed < LAST_KEY) {
 
-            if (last_key_pressed == KEY_ENTER)
+            if (last_key_pressed >= KEY_F1 && last_key_pressed <= KEY_F10)
+                window->current_tab = last_key_pressed - KEY_F1;
+            else if (last_key_pressed == KEY_F11)
+                window->current_tab = 10;
+            else if (last_key_pressed == KEY_ENTER)
                 curline++;
             else {
                 if (last_key_pressed == KEY_BKSP) {
