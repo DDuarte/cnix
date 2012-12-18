@@ -100,13 +100,15 @@ int window_init(window_t* window) {
         printf("window_init: window_install_mouse failed with error code %d.\n", error);
         return error;
     }
+    printf("window_install: mouse installed with success.\n");
 
     error = keyboard_install();
     if (error) {
-        printf("window_init_ keyboard_install failed with error code %d.\n", error);
+        printf("window_init: keyboard_install failed with error code %d.\n", error);
         return error;
     }
-
+    printf("window_init: keyboard installed with success.\n");
+    
     /* set up buttons */
 
     new_btn = new_button(869, 5, 20, 20, new_btn_draw, new_btn_click, 1);
@@ -236,9 +238,13 @@ int window_draw(window_t* window) {
         }
     }
 
+    /* draw cmd tab*/
+    vg_draw_rectangle(5, 733, 1019, 763, vg_color_rgb(90, 90, 90));    
+    vg_draw_rectangle(5, 698, 1019, 703, vg_color_rgb(90, 90, 90));
+    
     /* draw mouse */
     vg_draw_circle(window->mouse_x, window->mouse_y, 5, vg_color_rgb(0, 0, 0));
-
+    
     /* write key */ // *NOTE*: this is test code, will be removed.
     if (last_key != last_key_pressed) {
         if (last_key_pressed > 0 && last_key_pressed < LAST_KEY) {
@@ -301,7 +307,8 @@ int window_set_size(window_t* window, int width, int height) {
 int window_install_mouse(window_t* window) {
 
     int error;
-
+    int ccb;
+    
     mouse_state.up = 0;
     window->mouse_x = 0;
     window->mouse_y = 0;
@@ -313,7 +320,7 @@ int window_install_mouse(window_t* window) {
     }
 
     mouse_interrupt = int_subscribe(MOUSE_IRQ, IRQ_REENABLE | IRQ_EXCLUSIVE, &mouseCallback);
-
+    
     return 0;
 }
 
@@ -426,7 +433,6 @@ void run_btn_draw(button_t* btn){
     vg_draw_line(btn->location_x + 15, btn->location_y + 10, btn->location_x + 5, btn->location_y + 15, vg_color_rgb(0, 0, 0));
     vg_draw_line(btn->location_x + 5, btn->location_y + 5, btn->location_x + 5, btn->location_y + 15, vg_color_rgb(0, 0, 0));
 }
-
 
 void close_btn_draw(button_t* btn) {
     vg_draw_rectangle(btn->location_x, btn->location_y, btn->location_x + 20, btn->location_y + 20, vg_color_rgb(230, 0, 0));

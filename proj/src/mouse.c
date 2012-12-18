@@ -37,10 +37,10 @@ int mouse_enable_stream_mode() {
         return 1;
     }
 
-   /* if (res != ACK) {
+    if (res != ACK) {
         printf("mouse_enable_stream_mode: did not receive acknowledge byte (0x%X), exiting\n.", res);
         return 1;
-    }*/
+    }
 
     return 0;
 }
