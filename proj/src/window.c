@@ -307,7 +307,6 @@ int window_set_size(window_t* window, int width, int height) {
 int window_install_mouse(window_t* window) {
 
     int error;
-    int ccb;
     
     mouse_state.up = 0;
     window->mouse_x = 0;

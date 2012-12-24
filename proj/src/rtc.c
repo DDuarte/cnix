@@ -37,19 +37,18 @@ void rtc_terminate(void) {
 }
 
 static void _rtcIntHandler(void) {
-    int cause;
     unsigned long regC;
-    event_t* event;
     priority_list_node_t* elem;
 
     sys_outb(RTC_ADDR_REG, RTC_REG_C);
-    cause = sys_inb(RTC_DATA_REG, &regC);
+    sys_inb(RTC_DATA_REG, &regC);
 
     printf("DEBUG: %s, %s\n", __FILE__, __FUNCTION__);
 
     if(bit_isset(regC, RTC_PF_BIT) && _periodicHandler) {
+        event_t* event;
         ticks++;
-        printf("DEBUG: %s, %s, ticks: %d", __FILE__, __FUNCTION__, ticks);
+        printf("DEBUG: %s, %s, ticks: %u", __FILE__, __FUNCTION__, ticks);
         elem = _rtc_events->root;
         while (elem != NULL) {
             event = (event_t*)(elem->val);
@@ -99,7 +98,6 @@ unsigned long bcd_to_decimal(unsigned long bcd) {
 
     unsigned long n;
     char buffer[10];
-    char *endptr;
 
     sprintf(buffer, "%x", bcd);
 
