@@ -8,6 +8,7 @@
 #include "keyboard.h"
 #include "tab.h"
 #include "button.h"
+#include "rtc.h"
 
 #include <minix/drivers.h>
 #include <stdio.h>
@@ -91,7 +92,9 @@ int window_init(window_t* window) {
     window->tabs[9]  = tab_create("#10");
     window->tabs[10] = tab_create("#11");
     window->current_tab = 0;
-
+    
+    window->date = NULL;
+    
     /* initialize interrupt handlers */
     int_init();
 
@@ -173,6 +176,11 @@ int window_update(window_t* window /* ... */) {
         button_update(close_btn, window->mouse_x, window->mouse_y, mouse_state.ldown);
     }
 
+    
+    if (window->date)
+        free(window->date);
+    window->date = rtc_get_date();
+    
     window->redraw = 1;
 
     return 0;
@@ -276,6 +284,10 @@ int window_draw(window_t* window) {
     for (i = 0; i < 20; ++i)
         vg_draw_string(buff[i], 32, 50, 100 + i*25, vg_color_rgb(0, 0, 0));
 
+        
+    
+    vg_draw_string(window->date, 16, 5, 760, vg_color_rgb(0, 0, 0));
+    
     return 0;
 }
 

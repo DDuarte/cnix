@@ -21,6 +21,8 @@ typedef struct {
 
     int current_tab;
     tab_t* tabs[TAB_COUNT];
+    
+    char* date;
 
 } window_t;
 

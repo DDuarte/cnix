@@ -21,44 +21,44 @@ int main(int argc, char const *argv[])
     char* prt;
     sef_startup();
     
-    prt = compile("/usr/src/drivers/proj/src/c.c");
-    
-    if (prt == NULL)
-        printf("NULL\n");
-    else
-        printf("%s\n", prt);
-        
-        printf("DONE\n");
+    //prt = compile("/usr/src/drivers/proj/src/c.c");
+    //
+    //if (prt == NULL)
+    //    printf("NULL\n");
+    //else
+    //    printf("%s\n", prt);
+    //    
+    //    printf("DONE\n");
 
-    //parse_args(argc, argv);
-    //
-    ///* start video mode, subscribe interrupts, allocate mem, etc. */
-    //error = window_init(&_window);
-    //if (error) {
-    //    printf("main: window_init failed with error code %d.\n", error);
-    //    return error;
-    //}
-    //
-    ///* initialize timers */
-    //error = timer_init(timer_handler);
-    //if (error < 0) {
-    //    printf("main: timer_init failed with error code %d.\n", error);
-    //    return error;
-    //}
-    //
-    ///* start interrupt loop */
-    //error = int_start_handler();
-    //if (error) {
-    //    printf("main: int_start_handler failed with error code %d.\n", error);
-    //    return error;
-    //}
-    //
-    ///* stop video mode and free required memory */
-    //error = window_destroy(&_window);
-    //if (error) {
-    //    printf("main: window_destroy failed with error code %d.\n", error);
-    //    return error;
-    //}
+    parse_args(argc, argv);
+    
+    /* start video mode, subscribe interrupts, allocate mem, etc. */
+    error = window_init(&_window);
+    if (error) {
+        printf("main: window_init failed with error code %d.\n", error);
+        return error;
+    }
+    
+    /* initialize timers */
+    error = timer_init(timer_handler);
+    if (error < 0) {
+        printf("main: timer_init failed with error code %d.\n", error);
+        return error;
+    }
+    
+    /* start interrupt loop */
+    error = int_start_handler();
+    if (error) {
+        printf("main: int_start_handler failed with error code %d.\n", error);
+        return error;
+    }
+    
+    /* stop video mode and free required memory */
+    error = window_destroy(&_window);
+    if (error) {
+        printf("main: window_destroy failed with error code %d.\n", error);
+        return error;
+    }
 
     return 0;
 }

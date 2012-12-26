@@ -1,6 +1,5 @@
 #include "rtc.h"
 #include "interrupt.h"
-#include "priority_list.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -13,91 +12,39 @@ static int _bit;
 static int(*_periodicHandler)(void) = NULL;
 static int(*_alarmHandler)(void) = NULL;
 static int(*_updateHandler)(void) = NULL;
-static priority_list_t* _rtc_events;
 
-static unsigned int ticks;
+char* rtc_get_date(void) {
+    char* res;
+    unsigned long seconds, minutes, hours, day_of_month, month, year, day_of_week,
+                  seconds_alarm, minutes_alarm, hours_alarm;
+    
+    rtc_wait_valid();
 
-/* Functions */
-static int _rtc_subscribe(void);
+    rtc_read_register(RTC_SECONDS, &seconds);
+    rtc_read_register(RTC_MINUTES, &minutes);
+    rtc_read_register(RTC_HOURS, &hours);
+    rtc_read_register(RTC_DAY_OF_MONTH, &day_of_month);
+    rtc_read_register(RTC_MONTH, &month);
+    rtc_read_register(RTC_YEAR, &year);
+    rtc_read_register(RTC_DAY_OF_WEEK, &day_of_week);
+    rtc_read_register(RTC_SECONDS_ALARM, &seconds_alarm);
+    rtc_read_register(RTC_MINUTES_ALARM, &minutes_alarm);
+    rtc_read_register(RTC_HOURS_ALARM, &hours_alarm);
 
-void rtc_init(void) {
-    printf("DEBUG: %s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
-    _rtc_events = priority_list_new(NULL, event_copy, event_destroy);
-    printf("DEBUG: %s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
-    _rtc_subscribe();
-    printf("DEBUG: %s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
-}
+    res = (char*)malloc(sizeof(char)*50);
+    
+    /* format similar to unix date command */
+    sprintf(res, "%s %s %02u 20%02u %02u:%02u:%02u\n", month_s[bcd_to_decimal(month) - 1], week_day_s[day_of_week - 1], bcd_to_decimal(day_of_month), bcd_to_decimal(year), 
+        bcd_to_decimal(hours), bcd_to_decimal(minutes), bcd_to_decimal(seconds));
 
-void rtc_terminate(void) {
-    int_unsubscribe(_bit);
-
-    priority_list_remove_all(_rtc_events);
-    free(_rtc_events);
-    _rtc_events = NULL;
-}
-
-static void _rtcIntHandler(void) {
-    unsigned long regC;
-    priority_list_node_t* elem;
-
-    sys_outb(RTC_ADDR_REG, RTC_REG_C);
-    sys_inb(RTC_DATA_REG, &regC);
-
-    printf("DEBUG: %s, %s\n", __FILE__, __FUNCTION__);
-
-    if(bit_isset(regC, RTC_PF_BIT) && _periodicHandler) {
-        event_t* event;
-        ticks++;
-        printf("DEBUG: %s, %s, ticks: %u", __FILE__, __FUNCTION__, ticks);
-        elem = _rtc_events->root;
-        while (elem != NULL) {
-            event = (event_t*)(elem->val);
-            if (event->due_ticks == ticks) {
-                if (!event->callback(event)) {
-                    rtc_terminate();
-                    return;
-                }
-                if(!(event->recursive)) {
-                    elem = priority_list_remove(_rtc_events, elem);
-                    continue;
-                } else {
-                    event_reset(event, ticks);
-                }
-                elem = elem->next;
-            }
-        }
-    }
-}
-
-static int _rtc_subscribe(void) {
-    unsigned long regA, regB;
-    printf("DEBUG: %s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
-    _bit = int_subscribe(RTC_IRQ, IRQ_REENABLE | IRQ_EXCLUSIVE, _rtcIntHandler);
-    printf("DEBUG: %s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
-    rtc_read_register(RTC_REG_B, &regB);
-    printf("DEBUG: %s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
-    bit_set(regB, RTC_PIE_BIT);
-    bit_unset(regB, RTC_AIE_BIT);
-    bit_unset(regB, RTC_UIE_BIT);
-
-    rtc_write_register(RTC_REG_B, regB);
-
-    rtc_read_register(RTC_REG_A, &regA);
-
-    bit_unset(regA, RTC_RS0_BIT);
-    bit_set(regA, RTC_RS1_BIT);
-    bit_set(regA, RTC_RS2_BIT);
-    bit_unset(regA, RTC_RS3_BIT);
-
-    rtc_write_register(RTC_REG_A, regA);
-
-    return _bit;
+    return res;
 }
 
 unsigned long bcd_to_decimal(unsigned long bcd) {
 
     unsigned long n;
     char buffer[10];
+    char *endptr;
 
     sprintf(buffer, "%x", bcd);
 
@@ -105,6 +52,7 @@ unsigned long bcd_to_decimal(unsigned long bcd) {
 
     return n;
 }
+
 
 void rtc_wait_valid() {
 
@@ -139,7 +87,7 @@ int rtc_read_register(unsigned long reg, unsigned long* value) {
         printf("rtc_read_register: sys_inb failed.\n");
         return res;
     }
-
+    
     if (value != NULL)
         *value = val_temp;
 
@@ -162,15 +110,6 @@ int rtc_write_register(unsigned long reg, unsigned long value) {
         printf("rtc_read_register: sys_inb failed.\n");
         return res;
     }
-
-    return 0;
-}
-
-int rtc_add_event(unsigned int dur_ms, int (*callback)(event_t*), unsigned int priority, unsigned int recursive) {
-    event_t event = { dur_ms + ticks, dur_ms, recursive, callback };
-
-    if (!priority_list_add_elem(_rtc_events, (void*)(&event), priority))
-        return 1;
 
     return 0;
 }
