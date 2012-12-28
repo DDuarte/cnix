@@ -13,7 +13,7 @@ static int(*_periodicHandler)(void) = NULL;
 static int(*_alarmHandler)(void) = NULL;
 static int(*_updateHandler)(void) = NULL;
 
-char* rtc_get_date(int* updated) {
+char* rtc_get_date() {
     char* res;
     unsigned long seconds, minutes, hours, day_of_month, month, year, day_of_week,
                   seconds_alarm, minutes_alarm, hours_alarm;
@@ -32,12 +32,10 @@ char* rtc_get_date(int* updated) {
     rtc_read_register(RTC_MINUTES_ALARM, &minutes_alarm);
     rtc_read_register(RTC_HOURS_ALARM, &hours_alarm);
 
-    if (prev_seconds != seconds) {
-        prev_seconds = seconds;
-        *updated = 1;
-    }
-    else
-        *updated = 0;
+    if (prev_seconds == seconds)
+        return NULL;
+
+    prev_seconds = seconds;
 
     res = (char*)malloc(sizeof(char)*50);
 
