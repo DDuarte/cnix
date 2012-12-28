@@ -44,6 +44,26 @@ tab_t* tab_create(char* file_name) {
     return tab;
 }
 
+tab_t* tab_create_from_file(char* file_name) {
+
+    tab_t* tab = tab_create(file_name);
+
+    tab->characters[0][0] = char_screen_create('t', vg_color_rgb(0, 0, 0), 10);
+    tab->characters[1][1] = char_screen_create('e', vg_color_rgb(0, 0, 0), 10);
+    tab->characters[2][2] = char_screen_create('s', vg_color_rgb(0, 0, 0), 10);
+    tab->characters[3][3] = char_screen_create('t', vg_color_rgb(0, 0, 0), 10);
+
+    return tab;
+}
+
+char* tab_to_file(tab_t* tab) {
+
+    char* buffer = (char*)malloc(sizeof(char)*5);
+    strcpy(buffer, "test");
+
+    return buffer;
+}
+
 int tab_draw_label(tab_t* tab, int tab_num, int selected) {
 
     const int label_size_x = 92;

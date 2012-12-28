@@ -26,7 +26,10 @@ typedef struct {
 
 } tab_t;
 
-tab_t* tab_create(char* file_name);
+tab_t* tab_create_from_file(char* file_name); // tab filled with contents of file name
+char* tab_to_file(tab_t* tab);
+
+tab_t* tab_create(char* file_name); // empty tab
 int tab_draw(tab_t* tab, int tab_num, int selected);
 
 int tab_key_press(tab_t* tab, KEY key);
