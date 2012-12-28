@@ -148,32 +148,46 @@ int window_destroy(window_t* window) {
 
 int window_update(window_t* window /* ... */) {
 
-    if (mouse_state.up) {
-        mouse_state.up = 0;
-        window->redraw = 1;
+    static unsigned int previous_key = -2;
+    int error;
+
+    /* Mouse */
+    if (mouse_state.updated) {
+        mouse_state.updated = 0;
+
         window->mouse_x += mouse_state.diffx;
-        window->mouse_y -= mouse_state.diffy;
+        window->mouse_y -= mouse_state.diffy; /* inverted y axis */
 
         window->mouse_x = clamp(window->mouse_x, 0, window->width);
         window->mouse_y = clamp(window->mouse_y, 0, window->height);
 
-        window_set_title(window, "x: %d, y: %d, w: %d, h: %d",
+        error = window_set_title(window, "x: %d, y: %d, w: %d, h: %d",
             window->mouse_x,
             window->mouse_y,
             window->width,
             window->height);
+        if (error) {
+            printf("window_update: window_set_title failed with error code %d.\n", error);
+            return error;
+        }
 
-        if (mouse_state.ldown)
-            if (window->mouse_y > 30 && window->mouse_y < 60)
-                if (window->mouse_x > 5 && window->mouse_x < (window->width - 5))
-                    window->current_tab = (window->mouse_x  - 5) / 92; /* dividing by size of label */
+        if (mouse_state.ldown || mouse_state.mdown || mouse_state.rdown)
+            window_mouse_press(window);
 
-        button_update(new_btn, window->mouse_x, window->mouse_y, mouse_state.ldown);
-        button_update(open_btn, window->mouse_x, window->mouse_y, mouse_state.ldown);
-        button_update(save_btn, window->mouse_x, window->mouse_y, mouse_state.ldown);
-        button_update(make_btn, window->mouse_x, window->mouse_y, mouse_state.ldown);
-        button_update(run_btn, window->mouse_x, window->mouse_y, mouse_state.ldown);
-        button_update(close_btn, window->mouse_x, window->mouse_y, mouse_state.ldown);
+        window->redraw = 1;
+    }
+
+    /* Keyboard */
+    if (previous_key != last_key_pressed) {
+        error = window_key_press(window, last_key_pressed);
+        if (error) {
+            printf("window_update: window_key_press failed with error code %d.\n", error);
+            return error;
+        }
+
+        previous_key = last_key_pressed;
+        last_key_pressed = -1;
+        window->redraw = 1;
     }
 
     /* RTC */
@@ -202,92 +216,93 @@ int deappend(char* s)
 }
 
 int window_draw(window_t* window) {
-    int i;
-    static char buff[20][200];
-    static unsigned int last_key = -1;
-    static int curline = 0;
-
-    static int initedBuff = 0;
-    if (!initedBuff) {
-        int i;
-        for (i = 0; i < 20; ++i)
-            memset(buff[i], 0, 200 * sizeof(char));
-        initedBuff = 1;
-    }
+    int error, i;
 
     /* background */
-    vg_fill(vg_color_rgb(255, 255, 255));
+    error = vg_fill(vg_color_rgb(255, 255, 255));
+    if (error) {
+        printf("window_draw: vg_fill failed with error code %d.\n", error);
+        return error;
+    }
 
     /* window title bar */
-    vg_draw_rectangle(0, 0, 1024, 30, vg_color_rgb(90, 90, 90));
+    error = vg_draw_rectangle(0, 0, 1024, 30, vg_color_rgb(90, 90, 90));
+    if (error) {
+        printf("window_draw: vg_draw_rectangle (1) failed with error code %d.\n", error);
+        return error;
+    }
 
     /* borders */
-    vg_draw_rectangle(0, 763, 1024, 768,    vg_color_rgb(90, 90, 90));
-    vg_draw_rectangle(0, 30, 5, 763,        vg_color_rgb(90, 90, 90));
-    vg_draw_rectangle(1019, 30, 1024, 763,  vg_color_rgb(90, 90, 90));
-
-    close_btn->draw(close_btn);
+    error = vg_draw_rectangle(0, 763, 1024, 768, vg_color_rgb(90, 90, 90));
+    if (error) {
+        printf("window_draw: vg_draw_rectangle (2) failed with error code %d.\n", error);
+        return error;
+    }
+    error = vg_draw_rectangle(0, 30, 5, 763, vg_color_rgb(90, 90, 90));
+    if (error) {
+        printf("window_draw: vg_draw_rectangle (3) failed with error code %d.\n", error);
+        return error;
+    }
+    error = vg_draw_rectangle(1019, 30, 1024, 763, vg_color_rgb(90, 90, 90));
+    if (error) {
+        printf("window_draw: vg_draw_rectangle (4) failed with error code %d.\n", error);
+        return error;
+    }
 
     /* window title */
-    if (window->title)
-        vg_draw_string(window->title, 32, 5, 25, vg_color_rgb(0, 0, 0));
+    if (window->title) {
+        error = vg_draw_string(window->title, 32, 5, 25, vg_color_rgb(0, 0, 0));
+        if (error) {
+            printf("window_draw: vg_draw_string (1) failed with error code %d.\n", error);
+            return error;
+        }
+    }
 
     new_btn->draw(new_btn); /* new button */
     open_btn->draw(open_btn); /* open button */
     save_btn->draw(save_btn); /* save button */
     make_btn->draw(make_btn); /* make button */
     run_btn->draw(run_btn); /* run button */
+    close_btn->draw(close_btn); /* close button */
 
     /* draw tabs */
     for (i = 0; i < TAB_COUNT; ++i) {
         tab_t* tab = window->tabs[i];
         if (tab) {
-            tab_draw(tab, i, window->current_tab == i);
+            error = tab_draw(tab, i, window->current_tab == i);
+            if (error) {
+                printf("window_draw: tab_draw failed with error code %d.\n", error);
+                return error;
+            }
         }
     }
 
     /* draw cmd tab*/
-    vg_draw_rectangle(5, 733, 1019, 763, vg_color_rgb(90, 90, 90));    
-    vg_draw_rectangle(5, 698, 1019, 703, vg_color_rgb(90, 90, 90));
-    
-    /* draw mouse */
-    vg_draw_circle(window->mouse_x, window->mouse_y, 5, vg_color_rgb(0, 0, 0));
-    
-    /* write key */ // *NOTE*: this is test code, will be removed.
-    if (last_key != last_key_pressed) {
-        if (last_key_pressed > 0 && last_key_pressed < LAST_KEY) {
-
-            if (last_key_pressed >= KEY_F1 && last_key_pressed <= KEY_F10)
-                window->current_tab = last_key_pressed - KEY_F1;
-            else if (last_key_pressed == KEY_F11)
-                window->current_tab = 10;
-            else if (last_key_pressed == KEY_ENTER)
-                curline++;
-            else {
-                if (last_key_pressed == KEY_BKSP) {
-                    int l = deappend(buff[curline]);
-
-                    if (l == 1)
-                        curline--;
-
-                    if (curline < 0)
-                        curline = 0;
-                }
-                else
-                    append(buff[curline], key_to_char(last_key_pressed));
-            }
-        }
+    error = vg_draw_rectangle(5, 733, 1019, 763, vg_color_rgb(90, 90, 90));
+    if (error) {
+        printf("window_draw: vg_draw_rectangle (5) failed with error code %d.\n", error);
+        return error;
     }
-    last_key = last_key_pressed;
-    last_key_pressed = -1;
+    error = vg_draw_rectangle(5, 698, 1019, 703, vg_color_rgb(90, 90, 90));
+    if (error) {
+        printf("window_draw: vg_draw_rectangle (6) failed with error code %d.\n", error);
+        return error;
+    }
 
-    for (i = 0; i < 20; ++i)
-        vg_draw_string(buff[i], 32, 50, 100 + i*25, vg_color_rgb(0, 0, 0));
+    /* draw time and date */
+    error = vg_draw_string(window->date, 16, 5, 760, vg_color_rgb(0, 0, 0));
+    if (error) {
+        printf("window_draw: vg_draw_string (2) failed with error code %d.\n", error);
+        return error;
+    }
 
-        
-    
-    vg_draw_string(window->date, 16, 5, 760, vg_color_rgb(0, 0, 0));
-    
+    /* draw mouse */
+    error = vg_draw_circle(window->mouse_x, window->mouse_y, 5, vg_color_rgb(0, 0, 0));
+    if (error) {
+        printf("window_draw: vg_draw_circle failed with error code %d.\n", error);
+        return error;
+    }
+
     return 0;
 }
 
@@ -319,8 +334,8 @@ int window_set_size(window_t* window, int width, int height) {
 int window_install_mouse(window_t* window) {
 
     int error;
-    
-    mouse_state.up = 0;
+
+    mouse_state.updated = 0;
     window->mouse_x = 0;
     window->mouse_y = 0;
 
@@ -331,7 +346,7 @@ int window_install_mouse(window_t* window) {
     }
 
     mouse_interrupt = int_subscribe(MOUSE_IRQ, IRQ_REENABLE | IRQ_EXCLUSIVE, &mouseCallback);
-    
+
     return 0;
 }
 
@@ -394,7 +409,35 @@ void mouseCallback(void) {
         mouse_state.diffx, // X
         mouse_state.diffy); // Y
 
-    mouse_state.up = 1;
+    mouse_state.updated = 1;
+}
+
+int window_key_press(window_t* window, KEY key) {
+
+    if (key >= KEY_F1 && key <= KEY_F10)
+        window->current_tab = key - KEY_F1;
+    else if (key == KEY_F11) /* F10 is 0x44 but F11 is not 0x45 */
+        window->current_tab = TAB_COUNT - 1;
+
+    return tab_key_press(window->tabs[window->current_tab], key);
+}
+
+int window_mouse_press(window_t* window) {
+
+    if (window->mouse_y > 30 && window->mouse_y < 60)
+        if (window->mouse_x > 5 && window->mouse_x < (window->width - 5))
+            window->current_tab = (window->mouse_x  - 5) / 92; /* dividing by size of label */
+
+    button_update(new_btn, window->mouse_x, window->mouse_y, mouse_state.ldown);
+    button_update(open_btn, window->mouse_x, window->mouse_y, mouse_state.ldown);
+    button_update(save_btn, window->mouse_x, window->mouse_y, mouse_state.ldown);
+    button_update(make_btn, window->mouse_x, window->mouse_y, mouse_state.ldown);
+    button_update(run_btn, window->mouse_x, window->mouse_y, mouse_state.ldown);
+    button_update(close_btn, window->mouse_x, window->mouse_y, mouse_state.ldown);
+
+    printf("close_btn: %p\n", close_btn);
+
+    return tab_mouse_press(window->tabs[window->current_tab], window->mouse_x, window->mouse_y);
 }
 
 void new_btn_draw(button_t* btn){
@@ -471,5 +514,6 @@ void run_btn_click(button_t* btn){
 }
 
 void close_btn_click(button_t* btn) {
+    printf("Exiting...\n");
     int_stop_handler();
 }

@@ -85,3 +85,47 @@ int tab_draw(tab_t* tab, int tab_num, int selected) {
 
     return 0;
 }
+
+int tab_key_press(tab_t* tab, KEY key) {
+
+    switch (key) {
+        case KEY_ARR_UP:
+            tab->current_line--;
+            break;
+        case KEY_ARR_DOWN:
+            tab->current_line++;
+            break;
+        case KEY_ARR_LEFT:
+            tab->current_column--;
+            break;
+        case KEY_ARR_RIGHT:
+            tab->current_column++;
+            break;
+        case KEY_ENTER:
+        case KEY_NUM_ENTER:
+            tab->current_line++;
+            break;
+        case KEY_HOME:
+            tab->current_column = 0;
+            break;
+        case KEY_END:
+            // tab->current_column = last character in this line;
+            break;
+    }
+
+    if (tab->current_line < 0) tab->current_line = 0;
+    if (tab->current_column < 0) tab->current_column = 0;
+    //if (tab->current_column > EOL) tab->current_column = EOL;
+    //if (tab->current_line > EOF) tab->current_column = EOF;
+
+    // TODO: write characters to the buffer at current_line and current_column
+    // TODO: handle
+
+    return 0;
+}
+
+int tab_mouse_press(tab_t* tab, unsigned long x, unsigned long y) {
+    // TODO: calculate current_column and current_line based on x and y
+    // TODO: if dragging mouse do text selection (possibly)
+    return 0;
+}

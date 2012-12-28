@@ -17,7 +17,7 @@ typedef struct {
     int diffy;
     int ovfx;
     int ovfy;
-    int up;
+    int updated;
 } mouse_state_t;
 
 typedef struct {

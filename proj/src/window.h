@@ -21,7 +21,7 @@ typedef struct {
 
     int current_tab;
     tab_t* tabs[TAB_COUNT];
-    
+
     char* date;
 
 } window_t;
@@ -34,5 +34,7 @@ int window_set_title(window_t* window, const char* format, ...);
 int window_set_size(window_t* window, int width, int height);
 int window_install_mouse(window_t* window);
 int window_uninstall_mouse(window_t* window);
+int window_key_press(window_t* window, KEY key);
+int window_mouse_press(window_t* window);
 
 #endif /* WINDOW_H */
