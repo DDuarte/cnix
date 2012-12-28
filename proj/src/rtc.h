@@ -75,7 +75,7 @@ void rtc_wait_valid();
 int rtc_read_register(unsigned long reg, unsigned long* value);
 int rtc_write_register(unsigned long reg, unsigned long value);
 
-char* rtc_get_date(void);
+char* rtc_get_date(int* updated);
 
 
 #endif /* RTC_H__ */

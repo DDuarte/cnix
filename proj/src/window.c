@@ -150,6 +150,7 @@ int window_update(window_t* window /* ... */) {
 
     static unsigned int previous_key = -2;
     int error;
+    int rtc_updated;
 
     /* Mouse */
     if (mouse_state.updated) {
@@ -193,9 +194,9 @@ int window_update(window_t* window /* ... */) {
     /* RTC */
     if (window->date)
         free(window->date);
-    window->date = rtc_get_date();
-    
-    window->redraw = 1;
+    window->date = rtc_get_date(&rtc_updated);
+    if (rtc_updated)
+        window->redraw = 1;
 
     return 0;
 }
