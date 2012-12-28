@@ -45,7 +45,6 @@ unsigned int File_Load(const char* fileName, char* buffer, size_t* size) {
     
     fclose(file);
     return 1;
-    
 }
 
 unsigned int File_Save(const char* fileName, const char* buffer, size_t size) {

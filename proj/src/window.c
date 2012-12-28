@@ -1,4 +1,5 @@
 #include "window.h"
+#include "cnix.h"
 #include "video_gr.h"
 #include "interrupt.h"
 #include "timer.h"
@@ -501,11 +502,28 @@ void new_btn_click(button_t* btn){
 }
 
 void open_btn_click(button_t* btn){
-
+    size_t i;
+    char* fileName = tab_to_file(window->tab[11]);
+    char* fileBuffer;
+    tab_t** tab = NULL;
+    
+    for (i = 0; i < 11; i++)
+        if (!window->tab[i])
+            tab = window->tab[i];
+            
+    if (!tab) {
+        printf("Open: No tabs available to open file!");
+        return;
+    }
+    
+    size_t size;
+    if (!File_Load(fileName, fileBuffer, &size)) { return; }
+    tab = tab_create_from_file(fileName, fileBuffer);
 }
 
 void save_btn_click(button_t* btn){
-
+    char* fileBuffer = tab_to_file(window->tab[window->current_tab]);
+    File_Save(window->tab[window->current_tab]->file_name, fileBuffer, strlen(fileBuffer));
 }
 
 void make_btn_click(button_t* btn){

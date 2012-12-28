@@ -1,3 +1,5 @@
+#include "cnix.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -9,7 +11,6 @@
 #include "interrupt.h"
 #include "window.h"
 
-static window_t _window;
 
 void parse_args(int argc, char const *argv[]);
 
