@@ -26,7 +26,7 @@ typedef struct {
 
 } tab_t;
 
-tab_t* tab_create_from_file(char* file_name); // tab filled with contents of file name
+tab_t* tab_create_from_file(char* file_name, char* file_buffer); // tab filled with contents of file name
 char* tab_to_file(tab_t* tab);
 
 tab_t* tab_create(char* file_name); // empty tab

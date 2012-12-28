@@ -44,14 +44,14 @@ tab_t* tab_create(char* file_name) {
     return tab;
 }
 
-tab_t* tab_create_from_file(char* file_name) {
+tab_t* tab_create_from_file(char* file_name, char* file_buffer) {
 
     tab_t* tab = tab_create(file_name);
 
-    tab->characters[0][0] = char_screen_create('t', vg_color_rgb(0, 0, 0), 10);
-    tab->characters[1][1] = char_screen_create('e', vg_color_rgb(0, 0, 0), 10);
-    tab->characters[2][2] = char_screen_create('s', vg_color_rgb(0, 0, 0), 10);
-    tab->characters[3][3] = char_screen_create('t', vg_color_rgb(0, 0, 0), 10);
+    tab->characters[0][0] = char_screen_create(file_buffer[0], vg_color_rgb(0, 0, 0), 10);
+    tab->characters[1][1] = char_screen_create(file_buffer[1], vg_color_rgb(0, 0, 0), 10);
+    tab->characters[2][2] = char_screen_create(file_buffer[2], vg_color_rgb(0, 0, 0), 10);
+    tab->characters[3][3] = char_screen_create(file_buffer[3], vg_color_rgb(0, 0, 0), 10);
 
     return tab;
 }
