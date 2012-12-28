@@ -24,7 +24,6 @@
 
 #define BIOS_VIDEO_SERVICE 0x10
 
-
 static unsigned BASE_H_RES = 1024;
 static unsigned BASE_V_RES = 768;
 
@@ -35,13 +34,9 @@ static char *temp_video_mem; /* address of the temporary buffer */
 static unsigned int vram_size;
 
 static int _vg_set_absolute_pixel(long x, long y, unsigned long color);
-#ifndef NGRAPHICS
+
 static long h_res; /* Horizontal screen resolution in pixels */
 static long v_res; /* Vertical screen resolution in pixels */
-#else
-static long h_res = 1024; /* Horizontal screen resolution in pixels */
-static long v_res = 768;
-#endif
 
 static unsigned bits_per_pixel; /* Number of VRAM bits per pixel */
 static unsigned bytes_per_pixel; /* Number of VRAM bytes per pixel (at least one) */

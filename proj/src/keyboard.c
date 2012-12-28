@@ -74,13 +74,13 @@ char key_to_char(unsigned int scancode) {
 }
 
 int keyboard_install(void) {
-    
+
     bit = int_subscribe(KB_IRQ, IRQ_REENABLE | IRQ_EXCLUSIVE, &keyboard_handler);
     if (bit == -1) {
         printf("keyboard_install: int_subscribe failed.\n");
         return -1;
     }
-    
+
     last_key_pressed = -1;
 
     return 0;
@@ -130,7 +130,7 @@ static void keyboard_handler(void) {
 
     if (scancode == KEY_RELEASE(KEY_ESC)) /* ESC release */
         int_stop_handler();
-    
+
     printf("DEBUG: Keyboard scancode : 0x%X\n", scancode);
 }
 

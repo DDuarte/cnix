@@ -29,9 +29,9 @@
 #define RTC_DV1_BIT         5
 #define RTC_DV2_BIT         6
 #define RTC_UIP_BIT         7
-    
-/* RTC_REG_B BITS */    
-    
+
+/* RTC_REG_B BITS */
+
 #define RTC_DSE_BIT         0
 #define RTC_MODE_BIT        1
 #define RTC_DM_BIT          2
@@ -40,9 +40,9 @@
 #define RTC_AIE_BIT         5
 #define RTC_PIE_BIT         6
 #define RTC_SET_BIT         7
-    
-/* RTC_REG_C BITS */    
-    
+
+/* RTC_REG_C BITS */
+
 #define RTC_UF_BIT          4
 #define RTC_AF_BIT          5
 #define RTC_PF_BIT          6

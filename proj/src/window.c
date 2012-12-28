@@ -68,14 +68,13 @@ int window_init(window_t* window) {
         return error;
     }
 
-    error = window_set_size(window, vg_get_h_res(), vg_get_v_res());
+    error = window_set_size(window, window->draw ? vg_get_h_res() : 1024, window->draw ? vg_get_v_res() : 768);
     if (error) {
         printf("window_init: window_set_size failed with error code %d.\n", error);
         return error;
     }
 
     /* set up tabs */
-
     window->current_tab = -1;
     for (i = 0; i < TAB_COUNT; ++i)
         window->tabs[i] = NULL;
@@ -92,12 +91,13 @@ int window_init(window_t* window) {
     window->tabs[9]  = tab_create("#10");
     window->tabs[10] = tab_create("#11");
     window->current_tab = 0;
-    
+
     window->date = NULL;
-    
+
     /* initialize interrupt handlers */
     int_init();
 
+    /* install mouse */
     error = window_install_mouse(window);
     if (error) {
         printf("window_init: window_install_mouse failed with error code %d.\n", error);
@@ -105,15 +105,15 @@ int window_init(window_t* window) {
     }
     printf("window_install: mouse installed with success.\n");
 
+    /* install keyboard */
     error = keyboard_install();
     if (error) {
         printf("window_init: keyboard_install failed with error code %d.\n", error);
         return error;
     }
     printf("window_init: keyboard installed with success.\n");
-    
-    /* set up buttons */
 
+    /* set up buttons */
     new_btn = new_button(869, 5, 20, 20, new_btn_draw, new_btn_click, 1);
     open_btn = new_button(894, 5, 20, 20, open_btn_draw, open_btn_click, 1);
     save_btn = new_button(919, 5, 20, 20, save_btn_draw, save_btn_click, 1);
@@ -176,7 +176,7 @@ int window_update(window_t* window /* ... */) {
         button_update(close_btn, window->mouse_x, window->mouse_y, mouse_state.ldown);
     }
 
-    
+    /* RTC */
     if (window->date)
         free(window->date);
     window->date = rtc_get_date();

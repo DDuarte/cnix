@@ -17,7 +17,7 @@ char* rtc_get_date(void) {
     char* res;
     unsigned long seconds, minutes, hours, day_of_month, month, year, day_of_week,
                   seconds_alarm, minutes_alarm, hours_alarm;
-    
+
     rtc_wait_valid();
 
     rtc_read_register(RTC_SECONDS, &seconds);
@@ -32,9 +32,9 @@ char* rtc_get_date(void) {
     rtc_read_register(RTC_HOURS_ALARM, &hours_alarm);
 
     res = (char*)malloc(sizeof(char)*50);
-    
+
     /* format similar to unix date command */
-    sprintf(res, "%s %s %02u 20%02u %02u:%02u:%02u\n", month_s[bcd_to_decimal(month) - 1], week_day_s[day_of_week - 1], bcd_to_decimal(day_of_month), bcd_to_decimal(year), 
+    sprintf(res, "%s %s %02u 20%02u %02u:%02u:%02u\n", month_s[bcd_to_decimal(month) - 1], week_day_s[day_of_week - 1], bcd_to_decimal(day_of_month), bcd_to_decimal(year),
         bcd_to_decimal(hours), bcd_to_decimal(minutes), bcd_to_decimal(seconds));
 
     return res;
@@ -87,7 +87,7 @@ int rtc_read_register(unsigned long reg, unsigned long* value) {
         printf("rtc_read_register: sys_inb failed.\n");
         return res;
     }
-    
+
     if (value != NULL)
         *value = val_temp;
 
