@@ -92,6 +92,7 @@ int window_init(window_t* window) {
     window->tabs[8]  = tab_create("#9");
     window->tabs[9]  = tab_create("#10");
     window->tabs[10] = tab_create("#11");
+    window->tabs[11] = tab_create("#console");
     window->current_tab = 0;
 
     window->date = NULL;
