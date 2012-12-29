@@ -10,6 +10,7 @@
 #include "tab.h"
 #include "button.h"
 #include "rtc.h"
+#include "file.h"
 
 #include <minix/drivers.h>
 #include <stdio.h>
@@ -127,12 +128,29 @@ int window_init(window_t* window) {
 
 int window_destroy(window_t* window) {
 
-    int error;
+    int error, i;
 
+    /* remove mouse */
     error = window_uninstall_mouse(window);
     if (error) {
         printf("window_destroy: window_uninstall_mouse failed with error code %d.\n", error);
         return error;
+    }
+
+    /* remove keyboard */
+    error = keyboard_destroy();
+    if (error) {
+        printf("window_destroy: keyboard_destroy failed with error code %d.\n", error);
+        return error;
+    }
+
+    /* remove tabs */
+    for (i = 0; i < TAB_COUNT; ++i) {
+        error = tab_destroy(window->tabs[i]);
+        if (error) {
+            printf("window_destroy: tab_destroy(%d) failed with error code %d.\n", i, error);
+            return error;
+        }
     }
 
     /* exit video mode */
@@ -201,21 +219,6 @@ int window_update(window_t* window /* ... */) {
     }
 
     return 0;
-}
-
-int append(char* s, char c)
-{
-        int len = strlen(s);
-        s[len] = c;
-        s[len+1] = '\0';
-        return len;
-}
-
-int deappend(char* s)
-{
-        int len = strlen(s);
-        s[len - 1] = '\0';
-        return len;
 }
 
 int window_draw(window_t* window) {
@@ -502,28 +505,30 @@ void new_btn_click(button_t* btn){
 }
 
 void open_btn_click(button_t* btn){
-    size_t i;
-    char* fileName = tab_to_file(window->tab[11]);
+    int i;
+    char* fileName = tab_to_file(_window.tabs[11]);
     char* fileBuffer;
-    tab_t** tab = NULL;
-    
+    tab_t* tab = NULL;
+
     for (i = 0; i < 11; i++)
-        if (!window->tab[i])
-            tab = window->tab[i];
-            
+        if (!_window.tabs[i]) {
+            tab = _window.tabs[i];
+            break;
+        }
+
     if (!tab) {
         printf("Open: No tabs available to open file!");
         return;
     }
-    
+
     size_t size;
     if (!File_Load(fileName, fileBuffer, &size)) { return; }
     tab = tab_create_from_file(fileName, fileBuffer);
 }
 
 void save_btn_click(button_t* btn){
-    char* fileBuffer = tab_to_file(window->tab[window->current_tab]);
-    File_Save(window->tab[window->current_tab]->file_name, fileBuffer, strlen(fileBuffer));
+    char* fileBuffer = tab_to_file(_window.tabs[_window.current_tab]);
+    File_Save(_window.tabs[_window.current_tab]->file_name, fileBuffer, strlen(fileBuffer));
 }
 
 void make_btn_click(button_t* btn){

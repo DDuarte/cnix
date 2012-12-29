@@ -44,6 +44,14 @@ tab_t* tab_create(char* file_name) {
     return tab;
 }
 
+int tab_destroy(tab_t* tab) {
+
+    /* ... */
+
+    free(tab);
+    return 0;
+}
+
 tab_t* tab_create_from_file(char* file_name, char* file_buffer) {
 
     tab_t* tab = tab_create(file_name);

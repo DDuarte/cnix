@@ -1,16 +1,14 @@
-#include "cnix.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <minix/drivers.h>
 
+#include "cnix.h"
 #include "utilities.h"
 #include "video_gr.h"
 #include "timer.h"
 #include "interrupt.h"
 #include "window.h"
-
 
 void parse_args(int argc, char const *argv[]);
 

@@ -31,6 +31,7 @@ char* tab_to_file(tab_t* tab);
 
 tab_t* tab_create(char* file_name); // empty tab
 int tab_draw(tab_t* tab, int tab_num, int selected);
+int tab_destroy(tab_t* tab);
 
 int tab_key_press(tab_t* tab, KEY key);
 int tab_mouse_press(tab_t* tab, unsigned long x, unsigned long y);

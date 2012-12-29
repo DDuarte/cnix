@@ -1,7 +1,7 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-#define TAB_COUNT 11
+#define TAB_COUNT 12
 
 #include "tab.h"
 

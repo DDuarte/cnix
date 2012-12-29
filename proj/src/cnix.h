@@ -1,6 +1,8 @@
 #ifndef CNIX_H_
 #define CNIX_H_
 
-window_t _window;
+#include "window.h"
+
+static window_t _window;
 
 #endif
