@@ -36,5 +36,6 @@ int window_install_mouse(window_t* window);
 int window_uninstall_mouse(window_t* window);
 int window_key_press(window_t* window, KEY key);
 int window_mouse_press(window_t* window);
+int window_mouse_release(window_t* window);
 
 #endif /* WINDOW_H */

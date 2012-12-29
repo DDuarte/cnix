@@ -25,27 +25,30 @@ void button_update(button_t* btn, unsigned long mouse_x, unsigned long mouse_y, 
 
     switch (btn->mouse_st) {
         case MOUSE_NONE:
-            if (btn->selected)
-                btn->mouse_st = MOUSE_OVER;
-            break;
-        case MOUSE_OVER:
             if (btn->selected) {
-                if (mouse_left /* && !btn->prev_mouse_left */)
+                btn->mouse_st = MOUSE_OVER_CLICK;
+            }
+            break;
+        case MOUSE_OVER:                
+            if (btn->selected) {
+                if (mouse_left && !btn->prev_mouse_left) {
                     btn->mouse_st = MOUSE_OVER_CLICK;
+                }
             } else
                 btn->mouse_st = MOUSE_NONE;
             break;
         case MOUSE_OVER_CLICK:
-            if (btn->selected) {
-                /* if (!mouse_left  && btn->prev_mouse_left ) { */
-                    btn->mouse_st = MOUSE_OVER;
-                    if (btn->click_call)
-                        btn->click_call(btn);
-                /* } */
-            } else
-                btn->mouse_st = MOUSE_NONE;
+            if (!mouse_left  && btn->prev_mouse_left ) {
+                btn->mouse_st = MOUSE_OVER;
+                if (btn->click_call && btn->selected) {
+                    btn->click_call(btn);
+                } else if (!btn->selected) {
+                    btn->mouse_st = MOUSE_NONE;
+                }
+            }
+                
             break;
     }
 
-    /* btn->prev_mouse_left = mouse_left; */
+    btn->prev_mouse_left = mouse_left;
 }

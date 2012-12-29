@@ -169,6 +169,7 @@ int window_destroy(window_t* window) {
 int window_update(window_t* window /* ... */) {
 
     static unsigned int previous_key = -2;
+    static mouse_state_t prev_mouse_state;
     int error;
 
     /* Mouse */
@@ -193,8 +194,14 @@ int window_update(window_t* window /* ... */) {
 
         if (mouse_state.ldown || mouse_state.mdown || mouse_state.rdown)
             window_mouse_press(window);
-
+        
+        if (prev_mouse_state.ldown && !mouse_state.ldown ||
+            prev_mouse_state.mdown && !mouse_state.mdown ||
+            prev_mouse_state.rdown && !mouse_state.rdown)
+            window_mouse_release(window);
+        
         window->redraw = 1;
+        prev_mouse_state = mouse_state;
     }
 
     /* Keyboard */
@@ -445,6 +452,20 @@ int window_mouse_press(window_t* window) {
     printf("close_btn: %p\n", close_btn);
 
     return tab_mouse_press(window->tabs[window->current_tab], window->mouse_x, window->mouse_y);
+}
+
+int window_mouse_release(window_t* window) {
+
+    button_update(new_btn, window->mouse_x, window->mouse_y, mouse_state.ldown);
+    button_update(open_btn, window->mouse_x, window->mouse_y, mouse_state.ldown);
+    button_update(save_btn, window->mouse_x, window->mouse_y, mouse_state.ldown);
+    button_update(make_btn, window->mouse_x, window->mouse_y, mouse_state.ldown);
+    button_update(run_btn, window->mouse_x, window->mouse_y, mouse_state.ldown);
+    button_update(close_btn, window->mouse_x, window->mouse_y, mouse_state.ldown);
+
+    printf("close_btn: %p\n", close_btn);
+
+    return 1;
 }
 
 void new_btn_draw(button_t* btn){
