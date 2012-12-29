@@ -69,9 +69,6 @@ int tab_draw_label(tab_t* tab, int tab_num, int selected) {
     const int label_size_x = 92;
     const int label_size_y = 30;
 
-    char name[10];
-    strncpy(name, tab->file_name, 9);
-
     vg_draw_rectangle(6 + tab_num * label_size_x, 31,
                       6 + tab_num * label_size_x + label_size_x, 31 + label_size_y,
                       vg_color_rgb(200 - selected * 20, 200 - selected * 20, 200 - selected * 20));
