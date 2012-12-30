@@ -56,16 +56,20 @@ static struct {
     unsigned long bluePosition;
 } gr_color;
 
-int vg_get_h_res(void) { return h_res; }
-int vg_get_v_res(void) { return v_res; }
+int vg_get_h_res(void) { LOG
+    return h_res;
+}
+int vg_get_v_res(void) { LOG
+    return v_res;
+}
 
-unsigned long vg_color_rgb(unsigned long r, unsigned long g, unsigned long b) {
+unsigned long vg_color_rgb(unsigned long r, unsigned long g, unsigned long b) { LOG
     return ((((b * gr_color.blueMask)  / 255) << gr_color.bluePosition)  |
             (((g * gr_color.greenMask) / 255) << gr_color.greenPosition) |
             (((r * gr_color.redMask)   / 255) << gr_color.redPosition));
 }
 
-int vg_init_FreeType(void) {
+int vg_init_FreeType(void) { LOG
     int error;
 
     error = FT_Init_FreeType(&_library);
@@ -88,8 +92,7 @@ int vg_init_FreeType(void) {
     return 0;
 }
 
-void* vg_init(unsigned short mode)
-{
+void* vg_init(unsigned short mode) { LOG
     struct mem_range mr;
     struct reg86u r;
 
@@ -145,7 +148,7 @@ void* vg_init(unsigned short mode)
     return video_mem;
 }
 
-int vg_fill(unsigned long color) {
+int vg_fill(unsigned long color) { LOG
     int i, j;
     unsigned long colorTemp;
     char* ptr;
@@ -166,8 +169,7 @@ int vg_fill(unsigned long color) {
     return 0;
 }
 
-long vg_scale_x(long x)
-{
+long vg_scale_x(long x) { LOG
     if (h_res == BASE_H_RES)
         return x;
     if (x == BASE_H_RES)
@@ -176,8 +178,7 @@ long vg_scale_x(long x)
     return (((double)h_res * (double)x) / (double)BASE_H_RES);
 }
 
-long vg_scale_y(long y)
-{
+long vg_scale_y(long y) { LOG
     if (v_res == BASE_V_RES)
         return y;
     if (y == BASE_V_RES)
@@ -186,7 +187,7 @@ long vg_scale_y(long y)
     return (((double)v_res * (double)y) / (double)BASE_V_RES);
 }
 
-int vg_set_pixel(long x, long y, unsigned long color) {
+int vg_set_pixel(long x, long y, unsigned long color) { LOG
 
     if (x > BASE_H_RES || y > BASE_V_RES || x < 0 || y < 0) {
         return -1;
@@ -198,7 +199,7 @@ int vg_set_pixel(long x, long y, unsigned long color) {
     return _vg_set_absolute_pixel(x, y, color);
 }
 
-static int _vg_set_absolute_pixel(long x, long y, unsigned long color) {
+static int _vg_set_absolute_pixel(long x, long y, unsigned long color) { LOG
     int i;
     char* vptr;
 
@@ -219,7 +220,7 @@ static int _vg_set_absolute_pixel(long x, long y, unsigned long color) {
     return 0;
 }
 
-long vg_get_pixel(long x, long y) {
+long vg_get_pixel(long x, long y) { LOG
     int i;
     long res;
     char* vptr;
@@ -243,7 +244,7 @@ long vg_get_pixel(long x, long y) {
     return res;
 }
 
-int _vg_draw_absolute_line(long xi, long yi, long xf, long yf, unsigned long color) {
+int _vg_draw_absolute_line(long xi, long yi, long xf, long yf, unsigned long color) { LOG
     int i;
 
     if ((xi > xf) || (xi == xf && yi > yf)) {
@@ -330,8 +331,7 @@ int _vg_draw_absolute_line(long xi, long yi, long xf, long yf, unsigned long col
     return 0;
 }
 
-int vg_draw_line(long xi, long yi, long xf, long yf, unsigned long color)
-{
+int vg_draw_line(long xi, long yi, long xf, long yf, unsigned long color) { LOG
     if (xi > BASE_H_RES && yi > BASE_V_RES && xf > BASE_H_RES && yf > BASE_V_RES) {
         return -1;
     }
@@ -345,7 +345,7 @@ int vg_draw_line(long xi, long yi, long xf, long yf, unsigned long color)
 }
 
 int vg_draw_rectangle(long x1, long y1, long x2,
-        long y2, unsigned long color) {
+        long y2, unsigned long color) { LOG
     int x, y;
 
     if (x1 > BASE_H_RES && y1 > BASE_V_RES && x2 > BASE_H_RES && y2 > BASE_V_RES) {
@@ -377,8 +377,7 @@ int vg_draw_rectangle(long x1, long y1, long x2,
     return 0;
 }
 
-int vg_draw_circle(int x0, int y0, int radius, unsigned long color)
-{
+int vg_draw_circle(int x0, int y0, int radius, unsigned long color) { LOG
     /* Based on a sample code from Wikipedia */
 
     int f, ddF_x, ddF_y, x, y;
@@ -432,11 +431,11 @@ int vg_draw_circle(int x0, int y0, int radius, unsigned long color)
     return 0;
 }
 
-void vg_swap_buffer(void) {
+void vg_swap_buffer(void) { LOG
     _vg_swap_buffer(temp_video_mem, video_mem, vram_size);
 }
 
-int vg_exit(void) {
+int vg_exit(void) { LOG
     struct reg86u reg86;
 
     reg86.u.b.intno = BIOS_VIDEO_SERVICE; /* BIOS video services */
@@ -454,7 +453,7 @@ int vg_exit(void) {
         return OK;
 }
 
-int vg_ft_draw_bitmap(FT_Bitmap* bitmap, int x, int y, unsigned long color) {
+int vg_ft_draw_bitmap(FT_Bitmap* bitmap, int x, int y, unsigned long color) { LOG
     int i, j, p, q;
 
     int x_max = x + bitmap->width;
@@ -475,7 +474,7 @@ int vg_ft_draw_bitmap(FT_Bitmap* bitmap, int x, int y, unsigned long color) {
     return 0;
 }
 
-int vg_draw_char(char character, int size, unsigned long x, unsigned long y, unsigned long color) {
+int vg_draw_char(char character, int size, unsigned long x, unsigned long y, unsigned long color) { LOG
         int error;
 
     error = FT_Set_Pixel_Sizes(_face, 0, size);
@@ -505,7 +504,7 @@ int vg_draw_char(char character, int size, unsigned long x, unsigned long y, uns
 }
 
 int vg_draw_string(char* str, int size, unsigned long x,
-        unsigned long y, unsigned long color) {
+        unsigned long y, unsigned long color) { LOG
     int error;
 
     error = FT_Set_Pixel_Sizes(_face, 0, size);

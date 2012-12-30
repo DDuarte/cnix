@@ -1,4 +1,5 @@
 #include "interrupt.h"
+#include "utilities.h"
 
 #include <minix/driver.h>
 #include <minix/drivers.h>
@@ -17,8 +18,7 @@ static interrupt int_data[NUM_OF_INTERRUPTS];
 
 static int executing;
 
-void int_init(void)
-{
+void int_init(void) { LOG
     int i;
 
     executing = 0;
@@ -27,13 +27,12 @@ void int_init(void)
         _int_reset_interrupt(i);
 }
 
-void _int_reset_interrupt(int bit)
-{
+void _int_reset_interrupt(int bit) { LOG
     int_data[bit].hook_id = -1;
     int_data[bit].callback = NULL;
 }
 
-int int_subscribe(int irq_line, int policy, void (*callback)()) {
+int int_subscribe(int irq_line, int policy, void (*callback)()) { LOG
     int r, bit = 0;
 
     while (int_data[bit].hook_id != -1 && bit < NUM_OF_INTERRUPTS) { bit++; }
@@ -72,8 +71,7 @@ int int_subscribe(int irq_line, int policy, void (*callback)()) {
     return bit;
 }
 
-int int_unsubscribe(int bit)
-{
+int int_unsubscribe(int bit) { LOG
     int r;
 
     r = sys_irqdisable(&int_data[bit].hook_id);
@@ -99,7 +97,7 @@ int int_unsubscribe(int bit)
     return 0; /* never fails (but prints errors if interrupt was not enabled) */
 }
 
-static int int_handle(void) {
+static int int_handle(void) { LOG
 
     message msg;
     int ipc_status;
@@ -136,16 +134,16 @@ static int int_handle(void) {
     return 0;
 }
 
-int int_start_handler(void) {
+int int_start_handler(void) { LOG
     executing = 1;
     return int_handle();
 }
 
-void int_stop_handler(void) {
+void int_stop_handler(void) { LOG
     executing = 0;
 }
 
-void int_enable_system(void) {
+void int_enable_system(void) { LOG
     endpoint_t ep;
     char name[256];
     int priv_f;
@@ -155,7 +153,7 @@ void int_enable_system(void) {
     asm("STI"); /* enable interrupts */
 }
 
-void int_disable_system(void) {
+void int_disable_system(void) { LOG
     endpoint_t ep;
     char name[256];
     int priv_f;

@@ -14,8 +14,7 @@ void parse_args(int argc, char const *argv[]);
 void exit_cleanup(void);
 void timer_handler(void);
 
-int main(int argc, char const *argv[])
-{
+int main(int argc, char const *argv[]) { LOG
     int error;
     sef_startup();
     atexit(exit_cleanup);
@@ -48,7 +47,7 @@ int main(int argc, char const *argv[])
     return 0;
 }
 
-void exit_cleanup(void) {
+void exit_cleanup(void) { LOG
     /* stop video mode and free required memory */
     int error = window_destroy(&_window);
     if (error) {
@@ -56,7 +55,7 @@ void exit_cleanup(void) {
     }
 }
 
-void timer_handler(void) {
+void timer_handler(void) { LOG
     window_update(&_window);
 
     if (_window.redraw) {
@@ -70,7 +69,7 @@ void timer_handler(void) {
     }
 }
 
-void parse_args(int argc, char const *argv[]) {
+void parse_args(int argc, char const *argv[]) { LOG
     /* defaults, optional args */
     _window.video_mode = 0x117;
     _window.draw = 1;

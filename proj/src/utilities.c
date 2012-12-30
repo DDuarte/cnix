@@ -5,14 +5,14 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-unsigned long bit_set_all(int n) {
+unsigned long bit_set_all(int n) { LOG
     unsigned long result = 0x0;
     for (; n >= 0; n--)
         bit_set(result, n);
     return result;
 }
 
-unsigned long parse_ulong(const char *str, int base) {
+unsigned long parse_ulong(const char *str, int base) { LOG
     char *endptr;
     unsigned long val;
 
@@ -33,13 +33,13 @@ unsigned long parse_ulong(const char *str, int base) {
     return val;
 }
 
-void swapl(long* a, long* b) {
+void swapl(long* a, long* b) { LOG
     long aux = *a;
     *a = *b;
     *b = aux;
 }
 
-int clamp(int x, int min, int max) {
+int clamp(int x, int min, int max) { LOG
     if (x < min)
         x = min;
     else if (x > max)

@@ -1,4 +1,5 @@
 #include "priority_list.h"
+#include "utilities.h"
 
 #include <stdlib.h>
 
@@ -6,7 +7,7 @@ static unsigned int defaultCmp(void* data1, void* data2) { return data1 == data2
 static void* defaultCopy(void* data) { return data; }
 static void  defaultDestroy(void* data) { }
 
-priority_list_t* priority_list_new(unsigned int (*cmp)(void*,void*), void* (*cpy)(void*), void (*destroy)(void*)) {
+priority_list_t* priority_list_new(unsigned int (*cmp)(void*,void*), void* (*cpy)(void*), void (*destroy)(void*)) { LOG
     priority_list_t* newlist = (priority_list_t*)malloc(sizeof(priority_list_t));
     if (!newlist)
         return NULL;
@@ -22,7 +23,7 @@ priority_list_t* priority_list_new(unsigned int (*cmp)(void*,void*), void* (*cpy
     return newlist;
 }
 
-unsigned int priority_list_add_elem(priority_list_t* me, void* val, unsigned int priority) {
+unsigned int priority_list_add_elem(priority_list_t* me, void* val, unsigned int priority) { LOG
     priority_list_node_t* elem;
 
     if (!me || !val)
@@ -75,7 +76,7 @@ unsigned int priority_list_add_elem(priority_list_t* me, void* val, unsigned int
     return 0;
 }
 
-priority_list_node_t* priority_list_find(priority_list_t* me, void* data) {
+priority_list_node_t* priority_list_find(priority_list_t* me, void* data) { LOG
     priority_list_node_t* obj;
 
     if (!me || !data)
@@ -86,7 +87,8 @@ priority_list_node_t* priority_list_find(priority_list_t* me, void* data) {
 
     return obj;
 }
-priority_list_node_t* priority_list_remove(priority_list_t* me, priority_list_node_t* elem) {
+
+priority_list_node_t* priority_list_remove(priority_list_t* me, priority_list_node_t* elem) { LOG
     priority_list_node_t* result;
 
     if (!me || !elem)
@@ -106,7 +108,7 @@ priority_list_node_t* priority_list_remove(priority_list_t* me, priority_list_no
     return result;
 }
 
-void priority_list_remove_all(priority_list_t* me) {
+void priority_list_remove_all(priority_list_t* me) { LOG
     priority_list_node_t* obj = me->last;
 
     while (obj != NULL) {

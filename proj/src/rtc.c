@@ -1,5 +1,6 @@
 #include "rtc.h"
 #include "interrupt.h"
+#include "utilities.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -13,7 +14,7 @@ static int(*_periodicHandler)(void) = NULL;
 static int(*_alarmHandler)(void) = NULL;
 static int(*_updateHandler)(void) = NULL;
 
-char* rtc_get_date() {
+char* rtc_get_date() { LOG
     char* res;
     unsigned long seconds, minutes, hours, day_of_month, month, year, day_of_week,
                   seconds_alarm, minutes_alarm, hours_alarm;
@@ -46,7 +47,7 @@ char* rtc_get_date() {
     return res;
 }
 
-unsigned long bcd_to_decimal(unsigned long bcd) {
+unsigned long bcd_to_decimal(unsigned long bcd) { LOG
 
     unsigned long n;
     char buffer[10];
@@ -58,7 +59,7 @@ unsigned long bcd_to_decimal(unsigned long bcd) {
 }
 
 
-void rtc_wait_valid() {
+void rtc_wait_valid() { LOG
 
     unsigned long regA;
     int res;
@@ -75,7 +76,7 @@ void rtc_wait_valid() {
     } while (bit_isset(regA, RTC_UIP_BIT));
 }
 
-int rtc_read_register(unsigned long reg, unsigned long* value) {
+int rtc_read_register(unsigned long reg, unsigned long* value) { LOG
 
     int res;
     unsigned long val_temp;
@@ -98,7 +99,7 @@ int rtc_read_register(unsigned long reg, unsigned long* value) {
     return 0;
 }
 
-int rtc_write_register(unsigned long reg, unsigned long value) {
+int rtc_write_register(unsigned long reg, unsigned long value) { LOG
 
     int res;
 

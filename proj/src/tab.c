@@ -1,9 +1,11 @@
 #include "tab.h"
 #include "video_gr.h"
+#include "utilities.h"
 #include <string.h>
 #include <assert.h>
+#include <ctype.h>
 
-char_screen char_screen_create(char character, int color, int size) {
+char_screen char_screen_create(char character, int color, int size) { LOG
     char_screen res;
     res.character = character;
     res.color = color;
@@ -11,12 +13,12 @@ char_screen char_screen_create(char character, int color, int size) {
     return res;
 }
 
-int char_screen_set_color(char_screen* cs, int color) {
+int char_screen_set_color(char_screen* cs, int color) { LOG
     cs->color = color;
     return 0;
 }
 
-int char_draw(char_screen* cs, int x, int y) {
+int char_draw(char_screen* cs, int x, int y) { LOG
     int error;
 
     error = vg_draw_char(cs->character, cs->size, x, y, cs->color);
@@ -28,7 +30,7 @@ int char_draw(char_screen* cs, int x, int y) {
     return 0;
 }
 
-tab_t* tab_create(char* file_name) {
+tab_t* tab_create(char* file_name) { LOG
     tab_t* tab;
 
     tab = malloc(sizeof(tab_t));
@@ -47,7 +49,7 @@ tab_t* tab_create(char* file_name) {
     return tab;
 }
 
-int tab_destroy(tab_t* tab) {
+int tab_destroy(tab_t* tab) { LOG
     int i, j;
     for (i = 0; i < vector_size(&tab->lines); ++i) {
         for (j = 0; j < vector_size(vector_get(&tab->lines, i)); ++j) {
@@ -63,7 +65,7 @@ int tab_destroy(tab_t* tab) {
     return 0;
 }
 
-tab_t* tab_create_from_file(char* file_name, char* file_buffer) {
+tab_t* tab_create_from_file(char* file_name, char* file_buffer) { LOG
     assert(file_name);
     assert(file_buffer);
 
@@ -78,16 +80,14 @@ tab_t* tab_create_from_file(char* file_name, char* file_buffer) {
     return tab;
 }
 
-char* tab_to_file(tab_t* tab) {
-
+char* tab_to_file(tab_t* tab) { LOG
     char* buffer = (char*)malloc(sizeof(char)*5);
     strcpy(buffer, "test");
 
     return buffer;
 }
 
-int tab_draw_label(tab_t* tab, int tab_num, int selected) {
-
+int tab_draw_label(tab_t* tab, int tab_num, int selected) { LOG
     const int label_size_x = 92;
     const int label_size_y = 30;
 
@@ -103,7 +103,7 @@ int tab_draw_label(tab_t* tab, int tab_num, int selected) {
     return 0;
 }
 
-int tab_draw_text(tab_t* tab) {
+int tab_draw_text(tab_t* tab) { LOG
 
     /* caret, TODO: make it blink */
     vg_draw_line(tab->current_column * 17 + 15, tab->current_line * 25 + 100,
@@ -124,8 +124,7 @@ int tab_draw_text(tab_t* tab) {
     return 0;
 }
 
-int tab_draw(tab_t* tab, int tab_num, int selected) {
-
+int tab_draw(tab_t* tab, int tab_num, int selected) { LOG
     tab_draw_label(tab, tab_num, selected);
 
     if (selected)
@@ -134,8 +133,8 @@ int tab_draw(tab_t* tab, int tab_num, int selected) {
     return 0;
 }
 
-int tab_add_char(tab_t* tab, char character) {
-    printf("DEBUG: %s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
+int tab_add_char(tab_t* tab, char character) { LOG
+
     if (!vector_size(&tab->lines)) {
         vector* line = (vector*) malloc(sizeof(vector));
         vector_new(line);
@@ -186,12 +185,12 @@ int tab_add_char(tab_t* tab, char character) {
     return 0;
 }
 
-int tab_remove_char(tab_t* tab) {
+int tab_remove_char(tab_t* tab) { LOG
     // TODO
     return 0;
 }
 
-int tab_key_press(tab_t* tab, KEY key) {
+int tab_key_press(tab_t* tab, KEY key) { LOG
     if (key <= 0 && key >= LAST_KEY) {
         return 1;
     }
@@ -244,7 +243,7 @@ int tab_key_press(tab_t* tab, KEY key) {
     return 0;
 }
 
-int tab_mouse_press(tab_t* tab, unsigned long x, unsigned long y) {
+int tab_mouse_press(tab_t* tab, unsigned long x, unsigned long y) { LOG
     // TODO: calculate current_column and current_line based on x and y
     // TODO: if dragging mouse do text selection (possibly)
     return 0;

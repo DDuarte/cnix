@@ -1,4 +1,5 @@
 #include "vector.h"
+#include "utilities.h"
 
 #include <stdlib.h>
 #include <assert.h>
@@ -7,7 +8,7 @@
 #define DEFAULT_CAPACITY 10
 #define CAPACITY_RATE 1.5f
 
-void vector_new(vector* v) {
+void vector_new(vector* v) { LOG
     assert(v);
 
     v->count = 0;
@@ -15,25 +16,25 @@ void vector_new(vector* v) {
     v->buffer = NULL;
 }
 
-void vector_free(vector* v) {
+void vector_free(vector* v) { LOG
     assert(v);
 
     free(v->buffer);
 }
 
-int vector_size(vector* v) {
+int vector_size(vector* v) { LOG
     assert(v);
 
     return v->count;
 }
 
-int vector_capacity(vector* v) {
+int vector_capacity(vector* v) { LOG
     assert(v);
 
     return v->capacity;
 }
 
-void vector_push_back(vector* v, void* data) {
+void vector_push_back(vector* v, void* data) { LOG
     assert(v);
     assert(data);
 
@@ -52,7 +53,7 @@ void vector_push_back(vector* v, void* data) {
     v->count++;
 }
 
-void vector_insert(vector* v, void* data, int index) {
+void vector_insert(vector* v, void* data, int index) { LOG
     assert(v);
     assert(index >= 0);
     assert(index < v->count);
@@ -71,7 +72,7 @@ void vector_insert(vector* v, void* data, int index) {
     v->count++;
 }
 
-void* vector_get(vector* v, int index) {
+void* vector_get(vector* v, int index) { LOG
     assert(v);
     assert(index >= 0);
     assert(index < v->count);
@@ -79,7 +80,7 @@ void* vector_get(vector* v, int index) {
     return v->buffer[index];
 }
 
-void vector_erase(vector* v, int index) {
+void vector_erase(vector* v, int index) { LOG
     assert(v);
     assert(index >= 0);
     assert(index < v->count);

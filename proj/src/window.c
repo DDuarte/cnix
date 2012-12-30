@@ -41,7 +41,7 @@ void make_btn_click(button_t* btn);
 void run_btn_click(button_t* btn);
 void close_btn_click(button_t* btn);
 
-int window_init(window_t* window) {
+int window_init(window_t* window) { LOG
 
     int error;
     int i;
@@ -127,7 +127,7 @@ int window_init(window_t* window) {
     return 0;
 }
 
-int window_destroy(window_t* window) {
+int window_destroy(window_t* window) { LOG
 
     int error, i;
 
@@ -166,7 +166,7 @@ int window_destroy(window_t* window) {
     return 0;
 }
 
-int window_update(window_t* window /* ... */) {
+int window_update(window_t* window) { LOG
 
     static unsigned int previous_key = -1;
     static mouse_state_t prev_mouse_state;
@@ -194,12 +194,12 @@ int window_update(window_t* window /* ... */) {
 
         if (mouse_state.ldown || mouse_state.mdown || mouse_state.rdown)
             window_mouse_press(window);
-        
+
         if (prev_mouse_state.ldown && !mouse_state.ldown ||
             prev_mouse_state.mdown && !mouse_state.mdown ||
             prev_mouse_state.rdown && !mouse_state.rdown)
             window_mouse_release(window);
-        
+
         window->redraw = 1;
         prev_mouse_state = mouse_state;
     }
@@ -229,7 +229,7 @@ int window_update(window_t* window /* ... */) {
     return 0;
 }
 
-int window_draw(window_t* window) {
+int window_draw(window_t* window) { LOG
     int error, i;
 
     /* background */
@@ -320,7 +320,7 @@ int window_draw(window_t* window) {
     return 0;
 }
 
-int window_set_title(window_t* window, const char* format, ...) {
+int window_set_title(window_t* window, const char* format, ...) { LOG
 
     if (window->title) {
         free(window->title);
@@ -337,7 +337,7 @@ int window_set_title(window_t* window, const char* format, ...) {
     return 0;
 }
 
-int window_set_size(window_t* window, int width, int height) {
+int window_set_size(window_t* window, int width, int height) { LOG
 
     window->width = width;
     window->height = height;
@@ -345,7 +345,7 @@ int window_set_size(window_t* window, int width, int height) {
 
 }
 
-int window_install_mouse(window_t* window) {
+int window_install_mouse(window_t* window) { LOG
 
     int error;
 
@@ -364,7 +364,7 @@ int window_install_mouse(window_t* window) {
     return 0;
 }
 
-int window_uninstall_mouse(window_t* window) {
+int window_uninstall_mouse(window_t* window) { LOG
     int error;
     unsigned long temp;
 
@@ -383,7 +383,7 @@ int window_uninstall_mouse(window_t* window) {
     return 0;
 }
 
-void mouseCallback(void) {
+void mouseCallback(void) { LOG
     static unsigned char packet[] = { 0, 0, 0 };
     static short counter = 0;
 
@@ -426,7 +426,7 @@ void mouseCallback(void) {
     mouse_state.updated = 1;
 }
 
-int window_key_press(window_t* window, KEY key) {
+int window_key_press(window_t* window, KEY key) { LOG
 
     if (key >= KEY_F1 && key <= KEY_F10)
         window->current_tab = key - KEY_F1;
@@ -436,7 +436,7 @@ int window_key_press(window_t* window, KEY key) {
     return tab_key_press(window->tabs[window->current_tab], key);
 }
 
-int window_mouse_press(window_t* window) {
+int window_mouse_press(window_t* window) { LOG
 
     if (window->mouse_y > 30 && window->mouse_y < 60)
         if (window->mouse_x > 5 && window->mouse_x < (window->width - 5))
@@ -454,7 +454,7 @@ int window_mouse_press(window_t* window) {
     return tab_mouse_press(window->tabs[window->current_tab], window->mouse_x, window->mouse_y);
 }
 
-int window_mouse_release(window_t* window) {
+int window_mouse_release(window_t* window) { LOG
 
     button_update(new_btn, window->mouse_x, window->mouse_y, mouse_state.ldown);
     button_update(open_btn, window->mouse_x, window->mouse_y, mouse_state.ldown);
@@ -468,19 +468,19 @@ int window_mouse_release(window_t* window) {
     return 1;
 }
 
-void new_btn_draw(button_t* btn){
+void new_btn_draw(button_t* btn) { LOG
     vg_draw_circle(btn->location_x + 10, btn->location_y + 10, 10, vg_color_rgb(230, 0, 0));
     vg_draw_rectangle(btn->location_x + 3, btn->location_y + 8, btn->location_x + 17, btn->location_y + 12, vg_color_rgb(255, 255, 255));
     vg_draw_rectangle(btn->location_x + 8, btn->location_y + 3, btn->location_x + 12, btn->location_y + 17, vg_color_rgb(255, 255, 255));
 }
 
-void open_btn_draw(button_t* btn){
+void open_btn_draw(button_t* btn) { LOG
     vg_draw_rectangle(btn->location_x + 2, btn->location_y, btn->location_x + 10, btn->location_y + 3, vg_color_rgb(255, 201, 14));
     vg_draw_rectangle(btn->location_x, btn->location_y + 3, btn->location_x + 20, btn->location_y + 20, vg_color_rgb(255, 201, 14));
     vg_draw_line(btn->location_x, btn->location_y + 9, btn->location_x + 20, btn->location_y + 9, vg_color_rgb(100, 100, 100));
 }
 
-void save_btn_draw(button_t* btn){
+void save_btn_draw(button_t* btn) { LOG
     vg_draw_rectangle(btn->location_x, btn->location_y, btn->location_x + 20, btn->location_y + 20, vg_color_rgb(50, 50, 50));
     vg_draw_rectangle(btn->location_x + 5, btn->location_y, btn->location_x + 15, btn->location_y + 6, vg_color_rgb(255, 255, 255));
     vg_draw_rectangle(btn->location_x + 6, btn->location_y + 1, btn->location_x + 7, btn->location_y + 5, vg_color_rgb(0, 0, 0));
@@ -488,7 +488,7 @@ void save_btn_draw(button_t* btn){
     vg_set_pixel(btn->location_x + 10, btn->location_y + 13, vg_color_rgb(0, 0, 0));
 }
 
-void make_btn_draw(button_t* btn){
+void make_btn_draw(button_t* btn) { LOG
     vg_draw_rectangle(btn->location_x, btn->location_y, btn->location_x + 20, btn->location_y + 20, vg_color_rgb(200, 100, 100));
     vg_draw_line(btn->location_x +  2, btn->location_y + 17, btn->location_x + 2 , btn->location_y + 14, vg_color_rgb(0, 0, 0));
     vg_draw_line(btn->location_x +  2, btn->location_y + 14, btn->location_x + 9 , btn->location_y + 7 , vg_color_rgb(0, 0, 0));
@@ -509,24 +509,24 @@ void make_btn_draw(button_t* btn){
     vg_draw_line(btn->location_x +  3, btn->location_y + 18, btn->location_x +  2, btn->location_y + 17, vg_color_rgb(0, 0, 0));
 }
 
-void run_btn_draw(button_t* btn){
+void run_btn_draw(button_t* btn) { LOG
     vg_draw_rectangle(btn->location_x, btn->location_y, btn->location_x + 20, btn->location_y + 20, vg_color_rgb(200, 100, 100));
     vg_draw_line(btn->location_x + 5, btn->location_y + 5, btn->location_x + 15, btn->location_y + 10, vg_color_rgb(0, 0, 0));
     vg_draw_line(btn->location_x + 15, btn->location_y + 10, btn->location_x + 5, btn->location_y + 15, vg_color_rgb(0, 0, 0));
     vg_draw_line(btn->location_x + 5, btn->location_y + 5, btn->location_x + 5, btn->location_y + 15, vg_color_rgb(0, 0, 0));
 }
 
-void close_btn_draw(button_t* btn) {
+void close_btn_draw(button_t* btn) { LOG
     vg_draw_rectangle(btn->location_x, btn->location_y, btn->location_x + 20, btn->location_y + 20, vg_color_rgb(230, 0, 0));
     vg_draw_line(btn->location_x + 3, btn->location_y + 3, btn->location_x + 17, btn->location_y + 17, vg_color_rgb(255, 255, 255));
     vg_draw_line(btn->location_x + 17, btn->location_y + 3, btn->location_x + 3, btn->location_y + 17, vg_color_rgb(255, 255, 255));
 }
 
-void new_btn_click(button_t* btn){
+void new_btn_click(button_t* btn) { LOG
 
 }
 
-void open_btn_click(button_t* btn){
+void open_btn_click(button_t* btn) { LOG
     int i;
     char* fileName = tab_to_file(_window.tabs[11]);
     char* fileBuffer;
@@ -548,19 +548,19 @@ void open_btn_click(button_t* btn){
     tab = tab_create_from_file(fileName, fileBuffer);
 }
 
-void save_btn_click(button_t* btn){
+void save_btn_click(button_t* btn) { LOG
     char* fileBuffer = tab_to_file(_window.tabs[_window.current_tab]);
     File_Save(_window.tabs[_window.current_tab]->file_name, fileBuffer, strlen(fileBuffer));
 }
 
-void make_btn_click(button_t* btn){
+void make_btn_click(button_t* btn) { LOG
 }
 
-void run_btn_click(button_t* btn){
+void run_btn_click(button_t* btn) { LOG
 
 }
 
-void close_btn_click(button_t* btn) {
+void close_btn_click(button_t* btn) { LOG
     printf("Exiting...\n");
     int_stop_handler();
 }

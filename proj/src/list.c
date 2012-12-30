@@ -1,4 +1,5 @@
 #include "list.h"
+#include "utilities.h"
 
 #include <stdlib.h>
 
@@ -6,7 +7,7 @@ static unsigned int defaultCmp(void* data1, void* data2) { return data1 == data2
 static void* defaultCopy(void* data) { return data; }
 static void  defaultDestroy(void* data) { }
 
-list_t* list_new(unsigned int (*cmp)(void*,void*), void* (*cpy)(void*), void (*destroy)(void*)) {
+list_t* list_new(unsigned int (*cmp)(void*,void*), void* (*cpy)(void*), void (*destroy)(void*)) { LOG
     list_t* newlist = (list_t*)malloc(sizeof(list_t));
     if (!newlist)
         return NULL;
@@ -33,7 +34,7 @@ list_t* list_new(unsigned int (*cmp)(void*,void*), void* (*cpy)(void*), void (*d
     return newlist;
 }
 
-unsigned int list_add_elem(list_t* me, void* val) {
+unsigned int list_add_elem(list_t* me, void* val) { LOG
     list_node_t* elem;
 
     if (!me || !val)
@@ -63,7 +64,7 @@ unsigned int list_add_elem(list_t* me, void* val) {
     return 0;
 }
 
-list_node_t* list_find(list_t* me, void* data) {
+list_node_t* list_find(list_t* me, void* data) { LOG
     list_node_t* obj;
 
     if (!me || !data)
@@ -75,7 +76,7 @@ list_node_t* list_find(list_t* me, void* data) {
     return obj;
 }
 
-list_node_t* list_remove(list_t* me, list_node_t* elem) {
+list_node_t* list_remove(list_t* me, list_node_t* elem) { LOG
     list_node_t* result;
 
     if (!me || !elem)
@@ -96,7 +97,7 @@ list_node_t* list_remove(list_t* me, list_node_t* elem) {
     return result;
 }
 
-void list_remove_all(list_t* me) {
+void list_remove_all(list_t* me) { LOG
     list_node_t* obj = me->last;
 
     while (obj != NULL) {

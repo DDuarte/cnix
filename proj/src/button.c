@@ -1,7 +1,8 @@
 #include "button.h"
+#include "utilities.h"
 #include <stdlib.h>
 
-button_t* new_button(unsigned int locx, unsigned int locy, unsigned int szx, unsigned int szy, void(*drfunc)(button_t*), void (*clcallback)(button_t*), int enabled) {
+button_t* new_button(unsigned int locx, unsigned int locy, unsigned int szx, unsigned int szy, void(*drfunc)(button_t*), void (*clcallback)(button_t*), int enabled) { LOG
     button_t* newbtn = (button_t*)malloc(sizeof(button_t));
 
     newbtn->location_x = locx;
@@ -18,7 +19,7 @@ button_t* new_button(unsigned int locx, unsigned int locy, unsigned int szx, uns
     return newbtn;
 }
 
-void button_update(button_t* btn, unsigned long mouse_x, unsigned long mouse_y, int mouse_left) {
+void button_update(button_t* btn, unsigned long mouse_x, unsigned long mouse_y, int mouse_left) { LOG
     if (mouse_x >= btn->location_x && mouse_x <= btn->location_x + btn->size_x)
         if (mouse_y >= btn->location_y && mouse_y <= btn->location_y + btn->size_y)
             btn->selected = 1;
@@ -29,7 +30,7 @@ void button_update(button_t* btn, unsigned long mouse_x, unsigned long mouse_y, 
                 btn->mouse_st = MOUSE_OVER_CLICK;
             }
             break;
-        case MOUSE_OVER:                
+        case MOUSE_OVER:
             if (btn->selected) {
                 if (mouse_left && !btn->prev_mouse_left) {
                     btn->mouse_st = MOUSE_OVER_CLICK;
@@ -46,7 +47,7 @@ void button_update(button_t* btn, unsigned long mouse_x, unsigned long mouse_y, 
                     btn->mouse_st = MOUSE_NONE;
                 }
             }
-                
+
             break;
     }
 

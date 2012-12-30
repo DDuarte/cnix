@@ -1,9 +1,9 @@
 #include "file.h"
-
+#include "utilities.h"
 #include <stdio.h>
 #include <stdlib.h>
 
-int File_Load(const char* fileName, char* buffer, size_t* size) {
+int File_Load(const char* fileName, char* buffer, size_t* size) { LOG
     FILE* file;
     size_t result;
 
@@ -48,7 +48,7 @@ int File_Load(const char* fileName, char* buffer, size_t* size) {
     return 1;
 }
 
-int File_Save(const char* fileName, const char* buffer, size_t size) {
+int File_Save(const char* fileName, const char* buffer, size_t size) { LOG
     FILE* file;
     size_t result;
 
@@ -73,6 +73,6 @@ int File_Save(const char* fileName, const char* buffer, size_t size) {
     return 1;
 }
 
-int File_Remove(const char* fileName) {
+int File_Remove(const char* fileName) { LOG
     return remove(fileName);
 }

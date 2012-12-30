@@ -1,6 +1,7 @@
 #include "keyboard.h"
 #include "kbc.h"
 #include "interrupt.h"
+#include "utilities.h"
 
 #include <ctype.h>
 #include <minix/drivers.h>
@@ -11,7 +12,7 @@ static KEY_MOD modifiers = KEY_MOD_NONE;
 
 static void keyboard_handler(void);
 
-char key_to_char(unsigned int scancode) {
+char key_to_char(unsigned int scancode) { LOG
 
     int up = 0;
     int shift = 0;
@@ -73,7 +74,7 @@ char key_to_char(unsigned int scancode) {
     return res;
 }
 
-int keyboard_install(void) {
+int keyboard_install(void) { LOG
 
     bit = int_subscribe(KB_IRQ, IRQ_REENABLE | IRQ_EXCLUSIVE, &keyboard_handler);
     if (bit == -1) {
@@ -86,7 +87,7 @@ int keyboard_install(void) {
     return 0;
 }
 
-static void keyboard_handler(void) {
+static void keyboard_handler(void) { LOG
     unsigned long long scancode = read_kbc();
 
     if (scancode == -1)
@@ -134,7 +135,7 @@ static void keyboard_handler(void) {
     printf("DEBUG: Keyboard scancode : 0x%X\n", scancode);
 }
 
-int keyboard_destroy(void) {
+int keyboard_destroy(void) { LOG
     int error;
 
     error = int_unsubscribe(bit);

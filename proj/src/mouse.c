@@ -1,10 +1,11 @@
 #include "mouse.h"
 #include "kbc.h"
+#include "utilities.h"
 
 #include <stdio.h>
 #include <minix/syslib.h>
 
-int mouse_write(unsigned char command) {
+int mouse_write(unsigned char command) { LOG
 
     if (write_kbc(CMD_REG, WRITE_BYTE_TO_MOUSE) != 0) {/* Write Byte to Mouse */
         printf("mouse_write: write_kbc CMD failed.\n");
@@ -19,11 +20,11 @@ int mouse_write(unsigned char command) {
     return 0;
 }
 
-int mouse_read(unsigned long* value) {
+int mouse_read(unsigned long* value) { LOG
     return sys_inb(DATA_REG, value);
 }
 
-int mouse_enable_stream_mode() {
+int mouse_enable_stream_mode() { LOG
 
     unsigned long res;
 

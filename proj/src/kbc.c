@@ -1,9 +1,10 @@
 #include "kbc.h"
+#include "utilities.h"
 
 #include <minix/syslib.h>
 #include <minix/drivers.h>
 
-int write_kbc(unsigned long port, unsigned char byte) {
+int write_kbc(unsigned long port, unsigned char byte) { LOG
     unsigned long stat, counter = 0;
 
     while (counter < TIMEOUT_COUNTER) {
@@ -32,7 +33,7 @@ int write_kbc(unsigned long port, unsigned char byte) {
     return -1;
 }
 
-int read_kbc(void) {
+int read_kbc(void) { LOG
     unsigned long stat, data, counter = 0;
 
     while (counter < TIMEOUT_COUNTER) {
