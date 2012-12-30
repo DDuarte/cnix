@@ -104,11 +104,16 @@ int tab_draw_label(tab_t* tab, int tab_num, int selected) { LOG
 }
 
 int tab_draw_text(tab_t* tab) { LOG
-
-    /* caret, TODO: make it blink */
-    vg_draw_line(tab->current_column * 17 + 15, tab->current_line * 25 + 100,
-                 tab->current_column * 17 + 15, tab->current_line * 25 + 100 - 17,
-                 vg_color_rgb(0, 0, 0));
+    static unsigned int on = 1;
+    
+    if (on) {
+        vg_draw_line(tab->current_column * 17 + 15, tab->current_line * 25 + 100,
+                    tab->current_column * 17 + 15, tab->current_line * 25 + 100 - 17,
+                    vg_color_rgb(0, 0, 0));
+        on = 0;
+    } else {
+        on = 1;
+    }
 
     // char_size = 17
     // size between lines = 25
