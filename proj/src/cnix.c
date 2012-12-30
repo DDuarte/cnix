@@ -11,13 +11,14 @@
 #include "window.h"
 
 void parse_args(int argc, char const *argv[]);
-
+void exit_cleanup(void);
 void timer_handler(void);
 
 int main(int argc, char const *argv[])
 {
     int error;
     sef_startup();
+    atexit(exit_cleanup);
 
     parse_args(argc, argv);
 
@@ -42,14 +43,17 @@ int main(int argc, char const *argv[])
         return error;
     }
 
-    /* stop video mode and free required memory */
-    error = window_destroy(&_window);
-    if (error) {
-        printf("main: window_destroy failed with error code %d.\n", error);
-        return error;
-    }
+    // atexit takes care of calling exit_cleanup
 
     return 0;
+}
+
+void exit_cleanup(void) {
+    /* stop video mode and free required memory */
+    int error = window_destroy(&_window);
+    if (error) {
+        printf("main: window_destroy failed with error code %d.\n", error);
+    }
 }
 
 void timer_handler(void) {
