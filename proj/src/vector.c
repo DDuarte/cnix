@@ -52,6 +52,25 @@ void vector_push_back(vector* v, void* data) {
     v->count++;
 }
 
+void vector_insert(vector* v, void* data, int index) {
+    assert(v);
+    assert(index >= 0);
+    assert(index < v->count);
+
+    if (v->capacity == v->count + 1) {
+        v->capacity *= CAPACITY_RATE;
+        v->buffer = realloc(v->buffer, v->capacity * sizeof(void*));
+    }
+
+    int i;
+    for (i = v->count; i >= index; --i) {
+        v->buffer[i + 1] = v->buffer[i];
+    }
+
+    v->buffer[index] = data;
+    v->count++;
+}
+
 void* vector_get(vector* v, int index) {
     assert(v);
     assert(index >= 0);
