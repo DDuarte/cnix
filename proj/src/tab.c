@@ -7,7 +7,7 @@ char_screen char_screen_create(char character, int color, int size) {
     char_screen res;
     res.character = character;
     res.color = color;
-    res.size = color;
+    res.size = size;
     return res;
 }
 
@@ -91,6 +91,9 @@ int tab_draw_label(tab_t* tab, int tab_num, int selected) {
     const int label_size_x = 92;
     const int label_size_y = 30;
 
+    if (tab_num == 11) // console special tab
+        return 0;
+
     vg_draw_rectangle(6 + tab_num * label_size_x, 31,
                       6 + tab_num * label_size_x + label_size_x, 31 + label_size_y,
                       vg_color_rgb(200 - selected * 20, 200 - selected * 20, 200 - selected * 20));
@@ -101,16 +104,22 @@ int tab_draw_label(tab_t* tab, int tab_num, int selected) {
 }
 
 int tab_draw_text(tab_t* tab) {
-    //static int drawCaret = 50;
-    //--drawCaret;
-    //
-    //if (drawCaret == 0) {
-    //    drawCaret = 50;
-    //
-    //    vg_draw_line(50, 50, 100, 100, vg_color_rgb(0, 0, 0));
-    //}
 
-    vg_draw_string(tab->file_name, 40, 400, 400, vg_color_rgb(rand()%255, rand()%255, rand()%255));
+    /* caret, TODO: make it blink */
+    vg_draw_line(tab->current_column * 17 + 15, tab->current_line * 25 + 100,
+                 tab->current_column * 17 + 15, tab->current_line * 25 + 100 - 17,
+                 vg_color_rgb(0, 0, 0));
+
+    // char_size = 17
+    // size between lines = 25
+
+    int i, j;
+    for (i = 0; i < vector_size(&tab->lines); ++i) {
+        for (j = 0; j < vector_size(vector_get(&tab->lines, i)); ++j) {
+            char_screen* cs = vector_get(vector_get(&tab->lines, i), j);
+            char_draw(cs, j * 17 + 15, i * 25 + 100);
+        }
+    }
 
     return 0;
 }
@@ -143,10 +152,8 @@ int tab_add_char(tab_t* tab, char character) {
         if (vector_size(current_line) > tab->current_column) { // see if current line has more characters after the cursor
             int i;
             int new_line_size = vector_size(current_line) - tab->current_column;
-            printf("new_line_size: %d, vector_size(current_line): %d, tab->current_column: %d\n", new_line_size, vector_size(current_line), tab->current_column);
 
             for (i = 0; i < new_line_size; ++i) { // copy chars to new line
-                printf("new_line_size: %d, i: %d, count: %d, cc: %c cc\n", new_line_size, i, vector_size(current_line), ((char_screen*)vector_get(current_line, 0))->character);
                 vector_push_back(new_line, vector_get(current_line, tab->current_column + i));
             }
 
@@ -212,8 +219,7 @@ int tab_key_press(tab_t* tab, KEY key) {
         case KEY_NUM_ENTER:
             tab_add_char(tab, '\n');
             break;
-        case KEY_DEL:
-        case KEY_NUM_DEL:
+        case KEY_BKSP:
             tab_remove_char(tab);
             break;
         case KEY_HOME:
@@ -222,14 +228,17 @@ int tab_key_press(tab_t* tab, KEY key) {
         case KEY_END:
             tab->current_column = last_column_this_line;
             break;
-        default:
-            tab_add_char(tab, key_to_char(key));
+        default: {
+            char c = key_to_char(key);
+            if (c)
+                tab_add_char(tab, c);
             break;
+        }
     }
 
     if (tab->current_line < 0) tab->current_line = 0;
     if (tab->current_column < 0) tab->current_column = 0;
-    if (tab->current_column > last_column_this_line) tab->current_column = last_column_this_line;
+    //if (tab->current_column > last_column_this_line) tab->current_column = last_column_this_line - 1;
     //if (tab->current_line > EOF) tab->current_column = EOF;
 
     return 0;
