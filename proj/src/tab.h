@@ -2,6 +2,7 @@
 #define TAB_H
 
 #include "keyboard.h"
+#include "vector.h"
 
 typedef struct {
 
@@ -19,7 +20,7 @@ typedef struct {
 
     char* file_name;
     char short_file_name[9];
-    char_screen** characters;
+    vector lines;
 
     int current_line;
     int current_column;
@@ -35,5 +36,8 @@ int tab_destroy(tab_t* tab);
 
 int tab_key_press(tab_t* tab, KEY key);
 int tab_mouse_press(tab_t* tab, unsigned long x, unsigned long y);
+
+int tab_add_char(tab_t* tab, char character);
+int tab_remove_char(tab_t* tab);
 
 #endif

@@ -168,7 +168,7 @@ int window_destroy(window_t* window) {
 
 int window_update(window_t* window /* ... */) {
 
-    static unsigned int previous_key = -2;
+    static unsigned int previous_key = -1;
     static mouse_state_t prev_mouse_state;
     int error;
 

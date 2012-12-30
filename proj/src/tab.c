@@ -1,6 +1,7 @@
 #include "tab.h"
 #include "video_gr.h"
 #include <string.h>
+#include <assert.h>
 
 char_screen char_screen_create(char character, int color, int size) {
     char_screen res;
@@ -41,25 +42,38 @@ tab_t* tab_create(char* file_name) {
     tab->current_column = 0;
     tab->current_line = 0;
 
+    vector_new(&tab->lines);
+
     return tab;
 }
 
 int tab_destroy(tab_t* tab) {
+    int i, j;
+    for (i = 0; i < vector_size(&tab->lines); ++i) {
+        for (j = 0; j < vector_size(vector_get(&tab->lines, i)); ++j) {
+            free(vector_get(vector_get(&tab->lines, i), j));
+        }
+        vector_free((vector*)vector_get(&tab->lines, i));
+        free(vector_get(&tab->lines, i));
+    }
 
-    /* ... */
-
+    vector_free(&tab->lines);
     free(tab);
+
     return 0;
 }
 
 tab_t* tab_create_from_file(char* file_name, char* file_buffer) {
+    assert(file_name);
+    assert(file_buffer);
 
     tab_t* tab = tab_create(file_name);
 
-    tab->characters[0][0] = char_screen_create(file_buffer[0], vg_color_rgb(0, 0, 0), 10);
-    tab->characters[1][1] = char_screen_create(file_buffer[1], vg_color_rgb(0, 0, 0), 10);
-    tab->characters[2][2] = char_screen_create(file_buffer[2], vg_color_rgb(0, 0, 0), 10);
-    tab->characters[3][3] = char_screen_create(file_buffer[3], vg_color_rgb(0, 0, 0), 10);
+    int i;
+
+    for (i = 0; file_buffer[i]; ++i) {
+        tab_add_char(tab, file_buffer[i]);
+    }
 
     return tab;
 }
@@ -111,7 +125,75 @@ int tab_draw(tab_t* tab, int tab_num, int selected) {
     return 0;
 }
 
+int tab_add_char(tab_t* tab, char character) {
+    printf("DEBUG: %s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
+    if (!vector_size(&tab->lines)) {
+        vector* line = (vector*) malloc(sizeof(vector));
+        vector_new(line);
+        vector_push_back(&tab->lines, line);
+    }
+
+    vector* current_line = (vector*)vector_get(&tab->lines, tab->current_line);
+
+    if (character == '\n') // add new line
+    {
+        vector* new_line = (vector*)malloc(sizeof(vector));
+        vector_new(new_line);
+
+        if (vector_size(current_line) > tab->current_column) { // see if current line has more characters after the cursor
+            int i;
+            int new_line_size = vector_size(current_line) - tab->current_column;
+            printf("new_line_size: %d, vector_size(current_line): %d, tab->current_column: %d\n", new_line_size, vector_size(current_line), tab->current_column);
+
+            for (i = 0; i < new_line_size; ++i) { // copy chars to new line
+                printf("new_line_size: %d, i: %d, count: %d, cc: %c cc\n", new_line_size, i, vector_size(current_line), ((char_screen*)vector_get(current_line, 0))->character);
+                vector_push_back(new_line, vector_get(current_line, tab->current_column + i));
+            }
+
+            for (i = 0; i < new_line_size; ++i) { // remove from current line
+                free(vector_get(current_line, tab->current_column));
+                vector_erase(current_line, tab->current_column); // erase reduces the number of elements, no +i
+            }
+        }
+
+        if (vector_size(&tab->lines) == tab->current_line + 1)
+            vector_push_back(&tab->lines, new_line);
+        else
+            vector_insert(&tab->lines, new_line, tab->current_line + 1);
+
+        // put cursor at beginning of line and move to next line
+        tab->current_column = 0;
+        tab->current_line++;
+    } else { // add character
+        char_screen* cs = (char_screen*)malloc(sizeof(char_screen));
+        *cs = char_screen_create(character, vg_color_rgb(0, 0, 0), 32);
+
+        if (vector_size(current_line) == tab->current_column)
+            vector_push_back(current_line, cs);
+        else
+            vector_insert(current_line, cs, tab->current_column);
+
+        tab->current_column++;
+    }
+
+    return 0;
+}
+
+int tab_remove_char(tab_t* tab) {
+    // TODO
+    return 0;
+}
+
 int tab_key_press(tab_t* tab, KEY key) {
+    if (key <= 0 && key >= LAST_KEY) {
+        return 1;
+    }
+
+    int last_column_this_line;
+    if (!vector_size(&tab->lines))
+        last_column_this_line = 0;
+    else
+        last_column_this_line = vector_size(vector_get(&tab->lines, tab->current_line));
 
     switch (key) {
         case KEY_ARR_UP:
@@ -128,23 +210,27 @@ int tab_key_press(tab_t* tab, KEY key) {
             break;
         case KEY_ENTER:
         case KEY_NUM_ENTER:
-            tab->current_line++;
+            tab_add_char(tab, '\n');
+            break;
+        case KEY_DEL:
+        case KEY_NUM_DEL:
+            tab_remove_char(tab);
             break;
         case KEY_HOME:
             tab->current_column = 0;
             break;
         case KEY_END:
-            // tab->current_column = last character in this line;
+            tab->current_column = last_column_this_line;
+            break;
+        default:
+            tab_add_char(tab, key_to_char(key));
             break;
     }
 
     if (tab->current_line < 0) tab->current_line = 0;
     if (tab->current_column < 0) tab->current_column = 0;
-    //if (tab->current_column > EOL) tab->current_column = EOL;
+    if (tab->current_column > last_column_this_line) tab->current_column = last_column_this_line;
     //if (tab->current_line > EOF) tab->current_column = EOF;
-
-    // TODO: write characters to the buffer at current_line and current_column
-    // TODO: handle
 
     return 0;
 }
