@@ -1,6 +1,11 @@
 #ifndef RTC_H__
 #define RTC_H__
 
+/** @defgroup rtc rtc
+ * @{
+ * Constants and functions for managing RTC driver
+ */
+
 #define RTC_ADDR_REG        0x70
 #define RTC_DATA_REG        0x71
 
@@ -54,6 +59,7 @@
 
 #define RTC_IRQ             0x8
 
+/// Represents date and time retrieved from RTC
 typedef struct
 {
     int Seconds;
@@ -65,17 +71,18 @@ typedef struct
     int HoursAlarm;
 } rtc_time_t;
 
-static const char* week_day_s[] = { "Thu", "Fri", "Sat", "Sun", "Mon", "Tue", "Wed" };
-static const char* month_s[] = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Set", "Oct", "Nov", "Dec" };
+static const char* week_day_s[] = { "Thu", "Fri", "Sat", "Sun", "Mon", "Tue", "Wed" }; ///< Week days strings
+static const char* month_s[] = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Set", "Oct", "Nov", "Dec" }; ///< Months strings
 
-unsigned long bcd_to_decimal(unsigned long bcd);
+unsigned long bcd_to_decimal(unsigned long bcd); ///< Converts bcd number to decimal
 
-void rtc_wait_valid();
+void rtc_wait_valid(); ///< Waits for RTC to be available
 
-int rtc_read_register(unsigned long reg, unsigned long* value);
-int rtc_write_register(unsigned long reg, unsigned long value);
+int rtc_read_register(unsigned long reg, unsigned long* value); ///< Reads byte from RTC from a specific register
+int rtc_write_register(unsigned long reg, unsigned long value); ///< Write byte to RTC to a specific register
 
-char* rtc_get_date();
+char* rtc_get_date(); ///< Returns string representation of date and time from RTC
 
+/**@}*/
 
 #endif /* RTC_H__ */

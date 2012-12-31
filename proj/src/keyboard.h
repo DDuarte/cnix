@@ -3,9 +3,16 @@
 
 #include "utilities.h"
 
-#define KEY_PRESS(x) (x)
-#define KEY_RELEASE(x) (0x80 | (x))
-#define VALID_KEY(KEY) (((KEY) > 0 && (KEY) <= KEY_F12) || ((KEY) >= KEY_NUM_ENTER && (KEY) <= KEY_END))
+/** @defgroup keyboard keyboard
+ * @{
+ * Constants and functions for managing keyboard (higher level layer over kbc)
+ */
+
+#define KEY_PRESS(x) (x) ///< Convers scancode to press
+#define KEY_RELEASE(x) (0x80 | (x)) ///< Converts scancode to release
+#define VALID_KEY(KEY) (((KEY) > 0 && (KEY) <= KEY_F12) || ((KEY) >= KEY_NUM_ENTER && (KEY) <= KEY_END)) ///< Non zero if key is valid
+
+/// Keys
 typedef enum {
     KEY_NONE         = 0x0000,
     KEY_ESC          = 0x0001,
@@ -111,6 +118,7 @@ typedef enum {
     KEY_END          = 0xE04F
 } KEY;
 
+/// Key modifiers
 typedef enum {
     KEY_MOD_NONE    = 0,
     KEY_MOD_L_SHIFT = BIT(0),
@@ -122,8 +130,9 @@ typedef enum {
     KEY_MOD_CAPS    = BIT(6)
 } KEY_MOD;
 
-#define LAST_KEY KEY_F12
+#define LAST_KEY KEY_F12 ///< Last key
 
+/// Key index to be used with key_c[][]
 typedef enum {
     KEY_IDX_NONE,
     KEY_IDX_UP,
@@ -131,6 +140,7 @@ typedef enum {
     KEY_IDX_ALTGR
 } KEY_IDX;
 
+/// Array used to convert keys into chars, including modifiers (caps lock, alt, etc.)
 // normal, upper case, shift, alt gr
 static char key_c[][4] = {
     {  0,   0,   0,   0  }, // KEY_NONE
@@ -224,11 +234,20 @@ static char key_c[][4] = {
     {  0,   0,   0,   0  }, // KEY_F12
 };
 
-unsigned int last_key_pressed;
+unsigned int last_key_pressed; ///< Key that was pressed (-1 if no key)
 
+
+/**
+ * @brief Converts a key into a char
+ *
+ * @param scancode Scancode of key
+ * @return 0 if bad key, character otherwise
+ */
 char key_to_char(unsigned int scancode);
 
-int keyboard_install(void);
-int keyboard_destroy(void);
+int keyboard_install(void); ///< Subscribe keyboard
+int keyboard_destroy(void); ///< Unsubscribe keyboard
+
+/**@}*/
 
 #endif

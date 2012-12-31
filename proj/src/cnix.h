@@ -3,6 +3,6 @@
 
 #include "window.h"
 
-static window_t _window;
+static window_t _window; ///< Main window
 
 #endif

@@ -19,6 +19,7 @@ int timer_set_square(unsigned long timer, unsigned long freq);
 /**
  * @brief Subscribes and enables Timer 0 interrupts
  *
+ * @param callback Called when a timer 0 interrupt occurs
  * @return Returns bit order in interrupt mask; negative value on failure
  */
 int timer_init(void (*callback)());
@@ -36,5 +37,7 @@ int timer_terminate(void);
  * Increments counter
  */
 void timer_int_handler(void);
+
+/**@}*/
 
 #endif /* __TIMER_H */

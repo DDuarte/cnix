@@ -243,17 +243,12 @@ int tab_remove_char(tab_t* tab) { LOG
         free((char_screen*)vector_get(line, tab->current_column - 1));
         vector_erase(line, tab->current_column - 1);
         tab->current_column--;
-    } else if (curr_line_size == 0) { // remove empty line
-        vector_free(line);
-        vector_erase(&tab->lines, tab->current_line);
-        tab->current_line--;
     } else { // move current line to above and remove line
+
         vector* above_line = vector_get(&tab->lines, tab->current_line - 1);
         int i;
-        for (i = 0; i < curr_line_size; ++i) { // move chars to above line
-            char_screen* cs = vector_get(line, i);
-            vector_push_back(above_line, cs);
-        }
+        for (i = 0; i < curr_line_size; ++i) // move chars to above line
+            vector_push_back(above_line, vector_get(line, i));
         tab->current_column = vector_size(above_line) - i;
         
         for (i = curr_line_size - 1; i >= 0; --i) {
