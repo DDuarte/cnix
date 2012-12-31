@@ -21,6 +21,7 @@ button_t* new_button(unsigned int locx, unsigned int locy, unsigned int szx, uns
 }
 
 void button_update(button_t* btn, unsigned long mouse_x, unsigned long mouse_y, int mouse_left) { LOG
+    btn->selected = 0;
     if (mouse_x >= btn->location_x && mouse_x <= btn->location_x + btn->size_x)
         if (mouse_y >= btn->location_y && mouse_y <= btn->location_y + btn->size_y)
             btn->selected = 1;

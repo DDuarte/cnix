@@ -15,7 +15,7 @@ typedef enum {
 
 typedef struct {
     char* title; /* window title bar */
-
+    char* log_message; /* log message in status bar */
     int width; /* screen total width */
     int height; /* screen total height */
 
@@ -44,6 +44,7 @@ int window_destroy(window_t* window);
 int window_update(window_t* window /* ... */);
 int window_draw(window_t* window);
 int window_set_title(window_t* window, const char* format, ...);
+int window_set_log_message(window_t* window, const char* format, ...);
 int window_set_size(window_t* window, int width, int height);
 int window_install_mouse(window_t* window);
 int window_uninstall_mouse(window_t* window);

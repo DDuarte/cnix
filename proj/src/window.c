@@ -17,6 +17,8 @@
 #include <stdarg.h>
 #include <string.h>
 
+#define WIN_LOG(args) window_set_log_message(window, args)
+
 static int mouse_interrupt;
 void mouseCallback(void);
 
@@ -42,6 +44,16 @@ void run_btn_click(button_t* btn);
 void close_btn_click(button_t* btn);
 
 void window_set_tab(window_t* window, int tab) {
+    if (tab < 0 || tab > TAB_CONSOLE) {
+        window_set_log_message(window, "invalid tab");
+    return;
+    }
+    
+    if (!window->tabs[tab]) {
+window_set_log_message(window, "Tab doesn't exist");     
+     return;
+    }
+        
     window->prev_current_tab = window->current_tab;
     window->current_tab = tab;
 }
@@ -80,6 +92,12 @@ int window_init(window_t* window) { LOG
         printf("window_init: window_set_title failed with error code %d.\n", error);
         return error;
     }
+    
+    error = window_set_log_message(window, "LOG_MESSAGE");
+    if (error) {
+        printf("window_init: window_set_log_message failed with error code %d.\n", error);
+        return error;
+    }
 
     error = window_set_size(window, window->draw ? vg_get_h_res() : 1024, window->draw ? vg_get_v_res() : 768);
     if (error) {
@@ -92,20 +110,20 @@ int window_init(window_t* window) { LOG
     for (i = 0; i < TAB_COUNT; ++i)
         window->tabs[i] = NULL;
 
-    window->tabs[0]  = tab_create("#1");
-    window->tabs[1]  = tab_create("#2");
-    window->tabs[2]  = tab_create("#3");
-    window->tabs[3]  = tab_create("#4");
-    window->tabs[4]  = tab_create("#5");
-    window->tabs[5]  = tab_create("#6");
-    window->tabs[6]  = tab_create("#7");
-    window->tabs[7]  = tab_create("#8");
-    window->tabs[8]  = tab_create("#9");
-    window->tabs[9]  = tab_create("#10");
-    window->tabs[10] = tab_create("#11");
+    //window->tabs[0]  = tab_create("#1");
+    //window->tabs[1]  = tab_create("#2");
+    //window->tabs[2]  = tab_create("#3");
+    //window->tabs[3]  = tab_create("#4");
+    //window->tabs[4]  = tab_create("#5");
+    //window->tabs[5]  = tab_create("#6");
+    //window->tabs[6]  = tab_create("#7");
+    //window->tabs[7]  = tab_create("#8");
+    //window->tabs[8]  = tab_create("#9");
+    //window->tabs[9]  = tab_create("#10");
+    //window->tabs[10] = tab_create("#11");
     window->tabs[11] = tab_create("#console");
-    window->current_tab = 0;
-    window->prev_current_tab = 0;
+    window->current_tab = TAB_CONSOLE;
+    window->prev_current_tab = window->current_tab;
 
     window->date = NULL;
 
@@ -160,10 +178,12 @@ int window_destroy(window_t* window) { LOG
 
     /* remove tabs */
     for (i = 0; i < TAB_COUNT; ++i) {
-        error = tab_destroy(window->tabs[i]);
-        if (error) {
-            printf("window_destroy: tab_destroy(%d) failed with error code %d.\n", i, error);
-            return error;
+        if (window->tabs[i]) {
+            error = tab_destroy(window->tabs[i]); 
+            if (error) {
+                printf("window_destroy: tab_destroy(%d) failed with error code %d.\n", i, error);
+                return error;
+            }
         }
     }
 
@@ -232,15 +252,15 @@ int window_update(window_t* window) { LOG
                         char* fileName = tab_to_file(window->tabs[TAB_CONSOLE]);
                         char* fileBuffer = NULL;
                         tab_t* tab = NULL;
-
-                        for (i = 0; i < TAB_COUNT - 1; i++) {
+                        
+                        for (i = 0; i < (TAB_COUNT - 1); i++) {
                             if (!window->tabs[i]) {
                                 tab = window->tabs[i];
                                 break;
                             }
                         }
 
-                        if (!tab) {
+                        if (i >= (TAB_COUNT - 1)) {
                             printf("Open: No tabs available to open file!");
                             window->state = WIN_STATE_NORMAL;
                             break;
@@ -270,11 +290,7 @@ int window_update(window_t* window) { LOG
                     }
                     break;
                 }
-                default: {
-                    if (window->current_tab == TAB_CONSOLE && (last_key_pressed == KEY_ENTER || last_key_pressed == KEY_NUM_ENTER)) {
-                        window->state = WIN_STATE_SAVE_ASK_NAME;
-                    }
-                }
+                default: break;
             }
 
             previous_key = last_key_pressed;
@@ -384,6 +400,15 @@ int window_draw(window_t* window) { LOG
         printf("window_draw: vg_draw_string (2) failed with error code %d.\n", error);
         return error;
     }
+    
+    /* window log message */
+    if (window->log_message) {
+        error = vg_draw_string(window->log_message, 16, 512, 760, vg_color_rgb(0, 0, 0));
+        if (error) {
+            printf("window_draw: vg_draw_string (1) failed with error code %d.\n", error);
+            return error;
+        }
+    }
 
     /* draw mouse */
     error = vg_draw_circle(window->mouse_x, window->mouse_y, 5, vg_color_rgb(0, 0, 0));
@@ -408,6 +433,23 @@ int window_set_title(window_t* window, const char* format, ...) { LOG
 
     window->title = (char*)malloc(strlen(buffer) + 1);
     strcpy(window->title, buffer);
+
+    return 0;
+}
+
+int window_set_log_message(window_t* window, const char* format, ...) { LOG
+
+    if (window->log_message) {
+        free(window->log_message);
+    }
+
+    char buffer[256];
+    va_list args;
+    va_start(args, format);
+    vsprintf(buffer, format, args);
+
+    window->log_message = (char*)malloc(strlen(buffer) + 1);
+    strcpy(window->log_message, buffer);
 
     return 0;
 }
@@ -615,7 +657,27 @@ void close_btn_draw(button_t* btn) { LOG
 }
 
 void new_btn_click(button_t* btn) { LOG
+    tab_t** tab = NULL;
+    window_t* window = btn->wnd;
+    int i;
+    
+    for (i = 0; i < (TAB_COUNT - 1); i++) {
+        if (!window->tabs[i]) {
+            tab = &window->tabs[i];
+            break;
+        }
+    }
 
+    if (i >= (TAB_COUNT - 1)) { 
+        window_set_log_message(window, "New: No tabs available!");
+        return;
+    }
+
+    *tab = tab_create("new tab");
+    
+    if (*tab) {
+        window_set_log_message(window, "New: Tab created with success");
+    }
 }
 
 void open_btn_click(button_t* btn) { LOG
