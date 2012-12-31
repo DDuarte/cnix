@@ -608,16 +608,17 @@ void new_btn_click(button_t* btn) { LOG
 
 void open_btn_click(button_t* btn) { LOG
     if (_window.state == WIN_STATE_NORMAL) {
-        _window.state = WIN_STATE_OPEN_ASK_NAME;
+        _window.prev_current_tab = _window.current_tab;
         _window.current_tab = TAB_CONSOLE;
+        _window.state = WIN_STATE_OPEN_ASK_NAME;
     }
 }
 
 void save_btn_click(button_t* btn) { LOG
     if (_window.state == WIN_STATE_NORMAL) {
         _window.prev_current_tab = _window.current_tab;
-        _window.state = WIN_STATE_SAVE_ASK_NAME;
         _window.current_tab = TAB_CONSOLE;
+        _window.state = WIN_STATE_SAVE_ASK_NAME;
     }
 }
 
