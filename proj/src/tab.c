@@ -288,15 +288,6 @@ int tab_remove_all(tab_t* tab) { LOG
 }
 
 int tab_key_press(tab_t* tab, KEY key) { LOG
-    int added = 1;
-    int size_of_line;
-    
-    printf("DEBUG: TAB: LINE: %d COLUMN: %d\n", tab->current_line, tab->current_column);
-    
-    if (!vector_size(&tab->lines))
-        size_of_line = 0;
-    else
-        size_of_line = vector_size(vector_get(&tab->lines, tab->current_line));
 
     switch (key) {
         case KEY_ARR_UP:
@@ -322,14 +313,23 @@ int tab_key_press(tab_t* tab, KEY key) { LOG
             tab->current_column = 0;
             break;
         case KEY_END:
-            tab->current_column = size_of_line;
+            tab->current_column = (!vector_size(&tab->lines) ? 0 : vector_size(vector_get(&tab->lines, tab->current_line)));
             break;
+        case KEY_PGUP: {
+            int i = 0;
+            while (tab_rewind_line(tab) && i++ < tabMaxCharsC);
+            break;
+        }
+        case KEY_PGDN: {
+            int i = 0;
+            while (tab_advance_line(tab) && i++ < tabMaxCharsC);
+            break;
+        }
         case KEY_DEL:
         case KEY_NUM_DEL:
-            tab_remove_all(tab);
-            added = 0;
-            tab->current_line = 0;
-            tab->current_column = 0;
+            if (tab_advance_column(tab)) {
+                tab_remove_char(tab);
+            }
             break;
         default: {
             if (key <= 0 || key > LAST_KEY)
