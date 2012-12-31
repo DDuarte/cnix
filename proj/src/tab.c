@@ -2,6 +2,7 @@
 #include "video_gr.h"
 #include "utilities.h"
 #include "window.h"
+#include "cnix.h"
 #include <string.h>
 #include <assert.h>
 #include <ctype.h>

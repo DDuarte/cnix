@@ -481,10 +481,6 @@ void mouseCallback(void) { LOG
 
 int window_key_press(window_t* window, KEY key) { LOG
     tab_t* tab = NULL;
-        
-    if (key <= 0 || key > LAST_KEY) {
-        return 1;
-    }
 
     if (key >= KEY_F1 && key <= KEY_F10) {
         window->current_tab = key - KEY_F1;
@@ -493,98 +489,15 @@ int window_key_press(window_t* window, KEY key) { LOG
         window->current_tab = TAB_COUNT - 2;
     }
     else if (key == KEY_F12) {
+        window->prev_current_tab = window->current_tab;
         window->current_tab = TAB_CONSOLE;
     }
     
-    tab = window->tabs[window->current_tab];
-    
-    if (window->current_tab == TAB_CONSOLE) {
-        int last_column_this_line;
-        if (!vector_size(&tab->lines))
-            last_column_this_line = 0;
-        else
-            last_column_this_line = vector_size(vector_get(&tab->lines, tab->current_line));
-    
-        switch (key) {
-            case KEY_ARR_UP:
-            case KEY_ARR_DOWN:
-                break;
-            case KEY_ARR_LEFT:
-                tab->current_column--;
-                break;
-            case KEY_ARR_RIGHT:
-                tab->current_column++;
-                break;
-            case KEY_ENTER:
-            case KEY_NUM_ENTER:
-                /* CONSOLE_ENTER_PRESSED */
-                break;
-            case KEY_BKSP:
-                tab_remove_char(tab);
-                break;
-            case KEY_HOME:
-                tab->current_column = 0;
-                break;
-            case KEY_END:
-                tab->current_column = last_column_this_line;
-                break;
-            default: {
-                char c = key_to_char(key);
-                if (c)
-                    tab_add_char(tab, c);
-                break;
-            }
-        }
+    if (window->current_tab == TAB_CONSOLE && (key == KEY_ENTER || key == KEY_NUM_ENTER)) {
+        return 0;
     } else {
-        int last_column_this_line;
-        if (!vector_size(&tab->lines))
-            last_column_this_line = 0;
-        else
-            last_column_this_line = vector_size(vector_get(&tab->lines, tab->current_line));
-    
-        switch (key) {
-            case KEY_ARR_UP:
-                tab->current_line--;
-                break;
-            case KEY_ARR_DOWN:
-                tab->current_line++;
-                break;
-            case KEY_ARR_LEFT:
-                tab->current_column--;
-                break;
-            case KEY_ARR_RIGHT:
-                tab->current_column++;
-                break;
-            case KEY_ENTER:
-            case KEY_NUM_ENTER:
-                tab_add_char(tab, '\n');
-                break;
-            case KEY_BKSP:
-                tab_remove_char(tab);
-                break;
-            case KEY_HOME:
-                tab->current_column = 0;
-                break;
-            case KEY_END:
-                tab->current_column = last_column_this_line;
-                break;
-            default: {
-                char c = key_to_char(key);
-                if (c)
-                    tab_add_char(tab, c);
-                break;
-            }
-        }
+      return tab_key_press(window->tabs[window->current_tab], key);
     }
-
-    if (tab->current_line < 0) tab->current_line = 0;
-    if (tab->current_column < 0) tab->current_column = 0;
-    //if (tab->current_column > last_column_this_line) tab->current_column = last_column_this_line - 1;
-    //if (tab->current_line > EOF) tab->current_column = EOF;
-
-    
-
-    return 0;
 }
 
 int window_mouse_press(window_t* window) { LOG
