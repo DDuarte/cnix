@@ -336,7 +336,11 @@ int window_draw(window_t* window) { LOG
     for (i = 0; i < TAB_COUNT; ++i) {
         tab_t* tab = window->tabs[i];
         if (tab) {
-            error = tab_draw(tab, i, window->current_tab == i);
+            error = tab_draw(tab, 
+                             i, /* tab_num */
+                             window->current_tab == i || (window->current_tab == TAB_CONSOLE && window->prev_current_tab == i), /* selected */
+                             window->current_tab == i || i == TAB_CONSOLE || (window->current_tab == TAB_CONSOLE && window->prev_current_tab == i), /* drawText */
+                             window->current_tab == i); /* HasFocus */
             if (error) {
                 printf("window_draw: tab_draw failed with error code %d.\n", error);
                 return error;

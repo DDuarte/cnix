@@ -31,7 +31,7 @@ tab_t* tab_create_from_file(char* file_name, char* file_buffer); // tab filled w
 char* tab_to_file(tab_t* tab);
 
 tab_t* tab_create(char* file_name); // empty tab
-int tab_draw(tab_t* tab, int tab_num, int selected);
+int tab_draw(tab_t* tab, int tab_num, int selected, int drawText, int hasFocus);
 int tab_destroy(tab_t* tab);
 
 int tab_key_press(tab_t* tab, KEY key);
