@@ -247,14 +247,16 @@ int tab_remove_char(tab_t* tab) { LOG
 }
 
 int tab_remove_all(tab_t* tab) { LOG
-
-    if (!vector_size(&tab->lines))
+    if (!tab->lines.buffer || !vector_size(&tab->lines))
         return 0;
 
+    int num_of_lines = vector_size(&tab->lines);
+
     int i, j;
-    for (i = 0; i < vector_size(&tab->lines); ++i) {
-        for (j = 0; j < vector_size(vector_get(&tab->lines, i)); ++j)
-            vector_erase(vector_get(&tab->lines, i), 0);
+    for (i = 0; i < num_of_lines; ++i) {
+        int num_of_chars = vector_size(vector_get(&tab->lines, 0));
+        for (j = 0; j < num_of_chars; ++j)
+            vector_erase(vector_get(&tab->lines, 0), 0);
         vector_erase(&tab->lines, 0);
     }
 
@@ -262,10 +264,6 @@ int tab_remove_all(tab_t* tab) { LOG
 }
 
 int tab_key_press(tab_t* tab, KEY key) { LOG
-    if (key <= 0 || key > LAST_KEY) {
-        return 1;
-    }
-
     int added = 1;
     int size_of_column;
     if (!vector_size(&tab->lines))
@@ -302,8 +300,13 @@ int tab_key_press(tab_t* tab, KEY key) { LOG
         case KEY_DEL:
         case KEY_NUM_DEL:
             tab_remove_all(tab);
+            added = 0;
+            tab->current_line = 0;
+            tab->current_column = 0;
             break;
         default: {
+            if (key <= 0 || key > LAST_KEY)
+                return 1;
             char c = key_to_char(key);
             if (c)
                 tab_add_char(tab, c);
@@ -314,7 +317,10 @@ int tab_key_press(tab_t* tab, KEY key) { LOG
     }
 
     if (added) {
-        size_of_column = vector_size(vector_get(&tab->lines, tab->current_line)); /* update */
+        if (!vector_size(&tab->lines))
+            size_of_column = 0;
+        else
+            size_of_column = vector_size(vector_get(&tab->lines, tab->current_line));
 
         if (tab->current_line < 0)
             tab->current_line = 0;
