@@ -41,12 +41,13 @@ void vector_push_back(vector* v, void* data) { LOG
     if (!v->capacity) {
         v->capacity = DEFAULT_CAPACITY;
         v->buffer = (void**)malloc(v->capacity * sizeof(void*));
-        memset(v->buffer, 0, v->capacity * sizeof(void));
+        memset(v->buffer, 0, v->capacity * sizeof(void*));
     }
 
     if (v->capacity == v->count) {
         v->capacity *= CAPACITY_RATE;
-        v->buffer = realloc(v->buffer, v->capacity * sizeof(void*));
+        v->buffer = (void**)realloc(v->buffer, v->capacity * sizeof(void*));
+        assert(v->buffer);
     }
 
     v->buffer[v->count] = data;
@@ -61,6 +62,7 @@ void vector_insert(vector* v, void* data, int index) { LOG
     if (v->capacity == v->count + 1) {
         v->capacity *= CAPACITY_RATE;
         v->buffer = realloc(v->buffer, v->capacity * sizeof(void*));
+        assert(v->buffer);
     }
 
     int i;
@@ -85,21 +87,12 @@ void vector_erase(vector* v, int index) { LOG
     assert(index >= 0);
     assert(index < v->count);
 
-    v->buffer[index] = NULL; // maybe need a custom deallocator
-
-    int i, j;
-
-    void** arr = (void**)malloc(v->count * CAPACITY_RATE * sizeof(void*));
-    for (i = 0, j = 0; i < v->count; ++i) {
-        if (v->buffer[i]) {
-            arr[j] = v->buffer[i];
-            j++;
-        }
+    if (index != v->count -1) {
+        int i;
+        for (i = index; i < v->count - 2; ++i)
+            v->buffer[i] = v->buffer[i+1];
     }
-
-    v->capacity = v->count * CAPACITY_RATE;
-
-    free(v->buffer);
-    v->buffer = arr;
-    v->count--;
+    
+    v->buffer[v->count - 1] = NULL;
+    v->count --;
 }
