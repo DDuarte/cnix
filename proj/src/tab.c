@@ -260,10 +260,11 @@ int tab_remove_all(tab_t* tab) { LOG
 }
 
 int tab_key_press(tab_t* tab, KEY key) { LOG
-    if (key <= 0 && key >= LAST_KEY) {
+    if (key <= 0 || key > LAST_KEY) {
         return 1;
     }
 
+    int added = 1;
     int size_of_column;
     if (!vector_size(&tab->lines))
         size_of_column = 0;
@@ -304,22 +305,25 @@ int tab_key_press(tab_t* tab, KEY key) { LOG
             char c = key_to_char(key);
             if (c)
                 tab_add_char(tab, c);
+            else
+                added = 0;
             break;
         }
     }
-
-    size_of_column = vector_size(vector_get(&tab->lines, tab->current_line)); /* update */
-
-    if (tab->current_line < 0)
-        tab->current_line = 0;
-    else if (tab->current_line > vector_size(&tab->lines))
-        tab->current_line = vector_size(&tab->lines) - 1;
-
-    if (tab->current_column < 0)
-        tab->current_column = 0;
-    else if (tab->current_column > size_of_column)
-        tab->current_column = size_of_column;
-
+    
+    if (added) {
+        size_of_column = vector_size(vector_get(&tab->lines, tab->current_line)); /* update */
+    
+        if (tab->current_line < 0)
+            tab->current_line = 0;
+        else if (tab->current_line > vector_size(&tab->lines))
+            tab->current_line = vector_size(&tab->lines) - 1;
+    
+        if (tab->current_column < 0)
+            tab->current_column = 0;
+        else if (tab->current_column > size_of_column)
+            tab->current_column = size_of_column;
+    }
     return 0;
 }
 
