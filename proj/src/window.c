@@ -506,10 +506,22 @@ int window_key_press(window_t* window, KEY key) { LOG
 
 int window_mouse_press(window_t* window) { LOG
 
+    /* tab labels */
     if (window->mouse_y > 30 && window->mouse_y < 60)
         if (window->mouse_x > 5 && window->mouse_x < (window->width - 5))
             window->current_tab = (window->mouse_x  - 5) / 92; /* dividing by size of label */
-
+    
+    /* console box */
+    if (window->mouse_y > 703 && window->mouse_y < 733)
+        if (window->mouse_x > 5 && window->mouse_x < (window->width - 5))
+            window->current_tab = TAB_CONSOLE;
+            
+    /* tab box */
+    if (window->current_tab == TAB_CONSOLE)
+        if (window->mouse_y > 5 && window->mouse_y < 698)
+            if (window->mouse_x > 5 && window->mouse_x < (window->width - 5))
+                window->current_tab = window->prev_current_tab;
+    
     button_update(new_btn, window->mouse_x, window->mouse_y, mouse_state.ldown);
     button_update(open_btn, window->mouse_x, window->mouse_y, mouse_state.ldown);
     button_update(save_btn, window->mouse_x, window->mouse_y, mouse_state.ldown);
