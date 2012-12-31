@@ -246,7 +246,7 @@ int window_update(window_t* window) { LOG
                             break;
                         }
 
-                        if (!File_Load(fileName, fileBuffer, &size)) {
+                        if (!File_Load(fileName, &fileBuffer, &size)) {
                             window->state = WIN_STATE_NORMAL;
                             break;
                         }
