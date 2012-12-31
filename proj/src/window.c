@@ -229,13 +229,13 @@ int window_update(window_t* window) { LOG
                     else if (last_key_pressed == KEY_ENTER || last_key_pressed == KEY_NUM_ENTER) {
                         int i;
                         size_t size;
-                        char* fileName = tab_to_file(_window.tabs[TAB_CONSOLE]);
+                        char* fileName = tab_to_file(window->tabs[TAB_CONSOLE]);
                         char* fileBuffer = NULL;
                         tab_t* tab = NULL;
 
                         for (i = 0; i < TAB_COUNT - 1; i++) {
-                            if (!_window.tabs[i]) {
-                                tab = _window.tabs[i];
+                            if (!window->tabs[i]) {
+                                tab = window->tabs[i];
                                 break;
                             }
                         }
@@ -251,7 +251,7 @@ int window_update(window_t* window) { LOG
                             break;
                         }
 
-                        _window.tabs[i] = tab_create_from_file(fileName, fileBuffer);
+                        window->tabs[i] = tab_create_from_file(fileName, fileBuffer);
                         window->state = WIN_STATE_NORMAL;
                     }
                     break;
@@ -260,8 +260,8 @@ int window_update(window_t* window) { LOG
                     if (window->current_tab != TAB_CONSOLE) {
                         window->state = WIN_STATE_NORMAL;
                     } else if (last_key_pressed == KEY_ENTER || last_key_pressed == KEY_NUM_ENTER) {
-                        char* fileName = tab_to_file(_window.tabs[TAB_CONSOLE]);
-                        char* fileBuffer = tab_to_file(_window.tabs[_window.prev_current_tab]);
+                        char* fileName = tab_to_file(window->tabs[TAB_CONSOLE]);
+                        char* fileBuffer = tab_to_file(window->tabs[window->prev_current_tab]);
 
                         if (strlen(fileName) != 0) {
                             File_Save(fileName, fileBuffer, strlen(fileBuffer));
@@ -270,6 +270,11 @@ int window_update(window_t* window) { LOG
                     }
                     break;
                 }
+                default: {
+                    if (window->current_tab == TAB_CONSOLE && (last_key_pressed == KEY_ENTER || last_key_pressed == KEY_NUM_ENTER)) {
+                        window->state = WIN_STATE_SAVE_ASK_NAME;
+                    }
+                }
             }
 
             previous_key = last_key_pressed;
@@ -277,6 +282,8 @@ int window_update(window_t* window) { LOG
             window->redraw = 1;
         } else {
             printf("window_update: window_key_press failed with error code %d.\n", error);
+            last_key_pressed = -1;
+            window->redraw = 1;
         }
     }
 
