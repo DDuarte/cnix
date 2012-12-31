@@ -45,6 +45,7 @@ tab_t* tab_create(char* file_name) { LOG
 
     tab->current_column = 0;
     tab->current_line = 0;
+    tab->maxLineSize = 0;
 
     vector_new(&tab->lines);
 
@@ -76,6 +77,13 @@ tab_t* tab_create_from_file(char* file_name, char* file_buffer) { LOG
     int i;
     for (i = 0; file_buffer[i]; ++i)
         tab_add_char(tab, file_buffer[i]);
+        
+    for (i = 0; i < vector_size(&tab->lines); ++i) {
+        int size_of_line = vector_size(vector_get(&tab->lines, i));
+        if (size_of_line > tab->maxLineSize) {
+            tab->maxLineSize = size_of_line;
+        }
+    }
 
     return tab;
 }
@@ -120,12 +128,22 @@ int tab_draw_label(tab_t* tab, int tab_num, int selected) { LOG
 int tab_draw_text(tab_t* tab, int tab_num, int selected) { LOG
     static unsigned int caret_on = 1;
     int x = 15;
-    int y = (tab_num == TAB_CONSOLE ? 730 : 100);
+    int y = (tab_num == TAB_CONSOLE ? 730 : 90);
+    
+    int i, j;
+    
+    int iinit = tab->current_line - tabMaxCharsC;
+    if (iinit < 0)
+        iinit = 0;
 
+    int jinit = tab->current_column - tabMaxCharsL;
+    if (jinit < 0)
+        jinit = 0;
+        
     if (selected) {
         if (caret_on) {
-            vg_draw_line(tab->current_column * 17 + x, tab->current_line * 25 + y,
-                    tab->current_column * 17 + x, tab->current_line * 25 + y - 17,
+            vg_draw_line(tab->current_column * 17 + x, (tab->current_line - iinit) * 25 + y ,
+                    tab->current_column * 17 + x, (tab->current_line - iinit) * 25 + y - 17,
                     vg_color_rgb(0, 0, 0));
             caret_on = 0;
         } else
@@ -135,11 +153,13 @@ int tab_draw_text(tab_t* tab, int tab_num, int selected) { LOG
     // char_size = 17
     // size between lines = 25
 
-    int i, j;
-    for (i = 0; i < vector_size(&tab->lines); ++i) {
-        for (j = 0; j < vector_size(vector_get(&tab->lines, i)); ++j) {
+    
+
+        
+    for (i = iinit; i < vector_size(&tab->lines); ++i) {
+        for (j = jinit; j < vector_size(vector_get(&tab->lines, i)); ++j) {
             char_screen* cs = vector_get(vector_get(&tab->lines, i), j);
-            char_draw(cs, j * 17 + x, i * 25 + y);
+            char_draw(cs, (j-jinit) * 17 + x, (i-iinit) * 25 + y);
         }
     }
 
@@ -202,6 +222,10 @@ int tab_add_char(tab_t* tab, char character) { LOG
             vector_insert(current_line, cs, tab->current_column);
 
         tab->current_column++;
+        
+        if (vector_size(current_line) > tab->maxLineSize) {
+            tab->maxLineSize = vector_size(current_line);
+        }
     }
 
     return 0;
@@ -265,24 +289,27 @@ int tab_remove_all(tab_t* tab) { LOG
 
 int tab_key_press(tab_t* tab, KEY key) { LOG
     int added = 1;
-    int size_of_column;
+    int size_of_line;
+    
+    printf("DEBUG: TAB: LINE: %d COLUMN: %d\n", tab->current_line, tab->current_column);
+    
     if (!vector_size(&tab->lines))
-        size_of_column = 0;
+        size_of_line = 0;
     else
-        size_of_column = vector_size(vector_get(&tab->lines, tab->current_line));
+        size_of_line = vector_size(vector_get(&tab->lines, tab->current_line));
 
     switch (key) {
         case KEY_ARR_UP:
-            tab->current_line--;
+            tab_rewind_line(tab);
             break;
         case KEY_ARR_DOWN:
-            tab->current_line++;
+            tab_advance_line(tab);
             break;
         case KEY_ARR_LEFT:
-            tab->current_column--;
+            tab_rewind_column(tab);
             break;
         case KEY_ARR_RIGHT:
-            tab->current_column++;
+            tab_advance_column(tab);
             break;
         case KEY_ENTER:
         case KEY_NUM_ENTER:
@@ -295,7 +322,7 @@ int tab_key_press(tab_t* tab, KEY key) { LOG
             tab->current_column = 0;
             break;
         case KEY_END:
-            tab->current_column = size_of_column;
+            tab->current_column = size_of_line;
             break;
         case KEY_DEL:
         case KEY_NUM_DEL:
@@ -310,29 +337,84 @@ int tab_key_press(tab_t* tab, KEY key) { LOG
             char c = key_to_char(key);
             if (c)
                 tab_add_char(tab, c);
-            else
-                added = 0;
             break;
         }
     }
 
-    if (added) {
-        if (!vector_size(&tab->lines))
-            size_of_column = 0;
-        else
-            size_of_column = vector_size(vector_get(&tab->lines, tab->current_line));
-
-        if (tab->current_line < 0)
-            tab->current_line = 0;
-        else if (tab->current_line > vector_size(&tab->lines))
-            tab->current_line = vector_size(&tab->lines) - 1;
-
-        if (tab->current_column < 0)
-            tab->current_column = 0;
-        else if (tab->current_column > size_of_column)
-            tab->current_column = size_of_column;
-    }
     return 0;
+}
+
+int tab_advance_column(tab_t* tab) { LOG
+    if (!tab || vector_size(&tab->lines) == 0) { 
+        return 0;
+    }
+    
+    if (tab->current_column == vector_size(vector_get(&tab->lines, tab->current_line))) {
+        if (tab->current_line == vector_size(&tab->lines) - 1)
+            return 0;
+        tab->current_line ++;
+        tab->current_column = 0;
+    } else {
+        tab->current_column ++;
+    }
+     
+    return 1;
+}
+int tab_rewind_column(tab_t* tab) { LOG
+    if (!tab || vector_size(&tab->lines) == 0) { 
+        return 1;
+    }
+    
+    if (tab->current_column == 0) {
+        if (tab->current_line == 0)
+            return 1;
+        tab->current_line --;
+        tab->current_column = vector_size(vector_get(&tab->lines, tab->current_line));
+    } else {
+        tab->current_column --;
+    }
+    
+    return 0;
+}
+
+int tab_advance_line(tab_t* tab) {
+    int number_of_lines = vector_size(&tab->lines);
+    if (!tab || number_of_lines == 0) {
+        return 0;
+    }
+    
+    if (tab->current_line == number_of_lines - 1) {
+        return 0;
+    }
+    
+    tab->current_line ++;
+    
+    int size_of_line = vector_size(vector_get(&tab->lines, tab->current_line));
+    
+    if (tab->current_column >= size_of_line)
+        tab->current_column = size_of_line;
+        
+    return 1;
+}
+
+int tab_rewind_line(tab_t* tab) {
+    int number_of_lines = vector_size(&tab->lines);
+    if (!tab || number_of_lines == 0) {
+        return 0;
+    }
+    
+    if (tab->current_line == 0) {
+        return 0;
+    }
+    
+    tab->current_line --;
+    
+    int size_of_line = vector_size(vector_get(&tab->lines, tab->current_line));
+    
+    if (tab->current_column >= size_of_line)
+        tab->current_column = size_of_line;
+        
+    return 1;
 }
 
 int tab_mouse_press(tab_t* tab, unsigned long x, unsigned long y) { LOG

@@ -4,6 +4,9 @@
 #include "keyboard.h"
 #include "vector.h"
 
+#define tabMaxCharsC 24
+#define tabMaxCharsL 59
+
 typedef struct {
 
     int size;
@@ -24,11 +27,18 @@ typedef struct {
 
     int current_line;
     int current_column;
+    int maxLineSize;
 
 } tab_t;
 
 tab_t* tab_create_from_file(char* file_name, char* file_buffer); // tab filled with contents of file name
 char* tab_to_file(tab_t* tab);
+
+int tab_advance_column(tab_t* tab);
+int tab_rewind_column(tab_t* tab);
+
+int tab_advance_line(tab_t* tab);
+int tab_rewind_line(tab_t* tab);
 
 tab_t* tab_create(char* file_name); // empty tab
 int tab_draw(tab_t* tab, int tab_num, int selected, int drawText, int hasFocus);

@@ -325,14 +325,33 @@ int window_draw(window_t* window) { LOG
         printf("window_draw: vg_fill failed with error code %d.\n", error);
         return error;
     }
-
+    
+    /* draw tabs */
+    for (i = 0; i < TAB_COUNT; ++i) {
+        tab_t* tab = window->tabs[i];
+        if (tab) {
+            if (i == TAB_CONSOLE) {
+                vg_draw_rectangle(5, 703, 1019, 733, vg_color_rgb(255,255,255));
+            }
+            error = tab_draw(tab,
+                             i, /* tab_num */
+                             window->current_tab == i || (window->current_tab == TAB_CONSOLE && window->prev_current_tab == i), /* selected */
+                             window->current_tab == i || i == TAB_CONSOLE || (window->current_tab == TAB_CONSOLE && window->prev_current_tab == i), /* drawText */
+                             window->current_tab == i); /* HasFocus */
+            if (error) {
+                printf("window_draw: tab_draw failed with error code %d.\n", error);
+                return error;
+            }
+        }
+    }
+    
     /* window title bar */
     error = vg_draw_rectangle(0, 0, 1024, 30, vg_color_rgb(90, 90, 90));
     if (error) {
         printf("window_draw: vg_draw_rectangle (1) failed with error code %d.\n", error);
         return error;
     }
-
+    
     /* borders */
     error = vg_draw_rectangle(0, 763, 1024, 768, vg_color_rgb(90, 90, 90));
     if (error) {
@@ -366,22 +385,6 @@ int window_draw(window_t* window) { LOG
     run_btn->draw(run_btn); /* run button */
     close_btn->draw(close_btn); /* close button */
 
-    /* draw tabs */
-    for (i = 0; i < TAB_COUNT; ++i) {
-        tab_t* tab = window->tabs[i];
-        if (tab) {
-            error = tab_draw(tab,
-                             i, /* tab_num */
-                             window->current_tab == i || (window->current_tab == TAB_CONSOLE && window->prev_current_tab == i), /* selected */
-                             window->current_tab == i || i == TAB_CONSOLE || (window->current_tab == TAB_CONSOLE && window->prev_current_tab == i), /* drawText */
-                             window->current_tab == i); /* HasFocus */
-            if (error) {
-                printf("window_draw: tab_draw failed with error code %d.\n", error);
-                return error;
-            }
-        }
-    }
-
     /* draw cmd tab*/
     error = vg_draw_rectangle(5, 733, 1019, 763, vg_color_rgb(90, 90, 90));
     if (error) {
@@ -393,7 +396,9 @@ int window_draw(window_t* window) { LOG
         printf("window_draw: vg_draw_rectangle (6) failed with error code %d.\n", error);
         return error;
     }
+    
 
+    
     /* draw time and date */
     error = vg_draw_string(window->date, 16, 5, 760, vg_color_rgb(0, 0, 0));
     if (error) {
