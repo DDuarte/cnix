@@ -3,7 +3,7 @@
 
 /** @defgroup window window
  * @{
- * Functions to manage vector ADT
+ * Functions to manage a window, see window_t
  */
 
 #define TAB_COUNT 12 ///< Number of available tabs
