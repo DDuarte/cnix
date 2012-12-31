@@ -1,0 +1,19 @@
+<map id="tab_draw" name="tab_draw">
+<area shape="rect" id="node3" href="$tab_8c.html#a4ceef5602db37e7372611e43d014a289" title="tab_draw_label" alt="" coords="281,259,389,285"/>
+<area shape="rect" id="node24" href="$tab_8c.html#a5794148a84fef6a79ac54c0c4e5a3c0b" title="tab_draw_text" alt="" coords="129,132,231,159"/>
+<area shape="rect" id="node5" href="$group__video__gr.html#ga29e8491dfaa7f6e996f1370cdd274239" title="Draw filled rectangle with the specifed end points and color." alt="" coords="784,259,912,285"/>
+<area shape="rect" id="node13" href="$group__video__gr.html#ga352cdbc0a4a6290ccaa84b28c4428010" title="Converts a RGB color to the color supported by VBE." alt="" coords="443,208,538,235"/>
+<area shape="rect" id="node15" href="$group__video__gr.html#gaabb3bf3fea56429aa41bc4f1986a7c98" title="vg_draw_string" alt="" coords="437,259,544,285"/>
+<area shape="rect" id="node7" href="$group__video__gr.html#ga407d2bebb5960e308ff7114142ed22e5" title="vg_scale_x" alt="" coords="1011,259,1098,285"/>
+<area shape="rect" id="node9" href="$group__video__gr.html#gaeea403b6eab6cae98efc1dd52ec1a993" title="vg_scale_y" alt="" coords="1011,208,1098,235"/>
+<area shape="rect" id="node11" href="$video__gr_8c.html#adfeba900ab1ada58c92bef25f22ae368" title="_vg_set_absolute_pixel" alt="" coords="977,157,1133,184"/>
+<area shape="rect" id="node17" href="$group__video__gr.html#ga760084051b88452ebc9fad789c8a2cd4" title="vg_ft_draw_bitmap" alt="" coords="592,208,720,235"/>
+<area shape="rect" id="node19" href="$group__video__gr.html#ga3b11ae0b3f40967835458423942e334b" title="Sets input pixel with input color." alt="" coords="801,208,895,235"/>
+<area shape="rect" id="node26" href="$group__video__gr.html#ga4098656945b01a92ffbb8e2e245e275e" title="Draw line segment with specifed end points and color." alt="" coords="609,132,703,159"/>
+<area shape="rect" id="node36" href="$vector_8c.html#aa6a1e26e7d26552925e2981d4b3d2499" title="vector_size" alt="" coords="291,5,378,32"/>
+<area shape="rect" id="node38" href="$vector_8c.html#a75ffb2ad4233613bd0c97d40b1c68611" title="vector_get" alt="" coords="294,107,375,133"/>
+<area shape="rect" id="node40" href="$tab_8c.html#aff1c286a2e6de7ba9d867c275bde8052" title="char_draw" alt="" coords="294,157,375,184"/>
+<area shape="rect" id="node30" href="$video__gr_8c.html#ae488b1f87dfb59b645f3d888d54a85be" title="_vg_draw_absolute_line" alt="" coords="769,107,927,133"/>
+<area shape="rect" id="node32" href="$utilities_8c.html#a9ec50cbe0735fc65f2eff87afe8582a6" title="swapl" alt="" coords="1027,107,1082,133"/>
+<area shape="rect" id="node42" href="$group__video__gr.html#gad3439d86d3ef66d8d7afef60ab840146" title="vg_draw_char" alt="" coords="441,157,541,184"/>
+</map>

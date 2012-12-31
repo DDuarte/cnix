@@ -1,0 +1,10 @@
+<map id="window_set_tab" name="window_set_tab">
+<area shape="rect" id="node3" href="$group__window.html#gacd8cd4c2fe8e78e21480301dcb996df1" title="Key has been pressed." alt="" coords="177,5,308,32"/>
+<area shape="rect" id="node11" href="$group__window.html#ga978ba95fd412b9c52111f1b704dd3735" title="Mouse key has been pressed." alt="" coords="168,56,317,83"/>
+<area shape="rect" id="node14" href="$window_8c.html#abd6d08c5425d8005c32eb28213bb3ea1" title="open_btn_click" alt="" coords="188,107,297,133"/>
+<area shape="rect" id="node19" href="$window_8c.html#af80bc278890db817b683ad18c96e3e17" title="save_btn_click" alt="" coords="189,157,296,184"/>
+<area shape="rect" id="node5" href="$group__window.html#ga69fb99e8de59bdbacfb1de0b46649b14" title="Updates window and all its &quot;children&quot; elements (tabs, buttons, etc)" alt="" coords="366,56,477,83"/>
+<area shape="rect" id="node7" href="$cnix_8c.html#aa9c1f035c82a93594d9838ea8ceae094" title="timer_handler" alt="" coords="526,56,626,83"/>
+<area shape="rect" id="node9" href="$cnix_8c.html#abf9e6b7e6f15df4b525a2e7705ba3089" title="main" alt="" coords="675,81,725,108"/>
+<area shape="rect" id="node16" href="$group__window.html#gad605925d100847b069d261d7f69b4d0a" title="Initializes a window." alt="" coords="377,107,465,133"/>
+</map>

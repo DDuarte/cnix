@@ -1,0 +1,10 @@
+<map id="tab_add_char" name="tab_add_char">
+<area shape="rect" id="node3" href="$group__vector.html#gaa6a1e26e7d26552925e2981d4b3d2499" title="Size of vector." alt="" coords="179,5,266,32"/>
+<area shape="rect" id="node5" href="$group__vector.html#ga4c767de193ea3674ab101c805d098f0d" title="Create new vector." alt="" coords="179,56,266,83"/>
+<area shape="rect" id="node7" href="$group__vector.html#ga0d36e1e11d647504f35299974f222766" title="Adds element to back of vector." alt="" coords="159,107,286,133"/>
+<area shape="rect" id="node9" href="$group__vector.html#ga75ffb2ad4233613bd0c97d40b1c68611" title="Element at position index." alt="" coords="182,157,263,184"/>
+<area shape="rect" id="node11" href="$group__vector.html#ga951a0ef34f7e54967c45c59f9ded305b" title="Removes element at position index." alt="" coords="175,208,270,235"/>
+<area shape="rect" id="node13" href="$group__vector.html#ga27a3e8cd2e23332b340ba1e89fa1ea57" title="Adds element at position index." alt="" coords="175,259,270,285"/>
+<area shape="rect" id="node15" href="$group__tab.html#ga411f75cac87c42545626dffb8a6e7119" title="Creates a char_screen." alt="" coords="155,309,291,336"/>
+<area shape="rect" id="node17" href="$group__video__gr.html#ga352cdbc0a4a6290ccaa84b28c4428010" title="Converts a RGB color to the color supported by VBE." alt="" coords="175,360,270,387"/>
+</map>

@@ -1,0 +1,8 @@
+<map id="vg_draw_circle" name="vg_draw_circle">
+<area shape="rect" id="node3" href="$group__window.html#gaac0270c2bc86b0fab8572aa784636549" title="Function called to draw window and all its &quot;children&quot; elements (tabs, buttons, etc)" alt="" coords="164,5,263,32"/>
+<area shape="rect" id="node9" href="$window_8c.html#afdecf2e91f9cc12e5dc4463fd50f8e39" title="new_btn_draw" alt="" coords="161,56,265,83"/>
+<area shape="rect" id="node14" href="$window_8c.html#a025d4d23fc374a08b65ac5f87164dfeb" title="save_btn_draw" alt="" coords="160,107,267,133"/>
+<area shape="rect" id="node5" href="$cnix_8c.html#aa9c1f035c82a93594d9838ea8ceae094" title="timer_handler" alt="" coords="315,5,415,32"/>
+<area shape="rect" id="node7" href="$cnix_8c.html#abf9e6b7e6f15df4b525a2e7705ba3089" title="main" alt="" coords="464,31,515,57"/>
+<area shape="rect" id="node11" href="$group__window.html#gad605925d100847b069d261d7f69b4d0a" title="Initializes a window." alt="" coords="321,56,409,83"/>
+</map>

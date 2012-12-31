@@ -1,0 +1,5 @@
+<map id="rtc_get_date" name="rtc_get_date">
+<area shape="rect" id="node3" href="$group__rtc.html#ga3b4a54cae34c67d2b07c7ca6e99d0cf8" title="Waits for RTC to be available." alt="" coords="160,5,259,32"/>
+<area shape="rect" id="node5" href="$group__rtc.html#ga2e1631108feead6b7d06a928a022ce5f" title="Reads byte from RTC from a specific register." alt="" coords="150,56,269,83"/>
+<area shape="rect" id="node7" href="$group__rtc.html#ga2a1f4793f5f1df109056889c5e5f2e05" title="Converts bcd number to decimal." alt="" coords="153,107,266,133"/>
+</map>

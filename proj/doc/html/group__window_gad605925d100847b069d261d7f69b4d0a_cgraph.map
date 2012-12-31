@@ -1,0 +1,50 @@
+<map id="window_init" name="window_init">
+<area shape="rect" id="node3" href="$group__video__gr.html#gacef21667c79365d57a084bed994c2189" title="Initializes the video module in graphics mode." alt="" coords="188,31,247,57"/>
+<area shape="rect" id="node9" href="$group__video__gr.html#ga97ab416840972f03882131e88ff5897b" title="vg_init_FreeType" alt="" coords="158,81,277,108"/>
+<area shape="rect" id="node11" href="$group__window.html#gab0b36f6f3a4ad3275bae13d051df1883" title="Changes title of window, printf style." alt="" coords="159,132,276,159"/>
+<area shape="rect" id="node13" href="$group__window.html#ga599f76484bcb17c622dbb276690e4f0d" title="Changes log message, printf style." alt="" coords="581,284,755,311"/>
+<area shape="rect" id="node15" href="$group__window.html#ga833db7fbaeba321aa70de170380ae4ac" title="Sets size of window." alt="" coords="157,436,277,463"/>
+<area shape="rect" id="node17" href="$group__video__gr.html#gab95ee193bf181ff9ee6fcd0a25651f9c" title="vg_get_h_res" alt="" coords="168,487,267,513"/>
+<area shape="rect" id="node19" href="$group__video__gr.html#gadea9707d500b33f73f2d3aa6df45f552" title="vg_get_v_res" alt="" coords="169,537,265,564"/>
+<area shape="rect" id="node21" href="$group__tab.html#gaaf84d60061510013ace5ad84c3b3827d" title="Creates empty tab." alt="" coords="396,385,479,412"/>
+<area shape="rect" id="node25" href="$group__interrupt.html#ga1592f65afa0bb6874910f1fd1d13e0a7" title="Needs to be called before subscribing any interrupt." alt="" coords="407,639,467,665"/>
+<area shape="rect" id="node29" href="$group__window.html#ga984bfdd6079a744c49e6d5c48fcaf6f4" title="Installs mouse." alt="" coords="142,588,293,615"/>
+<area shape="rect" id="node45" href="$group__keyboard.html#gac734f92550b667d9fe9b2968fa0e183e" title="Subscribe keyboard." alt="" coords="159,689,275,716"/>
+<area shape="rect" id="node54" href="$group__button.html#gab2f586c82c8ab88711043cd0d9b13853" title="Creates a new button (uses malloc)" alt="" coords="173,791,261,817"/>
+<area shape="rect" id="node56" href="$window_8c.html#afdecf2e91f9cc12e5dc4463fd50f8e39" title="new_btn_draw" alt="" coords="165,892,269,919"/>
+<area shape="rect" id="node78" href="$window_8c.html#a7c542480b0ef0d70c1d720cfeb2b75eb" title="new_btn_click" alt="" coords="165,335,269,361"/>
+<area shape="rect" id="node82" href="$window_8c.html#ab0c17a499aae322a132aec5556f5658a" title="open_btn_draw" alt="" coords="163,1044,272,1071"/>
+<area shape="rect" id="node91" href="$window_8c.html#abd6d08c5425d8005c32eb28213bb3ea1" title="open_btn_click" alt="" coords="163,233,272,260"/>
+<area shape="rect" id="node96" href="$window_8c.html#a025d4d23fc374a08b65ac5f87164dfeb" title="save_btn_draw" alt="" coords="164,841,271,868"/>
+<area shape="rect" id="node106" href="$window_8c.html#af80bc278890db817b683ad18c96e3e17" title="save_btn_click" alt="" coords="164,183,271,209"/>
+<area shape="rect" id="node109" href="$window_8c.html#a00f492da3428c7f898ddf0fe1176b856" title="make_btn_draw" alt="" coords="161,1095,274,1121"/>
+<area shape="rect" id="node114" href="$window_8c.html#a73acccf2f0dfbd55e22c01ae0d4f3bb8" title="make_btn_click" alt="" coords="161,1145,274,1172"/>
+<area shape="rect" id="node116" href="$window_8c.html#a50ffe5de2dd9e6eb924331dd9229494a" title="run_btn_draw" alt="" coords="168,943,267,969"/>
+<area shape="rect" id="node121" href="$window_8c.html#a9c1a1dbd608955ab8667f72eb486fc22" title="run_btn_click" alt="" coords="168,1196,267,1223"/>
+<area shape="rect" id="node123" href="$window_8c.html#a641cdacc9f6abfe7706ef8242812b9cd" title="close_btn_draw" alt="" coords="161,993,273,1020"/>
+<area shape="rect" id="node128" href="$window_8c.html#ad3ca36c6b5e0fe6ba859a91cef4f2f76" title="close_btn_click" alt="" coords="381,740,493,767"/>
+<area shape="rect" id="node5" href="$group__vbe.html#ga4ef3234e41f2050bc094a22049b69e45" title="Returns information on the input VBE mode, including screen dimensions, color depth and VRAM physical..." alt="" coords="371,5,503,32"/>
+<area shape="rect" id="node7" href="$group__utilities.html#ga6b8f4c7e2a5153f2f91fea4d1e540ff7" title="bit_set_all" alt="" coords="397,56,478,83"/>
+<area shape="rect" id="node23" href="$group__vector.html#ga4c767de193ea3674ab101c805d098f0d" title="Create new vector." alt="" coords="625,385,711,412"/>
+<area shape="rect" id="node27" href="$group__interrupt.html#ga901b6a6215a5f9152950435e221ceb01" title="(Internal function, do not use) Clears assigned callback" alt="" coords="601,613,735,640"/>
+<area shape="rect" id="node31" href="$group__mouse.html#ga27eefbf4822f7b30cdb554f0e0085a43" title="Enables stream mode." alt="" coords="341,487,533,513"/>
+<area shape="rect" id="node39" href="$group__interrupt.html#gaa7d0a67308b719e7a96ce07825f16132" title="Subscribes a system interrupt." alt="" coords="388,588,487,615"/>
+<area shape="rect" id="node42" href="$window_8c.html#a4ed1f2b1f18bc37dcb86889177cf7512" title="mouseCallback" alt="" coords="382,537,493,564"/>
+<area shape="rect" id="node33" href="$group__mouse.html#ga97b9b5bcd9b0986fe518bef6c303d58b" title="Write byte to mouse." alt="" coords="621,487,715,513"/>
+<area shape="rect" id="node37" href="$group__mouse.html#ga35dc9f62be9d7d238bd18baa033fd597" title="Read byte from mouse." alt="" coords="621,537,715,564"/>
+<area shape="rect" id="node35" href="$group__kbc.html#ga95d6e1f5fed116286e1052147e7c0ee3" title="Writes byte to keyboard." alt="" coords="843,487,920,513"/>
+<area shape="rect" id="node48" href="$keyboard_8c.html#ac00f3ebcdb64d0910af1c1fc7b0bf0ae" title="keyboard_handler" alt="" coords="375,689,499,716"/>
+<area shape="rect" id="node50" href="$group__kbc.html#ga52a7ce44125208dfa303e597e6302a71" title="Reads byte to keyboard." alt="" coords="631,689,705,716"/>
+<area shape="rect" id="node52" href="$group__interrupt.html#ga7ed855ada1474b14465e984db8004ef7" title="Stop handling interrupts." alt="" coords="609,740,727,767"/>
+<area shape="rect" id="node58" href="$group__video__gr.html#ga6cd8b593904d79878e097215d115eceb" title="Draw circle with the specifed center point, radius and line color." alt="" coords="384,892,491,919"/>
+<area shape="rect" id="node71" href="$group__video__gr.html#ga352cdbc0a4a6290ccaa84b28c4428010" title="Converts a RGB color to the color supported by VBE." alt="" coords="390,943,485,969"/>
+<area shape="rect" id="node73" href="$group__video__gr.html#ga29e8491dfaa7f6e996f1370cdd274239" title="Draw filled rectangle with the specifed end points and color." alt="" coords="373,993,501,1020"/>
+<area shape="rect" id="node60" href="$group__video__gr.html#ga407d2bebb5960e308ff7114142ed22e5" title="vg_scale_x" alt="" coords="625,892,711,919"/>
+<area shape="rect" id="node62" href="$group__video__gr.html#gaeea403b6eab6cae98efc1dd52ec1a993" title="vg_scale_y" alt="" coords="625,943,711,969"/>
+<area shape="rect" id="node64" href="$video__gr_8c.html#adfeba900ab1ada58c92bef25f22ae368" title="_vg_set_absolute_pixel" alt="" coords="803,917,959,944"/>
+<area shape="rect" id="node66" href="$video__gr_8c.html#ae488b1f87dfb59b645f3d888d54a85be" title="_vg_draw_absolute_line" alt="" coords="589,1044,747,1071"/>
+<area shape="rect" id="node68" href="$group__utilities.html#ga9ec50cbe0735fc65f2eff87afe8582a6" title="Swaps two longs." alt="" coords="854,1044,909,1071"/>
+<area shape="rect" id="node86" href="$group__video__gr.html#ga4098656945b01a92ffbb8e2e245e275e" title="Draw line segment with specifed end points and color." alt="" coords="390,1044,485,1071"/>
+<area shape="rect" id="node93" href="$window_8c.html#af251e06a5e8fb2c157c93b4c00f2c529" title="window_set_tab" alt="" coords="380,233,495,260"/>
+<area shape="rect" id="node101" href="$group__video__gr.html#ga3b11ae0b3f40967835458423942e334b" title="Sets input pixel with input color." alt="" coords="391,841,484,868"/>
+</map>

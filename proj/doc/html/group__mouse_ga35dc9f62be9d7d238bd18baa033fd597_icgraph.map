@@ -1,0 +1,10 @@
+<map id="mouse_read" name="mouse_read">
+<area shape="rect" id="node3" href="$group__mouse.html#ga27eefbf4822f7b30cdb554f0e0085a43" title="Enables stream mode." alt="" coords="147,5,339,32"/>
+<area shape="rect" id="node11" href="$group__window.html#ga50da694f2aab136cb76b29459f4f354d" title="Unnistalls mouse." alt="" coords="160,107,325,133"/>
+<area shape="rect" id="node18" href="$window_8c.html#a4ed1f2b1f18bc37dcb86889177cf7512" title="mouseCallback" alt="" coords="187,56,298,83"/>
+<area shape="rect" id="node5" href="$group__window.html#ga984bfdd6079a744c49e6d5c48fcaf6f4" title="Installs mouse." alt="" coords="387,56,538,83"/>
+<area shape="rect" id="node7" href="$group__window.html#gad605925d100847b069d261d7f69b4d0a" title="Initializes a window." alt="" coords="591,56,679,83"/>
+<area shape="rect" id="node9" href="$cnix_8c.html#abf9e6b7e6f15df4b525a2e7705ba3089" title="main" alt="" coords="731,81,781,108"/>
+<area shape="rect" id="node13" href="$group__window.html#gaa072ae013c999ef6b1eb8d44c9eda573" title="De&#45;allocates whatever the window required." alt="" coords="405,107,520,133"/>
+<area shape="rect" id="node15" href="$cnix_8c.html#ad7f085309ae89de98d2f3755d6b00d6a" title="exit_cleanup" alt="" coords="587,107,682,133"/>
+</map>

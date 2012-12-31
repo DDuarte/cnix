@@ -1,0 +1,7 @@
+<map id="keyboard_install" name="keyboard_install">
+<area shape="rect" id="node3" href="$group__interrupt.html#gaa7d0a67308b719e7a96ce07825f16132" title="Subscribes a system interrupt." alt="" coords="184,5,283,32"/>
+<area shape="rect" id="node7" href="$keyboard_8c.html#ac00f3ebcdb64d0910af1c1fc7b0bf0ae" title="keyboard_handler" alt="" coords="171,56,295,83"/>
+<area shape="rect" id="node5" href="$group__interrupt.html#ga901b6a6215a5f9152950435e221ceb01" title="(Internal function, do not use) Clears assigned callback" alt="" coords="344,5,477,32"/>
+<area shape="rect" id="node9" href="$group__kbc.html#ga52a7ce44125208dfa303e597e6302a71" title="Reads byte to keyboard." alt="" coords="373,56,448,83"/>
+<area shape="rect" id="node11" href="$group__interrupt.html#ga7ed855ada1474b14465e984db8004ef7" title="Stop handling interrupts." alt="" coords="352,107,469,133"/>
+</map>

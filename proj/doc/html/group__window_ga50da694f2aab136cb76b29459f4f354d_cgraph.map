@@ -1,0 +1,5 @@
+<map id="window_uninstall_mouse" name="window_uninstall_mouse">
+<area shape="rect" id="node3" href="$group__interrupt.html#ga55b1d9744d5a5f7e7445dc8b5db1f62b" title="Unsubscribes a system interrupt." alt="" coords="219,5,333,32"/>
+<area shape="rect" id="node7" href="$group__mouse.html#ga35dc9f62be9d7d238bd18baa033fd597" title="Read byte from mouse." alt="" coords="229,56,323,83"/>
+<area shape="rect" id="node5" href="$group__interrupt.html#ga901b6a6215a5f9152950435e221ceb01" title="(Internal function, do not use) Clears assigned callback" alt="" coords="381,5,515,32"/>
+</map>

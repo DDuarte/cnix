@@ -1,0 +1,16 @@
+<map id="_vg_draw_absolute_line" name="_vg_draw_absolute_line">
+<area shape="rect" id="node3" href="$group__video__gr.html#ga4098656945b01a92ffbb8e2e245e275e" title="Draw line segment with specifed end points and color." alt="" coords="219,206,314,233"/>
+<area shape="rect" id="node29" href="$group__video__gr.html#ga6cd8b593904d79878e097215d115eceb" title="Draw circle with the specifed center point, radius and line color." alt="" coords="213,54,320,81"/>
+<area shape="rect" id="node5" href="$tab_8c.html#a5794148a84fef6a79ac54c0c4e5a3c0b" title="tab_draw_text" alt="" coords="374,333,477,360"/>
+<area shape="rect" id="node15" href="$window_8c.html#ab0c17a499aae322a132aec5556f5658a" title="open_btn_draw" alt="" coords="371,181,480,208"/>
+<area shape="rect" id="node20" href="$window_8c.html#a00f492da3428c7f898ddf0fe1176b856" title="make_btn_draw" alt="" coords="369,232,482,258"/>
+<area shape="rect" id="node23" href="$window_8c.html#a50ffe5de2dd9e6eb924331dd9229494a" title="run_btn_draw" alt="" coords="376,282,475,309"/>
+<area shape="rect" id="node26" href="$window_8c.html#a641cdacc9f6abfe7706ef8242812b9cd" title="close_btn_draw" alt="" coords="369,130,481,157"/>
+<area shape="rect" id="node7" href="$group__tab.html#ga3602a64b3cb3808621920f9cf12308a4" title="Draw tab to screen." alt="" coords="537,257,612,284"/>
+<area shape="rect" id="node9" href="$group__window.html#gaac0270c2bc86b0fab8572aa784636549" title="Function called to draw window and all its &quot;children&quot; elements (tabs, buttons, etc)" alt="" coords="667,206,765,233"/>
+<area shape="rect" id="node11" href="$cnix_8c.html#aa9c1f035c82a93594d9838ea8ceae094" title="timer_handler" alt="" coords="814,206,914,233"/>
+<area shape="rect" id="node13" href="$cnix_8c.html#abf9e6b7e6f15df4b525a2e7705ba3089" title="main" alt="" coords="963,181,1013,208"/>
+<area shape="rect" id="node17" href="$group__window.html#gad605925d100847b069d261d7f69b4d0a" title="Initializes a window." alt="" coords="531,156,619,182"/>
+<area shape="rect" id="node32" href="$window_8c.html#afdecf2e91f9cc12e5dc4463fd50f8e39" title="new_btn_draw" alt="" coords="373,29,477,56"/>
+<area shape="rect" id="node35" href="$window_8c.html#a025d4d23fc374a08b65ac5f87164dfeb" title="save_btn_draw" alt="" coords="372,80,479,106"/>
+</map>

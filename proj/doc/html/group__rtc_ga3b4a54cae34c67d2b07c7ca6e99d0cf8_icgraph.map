@@ -1,0 +1,6 @@
+<map id="rtc_wait_valid" name="rtc_wait_valid">
+<area shape="rect" id="node3" href="$group__rtc.html#ga634061cbf87acc0a1cb6515035d64c7b" title="Returns string representation of date and time from RTC." alt="" coords="153,5,247,32"/>
+<area shape="rect" id="node5" href="$group__window.html#ga69fb99e8de59bdbacfb1de0b46649b14" title="Updates window and all its &quot;children&quot; elements (tabs, buttons, etc)" alt="" coords="297,5,407,32"/>
+<area shape="rect" id="node7" href="$cnix_8c.html#aa9c1f035c82a93594d9838ea8ceae094" title="timer_handler" alt="" coords="457,5,557,32"/>
+<area shape="rect" id="node9" href="$cnix_8c.html#abf9e6b7e6f15df4b525a2e7705ba3089" title="main" alt="" coords="605,5,656,32"/>
+</map>

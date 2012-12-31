@@ -1,0 +1,22 @@
+<map id="vector_size" name="vector_size">
+<area shape="rect" id="node3" href="$group__tab.html#ga3742c04b7b83fcee6a89c23a398885cb" title="Remove tab." alt="" coords="168,5,259,32"/>
+<area shape="rect" id="node11" href="$group__tab.html#ga2ec91ba4d969945404a5cde2de245b45" title="Tab filled with contents of file." alt="" coords="333,411,472,437"/>
+<area shape="rect" id="node18" href="$group__tab.html#gaaf2425cbe541677aa765cdb5d2589717" title="Gets tab content and returns it as a string." alt="" coords="545,460,626,487"/>
+<area shape="rect" id="node21" href="$tab_8c.html#a5794148a84fef6a79ac54c0c4e5a3c0b" title="tab_draw_text" alt="" coords="351,56,454,83"/>
+<area shape="rect" id="node28" href="$group__tab.html#gad0c861e19c2767d14e6e42d2e08f80b8" title="Adds a character to tab." alt="" coords="163,411,263,437"/>
+<area shape="rect" id="node31" href="$group__tab.html#gaa86587646ff0fef58be4b60993a0ba5c" title="A key has been pressed while tab was active." alt="" coords="349,284,456,311"/>
+<area shape="rect" id="node36" href="$group__tab.html#ga0e365320092224c8054821ff2e18052f" title="Removes a character from tab." alt="" coords="153,107,273,133"/>
+<area shape="rect" id="node39" href="$group__tab.html#gaf028b51aca95129243487cb699201212" title="Removes all characters from tab." alt="" coords="159,563,267,589"/>
+<area shape="rect" id="node42" href="$group__tab.html#ga2ccd9a29bea54b870a9f0b4f26160115" title="Advances cursor column (with limits)" alt="" coords="142,157,285,184"/>
+<area shape="rect" id="node45" href="$group__tab.html#ga0601da6933ec63427f0b7924c6df8d9d" title="Retreats cursor column (with limits)" alt="" coords="147,208,280,235"/>
+<area shape="rect" id="node48" href="$group__tab.html#gac17c67228dfcda1b12ed8cc31523d4a4" title="Advances cursor line (with limits)" alt="" coords="153,259,274,285"/>
+<area shape="rect" id="node51" href="$group__tab.html#ga80257379dbd89c2c8822dd827c490075" title="Retreats cursor line (with limits)" alt="" coords="158,309,269,336"/>
+<area shape="rect" id="node5" href="$group__window.html#gaa072ae013c999ef6b1eb8d44c9eda573" title="De&#45;allocates whatever the window required." alt="" coords="345,5,460,32"/>
+<area shape="rect" id="node7" href="$cnix_8c.html#ad7f085309ae89de98d2f3755d6b00d6a" title="exit_cleanup" alt="" coords="707,5,802,32"/>
+<area shape="rect" id="node9" href="$cnix_8c.html#abf9e6b7e6f15df4b525a2e7705ba3089" title="main" alt="" coords="1008,31,1059,57"/>
+<area shape="rect" id="node13" href="$group__window.html#ga69fb99e8de59bdbacfb1de0b46649b14" title="Updates window and all its &quot;children&quot; elements (tabs, buttons, etc)" alt="" coords="699,335,810,361"/>
+<area shape="rect" id="node15" href="$cnix_8c.html#aa9c1f035c82a93594d9838ea8ceae094" title="timer_handler" alt="" coords="859,56,959,83"/>
+<area shape="rect" id="node23" href="$group__tab.html#ga3602a64b3cb3808621920f9cf12308a4" title="Draw tab to screen." alt="" coords="548,56,623,83"/>
+<area shape="rect" id="node25" href="$group__window.html#gaac0270c2bc86b0fab8572aa784636549" title="Function called to draw window and all its &quot;children&quot; elements (tabs, buttons, etc)" alt="" coords="705,56,804,83"/>
+<area shape="rect" id="node33" href="$group__window.html#gacd8cd4c2fe8e78e21480301dcb996df1" title="Key has been pressed." alt="" coords="520,296,651,323"/>
+</map>

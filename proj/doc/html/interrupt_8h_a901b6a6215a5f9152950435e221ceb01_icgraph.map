@@ -1,0 +1,15 @@
+<map id="_int_reset_interrupt" name="_int_reset_interrupt">
+<area shape="rect" id="node3" href="$interrupt_8h.html#a1592f65afa0bb6874910f1fd1d13e0a7" title="int_init" alt="" coords="214,5,274,32"/>
+<area shape="rect" id="node9" href="$interrupt_8h.html#aa7d0a67308b719e7a96ce07825f16132" title="int_subscribe" alt="" coords="195,81,293,108"/>
+<area shape="rect" id="node20" href="$interrupt_8h.html#a55b1d9744d5a5f7e7445dc8b5db1f62b" title="int_unsubscribe" alt="" coords="187,208,301,235"/>
+<area shape="rect" id="node5" href="$window_8h.html#ad605925d100847b069d261d7f69b4d0a" title="window_init" alt="" coords="576,56,664,83"/>
+<area shape="rect" id="node7" href="$cnix_8c.html#abf9e6b7e6f15df4b525a2e7705ba3089" title="main" alt="" coords="869,132,920,159"/>
+<area shape="rect" id="node11" href="$keyboard_8h.html#ac734f92550b667d9fe9b2968fa0e183e" title="keyboard_install" alt="" coords="374,31,490,57"/>
+<area shape="rect" id="node14" href="$group__timer.html#ga71ddf87fa03216fa6b22044aa2b7885e" title="Subscribes and enables Timer 0 interrupts." alt="" coords="736,132,811,159"/>
+<area shape="rect" id="node17" href="$window_8h.html#a984bfdd6079a744c49e6d5c48fcaf6f4" title="window_install_mouse" alt="" coords="357,81,507,108"/>
+<area shape="rect" id="node22" href="$keyboard_8h.html#a549c651b674392e78482a4104736c171" title="keyboard_destroy" alt="" coords="369,183,495,209"/>
+<area shape="rect" id="node29" href="$group__timer.html#gaf1a740b5f3dbd50a13a9562dad01a8cc" title="Unsubscribes Timer 0 interrupts." alt="" coords="376,233,488,260"/>
+<area shape="rect" id="node31" href="$window_8h.html#a50da694f2aab136cb76b29459f4f354d" title="window_uninstall_mouse" alt="" coords="349,284,515,311"/>
+<area shape="rect" id="node24" href="$window_8h.html#aa072ae013c999ef6b1eb8d44c9eda573" title="window_destroy" alt="" coords="563,183,677,209"/>
+<area shape="rect" id="node26" href="$cnix_8c.html#ad7f085309ae89de98d2f3755d6b00d6a" title="exit_cleanup" alt="" coords="726,183,821,209"/>
+</map>

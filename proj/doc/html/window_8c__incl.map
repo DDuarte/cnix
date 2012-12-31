@@ -1,0 +1,16 @@
+<map id="window.c" name="window.c">
+<area shape="rect" id="node3" href="$window_8h.html" title="window.h" alt="" coords="211,155,285,181"/>
+<area shape="rect" id="node5" href="$tab_8h.html" title="tab.h" alt="" coords="220,229,271,256"/>
+<area shape="rect" id="node7" href="$keyboard_8h.html" title="keyboard.h" alt="" coords="301,304,387,331"/>
+<area shape="rect" id="node9" href="$utilities_8h.html" title="utilities.h" alt="" coords="348,379,423,405"/>
+<area shape="rect" id="node15" href="$cnix_8h.html" title="cnix.h" alt="" coords="135,80,192,107"/>
+<area shape="rect" id="node18" href="$video__gr_8h.html" title="video_gr.h" alt="" coords="751,80,831,107"/>
+<area shape="rect" id="node22" href="$interrupt_8h.html" title="interrupt.h" alt="" coords="463,80,543,107"/>
+<area shape="rect" id="node24" href="$timer_8h.html" title="timer.h" alt="" coords="567,80,629,107"/>
+<area shape="rect" id="node26" href="$mouse_8h.html" title="mouse.h" alt="" coords="655,80,727,107"/>
+<area shape="rect" id="node28" href="$kbc_8h.html" title="kbc.h" alt="" coords="5,155,59,181"/>
+<area shape="rect" id="node34" href="$button_8h.html" title="button.h" alt="" coords="217,80,287,107"/>
+<area shape="rect" id="node37" href="$rtc_8h.html" title="rtc.h" alt="" coords="905,80,953,107"/>
+<area shape="rect" id="node39" href="$file_8h.html" title="file.h" alt="" coords="935,229,984,256"/>
+<area shape="rect" id="node13" href="$vector_8h.html" title="vector.h" alt="" coords="209,304,276,331"/>
+</map>

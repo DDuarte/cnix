@@ -1,0 +1,6 @@
+<map id="tab_key_press" name="tab_key_press">
+<area shape="rect" id="node3" href="$window_8h.html#acd8cd4c2fe8e78e21480301dcb996df1" title="window_key_press" alt="" coords="160,5,291,32"/>
+<area shape="rect" id="node5" href="$window_8h.html#a69fb99e8de59bdbacfb1de0b46649b14" title="window_update" alt="" coords="339,5,450,32"/>
+<area shape="rect" id="node7" href="$cnix_8c.html#aa9c1f035c82a93594d9838ea8ceae094" title="timer_handler" alt="" coords="499,5,599,32"/>
+<area shape="rect" id="node9" href="$cnix_8c.html#abf9e6b7e6f15df4b525a2e7705ba3089" title="main" alt="" coords="648,5,699,32"/>
+</map>

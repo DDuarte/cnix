@@ -1,0 +1,12 @@
+<map id="window_destroy" name="window_destroy">
+<area shape="rect" id="node3" href="$group__window.html#ga50da694f2aab136cb76b29459f4f354d" title="Unnistalls mouse." alt="" coords="168,56,333,83"/>
+<area shape="rect" id="node11" href="$group__keyboard.html#ga549c651b674392e78482a4104736c171" title="Unsubscribe keyboard." alt="" coords="188,5,313,32"/>
+<area shape="rect" id="node14" href="$group__tab.html#ga3742c04b7b83fcee6a89c23a398885cb" title="Remove tab." alt="" coords="205,107,296,133"/>
+<area shape="rect" id="node22" href="$group__video__gr.html#ga42f593e6656f1a978315aff02b1bcebf" title="Returns to default Minix 3 text mode (0x03: 25 x 80, 16 colors)" alt="" coords="219,157,282,184"/>
+<area shape="rect" id="node5" href="$group__interrupt.html#ga55b1d9744d5a5f7e7445dc8b5db1f62b" title="Unsubscribes a system interrupt." alt="" coords="382,5,495,32"/>
+<area shape="rect" id="node9" href="$group__mouse.html#ga35dc9f62be9d7d238bd18baa033fd597" title="Read byte from mouse." alt="" coords="392,56,485,83"/>
+<area shape="rect" id="node7" href="$group__interrupt.html#ga901b6a6215a5f9152950435e221ceb01" title="(Internal function, do not use) Clears assigned callback" alt="" coords="544,5,677,32"/>
+<area shape="rect" id="node16" href="$group__vector.html#gaa6a1e26e7d26552925e2981d4b3d2499" title="Size of vector." alt="" coords="395,107,482,133"/>
+<area shape="rect" id="node18" href="$group__vector.html#ga75ffb2ad4233613bd0c97d40b1c68611" title="Element at position index." alt="" coords="398,157,479,184"/>
+<area shape="rect" id="node20" href="$group__vector.html#ga04ca0e01713a6dd658ea2a9af0c655b2" title="Delete vector." alt="" coords="397,208,481,235"/>
+</map>

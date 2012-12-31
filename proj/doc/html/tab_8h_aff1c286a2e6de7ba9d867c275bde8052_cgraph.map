@@ -1,0 +1,8 @@
+<map id="char_draw" name="char_draw">
+<area shape="rect" id="node3" href="$group__video__gr.html#gad3439d86d3ef66d8d7afef60ab840146" title="vg_draw_char" alt="" coords="137,56,237,83"/>
+<area shape="rect" id="node5" href="$group__video__gr.html#ga760084051b88452ebc9fad789c8a2cd4" title="vg_ft_draw_bitmap" alt="" coords="285,56,413,83"/>
+<area shape="rect" id="node7" href="$group__video__gr.html#ga3b11ae0b3f40967835458423942e334b" title="Sets input pixel with input color." alt="" coords="461,56,555,83"/>
+<area shape="rect" id="node9" href="$group__video__gr.html#ga407d2bebb5960e308ff7114142ed22e5" title="vg_scale_x" alt="" coords="638,5,725,32"/>
+<area shape="rect" id="node11" href="$group__video__gr.html#gaeea403b6eab6cae98efc1dd52ec1a993" title="vg_scale_y" alt="" coords="638,56,725,83"/>
+<area shape="rect" id="node13" href="$video__gr_8c.html#adfeba900ab1ada58c92bef25f22ae368" title="_vg_set_absolute_pixel" alt="" coords="603,107,759,133"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="tab_remove_all" name="tab_remove_all">
+<area shape="rect" id="node3" href="$group__tab.html#gaa86587646ff0fef58be4b60993a0ba5c" title="A key has been pressed while tab was active." alt="" coords="163,5,269,32"/>
+<area shape="rect" id="node5" href="$group__window.html#gacd8cd4c2fe8e78e21480301dcb996df1" title="Key has been pressed." alt="" coords="317,5,448,32"/>
+<area shape="rect" id="node7" href="$group__window.html#ga69fb99e8de59bdbacfb1de0b46649b14" title="Updates window and all its &quot;children&quot; elements (tabs, buttons, etc)" alt="" coords="497,5,607,32"/>
+<area shape="rect" id="node9" href="$cnix_8c.html#aa9c1f035c82a93594d9838ea8ceae094" title="timer_handler" alt="" coords="657,5,757,32"/>
+<area shape="rect" id="node11" href="$cnix_8c.html#abf9e6b7e6f15df4b525a2e7705ba3089" title="main" alt="" coords="805,5,856,32"/>
+</map>

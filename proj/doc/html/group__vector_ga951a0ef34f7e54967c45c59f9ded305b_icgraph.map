@@ -1,0 +1,11 @@
+<map id="vector_erase" name="vector_erase">
+<area shape="rect" id="node3" href="$group__tab.html#gad0c861e19c2767d14e6e42d2e08f80b8" title="Adds a character to tab." alt="" coords="159,5,259,32"/>
+<area shape="rect" id="node18" href="$group__tab.html#ga0e365320092224c8054821ff2e18052f" title="Removes a character from tab." alt="" coords="149,56,269,83"/>
+<area shape="rect" id="node21" href="$group__tab.html#gaf028b51aca95129243487cb699201212" title="Removes all characters from tab." alt="" coords="155,107,263,133"/>
+<area shape="rect" id="node5" href="$group__tab.html#ga2ec91ba4d969945404a5cde2de245b45" title="Tab filled with contents of file." alt="" coords="472,5,611,32"/>
+<area shape="rect" id="node13" href="$group__tab.html#gaa86587646ff0fef58be4b60993a0ba5c" title="A key has been pressed while tab was active." alt="" coords="317,56,424,83"/>
+<area shape="rect" id="node7" href="$group__window.html#ga69fb99e8de59bdbacfb1de0b46649b14" title="Updates window and all its &quot;children&quot; elements (tabs, buttons, etc)" alt="" coords="659,31,770,57"/>
+<area shape="rect" id="node9" href="$cnix_8c.html#aa9c1f035c82a93594d9838ea8ceae094" title="timer_handler" alt="" coords="819,31,919,57"/>
+<area shape="rect" id="node11" href="$cnix_8c.html#abf9e6b7e6f15df4b525a2e7705ba3089" title="main" alt="" coords="968,31,1019,57"/>
+<area shape="rect" id="node15" href="$group__window.html#gacd8cd4c2fe8e78e21480301dcb996df1" title="Key has been pressed." alt="" coords="476,56,607,83"/>
+</map>

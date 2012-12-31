@@ -1,0 +1,12 @@
+<map id="tab_create_from_file" name="tab_create_from_file">
+<area shape="rect" id="node3" href="$group__tab.html#gaaf84d60061510013ace5ad84c3b3827d" title="Creates empty tab." alt="" coords="201,19,284,45"/>
+<area shape="rect" id="node7" href="$group__tab.html#gad0c861e19c2767d14e6e42d2e08f80b8" title="Adds a character to tab." alt="" coords="193,157,293,184"/>
+<area shape="rect" id="node9" href="$group__vector.html#gaa6a1e26e7d26552925e2981d4b3d2499" title="Size of vector." alt="" coords="366,56,453,83"/>
+<area shape="rect" id="node14" href="$group__vector.html#ga75ffb2ad4233613bd0c97d40b1c68611" title="Element at position index." alt="" coords="369,360,450,387"/>
+<area shape="rect" id="node5" href="$group__vector.html#ga4c767de193ea3674ab101c805d098f0d" title="Create new vector." alt="" coords="366,5,453,32"/>
+<area shape="rect" id="node12" href="$group__vector.html#ga0d36e1e11d647504f35299974f222766" title="Adds element to back of vector." alt="" coords="346,309,473,336"/>
+<area shape="rect" id="node16" href="$group__vector.html#ga951a0ef34f7e54967c45c59f9ded305b" title="Removes element at position index." alt="" coords="362,107,457,133"/>
+<area shape="rect" id="node18" href="$group__vector.html#ga27a3e8cd2e23332b340ba1e89fa1ea57" title="Adds element at position index." alt="" coords="362,157,457,184"/>
+<area shape="rect" id="node20" href="$group__tab.html#ga411f75cac87c42545626dffb8a6e7119" title="Creates a char_screen." alt="" coords="341,208,477,235"/>
+<area shape="rect" id="node22" href="$group__video__gr.html#ga352cdbc0a4a6290ccaa84b28c4428010" title="Converts a RGB color to the color supported by VBE." alt="" coords="362,259,457,285"/>
+</map>

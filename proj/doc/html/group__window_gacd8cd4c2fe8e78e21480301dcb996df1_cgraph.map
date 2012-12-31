@@ -1,0 +1,21 @@
+<map id="window_key_press" name="window_key_press">
+<area shape="rect" id="node3" href="$window_8c.html#af251e06a5e8fb2c157c93b4c00f2c529" title="window_set_tab" alt="" coords="184,183,299,209"/>
+<area shape="rect" id="node7" href="$group__tab.html#gaa86587646ff0fef58be4b60993a0ba5c" title="A key has been pressed while tab was active." alt="" coords="188,335,295,361"/>
+<area shape="rect" id="node5" href="$group__window.html#ga599f76484bcb17c622dbb276690e4f0d" title="Changes log message, printf style." alt="" coords="347,107,520,133"/>
+<area shape="rect" id="node9" href="$group__tab.html#ga80257379dbd89c2c8822dd827c490075" title="Retreats cursor line (with limits)" alt="" coords="378,360,489,387"/>
+<area shape="rect" id="node11" href="$group__vector.html#gaa6a1e26e7d26552925e2981d4b3d2499" title="Size of vector." alt="" coords="593,411,679,437"/>
+<area shape="rect" id="node13" href="$group__vector.html#ga75ffb2ad4233613bd0c97d40b1c68611" title="Element at position index." alt="" coords="595,360,677,387"/>
+<area shape="rect" id="node15" href="$group__tab.html#gac17c67228dfcda1b12ed8cc31523d4a4" title="Advances cursor line (with limits)" alt="" coords="373,411,494,437"/>
+<area shape="rect" id="node19" href="$group__tab.html#ga0601da6933ec63427f0b7924c6df8d9d" title="Retreats cursor column (with limits)" alt="" coords="367,461,500,488"/>
+<area shape="rect" id="node23" href="$group__tab.html#ga2ccd9a29bea54b870a9f0b4f26160115" title="Advances cursor column (with limits)" alt="" coords="362,512,505,539"/>
+<area shape="rect" id="node27" href="$group__tab.html#gad0c861e19c2767d14e6e42d2e08f80b8" title="Adds a character to tab." alt="" coords="383,157,483,184"/>
+<area shape="rect" id="node43" href="$group__tab.html#ga0e365320092224c8054821ff2e18052f" title="Removes a character from tab." alt="" coords="373,208,493,235"/>
+<area shape="rect" id="node53" href="$group__keyboard.html#ga7268a0d7e8eb37d7326cba832ec0d4a8" title="Converts a key into a char." alt="" coords="387,259,480,285"/>
+<area shape="rect" id="node30" href="$group__vector.html#ga4c767de193ea3674ab101c805d098f0d" title="Create new vector." alt="" coords="593,157,679,184"/>
+<area shape="rect" id="node32" href="$group__vector.html#ga0d36e1e11d647504f35299974f222766" title="Adds element to back of vector." alt="" coords="573,208,699,235"/>
+<area shape="rect" id="node35" href="$group__vector.html#ga951a0ef34f7e54967c45c59f9ded305b" title="Removes element at position index." alt="" coords="589,259,683,285"/>
+<area shape="rect" id="node37" href="$group__vector.html#ga27a3e8cd2e23332b340ba1e89fa1ea57" title="Adds element at position index." alt="" coords="589,5,683,32"/>
+<area shape="rect" id="node39" href="$group__tab.html#ga411f75cac87c42545626dffb8a6e7119" title="Creates a char_screen." alt="" coords="568,56,704,83"/>
+<area shape="rect" id="node41" href="$group__video__gr.html#ga352cdbc0a4a6290ccaa84b28c4428010" title="Converts a RGB color to the color supported by VBE." alt="" coords="589,107,683,133"/>
+<area shape="rect" id="node49" href="$group__vector.html#ga04ca0e01713a6dd658ea2a9af0c655b2" title="Delete vector." alt="" coords="594,309,678,336"/>
+</map>

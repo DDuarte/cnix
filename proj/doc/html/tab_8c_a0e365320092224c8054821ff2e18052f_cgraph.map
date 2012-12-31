@@ -1,0 +1,7 @@
+<map id="tab_remove_char" name="tab_remove_char">
+<area shape="rect" id="node3" href="$vector_8c.html#a75ffb2ad4233613bd0c97d40b1c68611" title="vector_get" alt="" coords="197,5,278,32"/>
+<area shape="rect" id="node5" href="$vector_8c.html#aa6a1e26e7d26552925e2981d4b3d2499" title="vector_size" alt="" coords="194,56,281,83"/>
+<area shape="rect" id="node7" href="$vector_8c.html#a951a0ef34f7e54967c45c59f9ded305b" title="vector_erase" alt="" coords="190,107,285,133"/>
+<area shape="rect" id="node9" href="$vector_8c.html#a0d36e1e11d647504f35299974f222766" title="vector_push_back" alt="" coords="174,157,301,184"/>
+<area shape="rect" id="node11" href="$vector_8c.html#a04ca0e01713a6dd658ea2a9af0c655b2" title="vector_free" alt="" coords="195,208,279,235"/>
+</map>

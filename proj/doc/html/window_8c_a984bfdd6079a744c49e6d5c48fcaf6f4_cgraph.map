@@ -1,0 +1,9 @@
+<map id="window_install_mouse" name="window_install_mouse">
+<area shape="rect" id="node3" href="$mouse_8c.html#a27eefbf4822f7b30cdb554f0e0085a43" title="mouse_enable_stream_mode" alt="" coords="205,5,397,32"/>
+<area shape="rect" id="node11" href="$group__interrupt.html#gaa7d0a67308b719e7a96ce07825f16132" title="Subscribes a system interrupt." alt="" coords="252,107,351,133"/>
+<area shape="rect" id="node15" href="$window_8c.html#a4ed1f2b1f18bc37dcb86889177cf7512" title="mouseCallback" alt="" coords="246,56,357,83"/>
+<area shape="rect" id="node5" href="$mouse_8c.html#a97b9b5bcd9b0986fe518bef6c303d58b" title="mouse_write" alt="" coords="465,5,559,32"/>
+<area shape="rect" id="node9" href="$mouse_8c.html#a35dc9f62be9d7d238bd18baa033fd597" title="mouse_read" alt="" coords="465,56,559,83"/>
+<area shape="rect" id="node7" href="$group__kbc.html#ga95d6e1f5fed116286e1052147e7c0ee3" title="Writes byte to keyboard." alt="" coords="627,5,704,32"/>
+<area shape="rect" id="node13" href="$group__interrupt.html#ga901b6a6215a5f9152950435e221ceb01" title="(Internal function, do not use) Clears assigned callback" alt="" coords="445,107,579,133"/>
+</map>
