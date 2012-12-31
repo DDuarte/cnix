@@ -5,7 +5,7 @@
 
 #define KEY_PRESS(x) (x)
 #define KEY_RELEASE(x) (0x80 | (x))
-
+#define VALID_KEY(KEY) (((KEY) > 0 && (KEY) <= KEY_F12) || ((KEY) >= KEY_NUM_ENTER && (KEY) <= KEY_END))
 typedef enum {
     KEY_NONE         = 0x0000,
     KEY_ESC          = 0x0001,
