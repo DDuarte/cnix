@@ -2,8 +2,16 @@
 #define WINDOW_H
 
 #define TAB_COUNT 12
-
+#define TAB_CONSOLE TAB_COUNT - 1
 #include "tab.h"
+
+typedef enum {
+    WIN_STATE_NORMAL,
+    WIN_STATE_OPEN_ASK_NAME,
+    WIN_STATE_SAVE_ASK_NAME,
+    WIN_STATE_OPEN_FILE,
+    WIN_STATE_SAVE_FILE
+} window_state_t;
 
 typedef struct {
     char* title; /* window title bar */
@@ -19,12 +27,17 @@ typedef struct {
     int mouse_x;
     int mouse_y;
 
+    int prev_current_tab;
     int current_tab;
     tab_t* tabs[TAB_COUNT];
 
     char* date;
-
+    
+    window_state_t state;
+    
 } window_t;
+
+
 
 int window_init(window_t* window);
 int window_destroy(window_t* window);
