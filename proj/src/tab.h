@@ -53,6 +53,7 @@ int tab_key_press(tab_t* tab, KEY key); ///< A key has been pressed while tab wa
 int tab_mouse_press(tab_t* tab, unsigned long x, unsigned long y); ///< Mouse has been pressed while tab was active
 
 int tab_add_char(tab_t* tab, char character); ///< Adds a character to tab
+int tab_printf(tab_t* tab, char* format, ...); ///< Prints the message to the end of the tab
 int tab_remove_char(tab_t* tab); ///< Removes a character from tab
 int tab_remove_all(tab_t* tab); ///< Removes all characters from tab
 

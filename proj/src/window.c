@@ -244,6 +244,8 @@ int window_update(window_t* window) { LOG
             switch (window->state) {
                 case WIN_STATE_OPEN_ASK_NAME: {
                     if (window->current_tab != TAB_CONSOLE) {
+                        window_set_log_message(window, "Open: Cancelled");
+                        window_set_previous_tab(window);
                         window->state = WIN_STATE_NORMAL;
                     }
                     else if (last_key_pressed == KEY_ENTER || last_key_pressed == KEY_NUM_ENTER) {
@@ -261,36 +263,80 @@ int window_update(window_t* window) { LOG
                         }
 
                         if (i >= (TAB_COUNT - 1)) {
-                            printf("Open: No tabs available to open file!");
+                            window_set_log_message(window, "Open: No tabs available to open file!");
+                            window_set_previous_tab(window);
                             window->state = WIN_STATE_NORMAL;
                             break;
                         }
 
                         if (!File_Load(fileName, &fileBuffer, &size)) {
+                            window_set_log_message(window, "Open: Error loading file %s", fileName);
+                            window_set_previous_tab(window);
                             window->state = WIN_STATE_NORMAL;
                             break;
                         }
 
                         window->tabs[i] = tab_create_from_file(fileName, fileBuffer);
+                        if (window->tabs[i]) {
+                            window_set_log_message(window, "Open: File loaded with success");
+                        }
+                        window_set_tab(window, i);
                         window->state = WIN_STATE_NORMAL;
                     }
                     break;
                 }
                 case WIN_STATE_SAVE_ASK_NAME: {
                     if (window->current_tab != TAB_CONSOLE) {
+                        window_set_log_message(window, "Save: Cancelled");
+                        window_set_previous_tab(window);
                         window->state = WIN_STATE_NORMAL;
                     } else if (last_key_pressed == KEY_ENTER || last_key_pressed == KEY_NUM_ENTER) {
                         char* fileName = tab_to_file(window->tabs[TAB_CONSOLE]);
                         char* fileBuffer = tab_to_file(window->tabs[window->prev_current_tab]);
 
                         if (strlen(fileName) != 0) {
-                            File_Save(fileName, fileBuffer, strlen(fileBuffer));
+                            if (File_Save(fileName, fileBuffer, strlen(fileBuffer))) {
+                                window_set_log_message(window, "Save: File saved with success");
+                                tab_remove_all(window->tabs[TAB_CONSOLE]);
+                                window_set_previous_tab(window);
+                                if ((strcmp(window->tabs[window->current_tab]->file_name, fileName) != 0) && (strlen(window->tabs[window->current_tab]->file_name) != strlen(fileName))) {
+                                    tab_destroy(window->tabs[window->current_tab]);
+                                    window->tabs[window->current_tab] = tab_create_from_file(fileName, fileBuffer);
+                                }
+                            } else {
+                                window_set_log_message(window, "Save: Error saving file");
+                            }
+                        } else {
+                            window_set_log_message(window, "Save: Invalid File name. Save cancelled");
+                            window_set_previous_tab(window);
                         }
                         window->state = WIN_STATE_NORMAL;
                     }
                     break;
                 }
-                default: break;
+                default: {
+                    if (window->current_tab == TAB_CONSOLE && (last_key_pressed == KEY_ENTER || last_key_pressed == KEY_NUM_ENTER)) {
+                        char* command = tab_to_file(window->tabs[TAB_CONSOLE]);
+                        if (!command) break;
+                        int size = strlen(command);
+                        if (size == 0) break;
+                        
+                        if ((size == 3) && (strcmp("new", command) == 0)) {
+                            new_btn_click(new_btn);
+                            tab_remove_all(window->tabs[TAB_CONSOLE]);
+                        }
+                        else if ((size == 4) && (strcmp("save", command) == 0)) {
+                            window_set_previous_tab(window);
+                            save_btn_click(save_btn);
+                        }
+                        else if ((size == 4) && (strcmp("open", command) == 0)) {
+                            open_btn_click(open_btn);
+                        } else {
+                            window_set_log_message(window, "Invalid Command.");
+                        }
+                    }
+                    break;
+                }
             }
 
             previous_key = last_key_pressed;
@@ -682,6 +728,10 @@ void new_btn_click(button_t* btn) { LOG
     
     if (*tab) {
         window_set_log_message(window, "New: Tab created with success");
+        window_set_tab(window, i);
+    } else {
+        window_set_log_message(window, "New: Error creating tab created with success");
+        tab_destroy(*tab);
     }
 }
 
@@ -689,18 +739,20 @@ void open_btn_click(button_t* btn) { LOG
     window_t* window = btn->wnd;
     if (window->state == WIN_STATE_NORMAL) {
         window_set_tab(window, TAB_CONSOLE);
-        /* Empty console */
+        tab_remove_all(window->tabs[TAB_CONSOLE]);
         window->state = WIN_STATE_OPEN_ASK_NAME;
+        window_set_log_message(window, "Open: Write file path in the console and press enter.");
     }
 }
 
 void save_btn_click(button_t* btn) { LOG
     window_t* window = btn->wnd;
     if (window->state == WIN_STATE_NORMAL) {
+        tab_remove_all(window->tabs[TAB_CONSOLE]);
+        tab_printf(window->tabs[TAB_CONSOLE], window->tabs[window->current_tab]->file_name);
         window_set_tab(window, TAB_CONSOLE);
-        /* Empty console */
-        /* Write current tab name to console */
         window->state = WIN_STATE_SAVE_ASK_NAME;
+        window_set_log_message(window, "Save: Write file path in the console and press enter.");
     }
 }
 

@@ -279,6 +279,9 @@ int tab_remove_all(tab_t* tab) { LOG
         vector_erase(&tab->lines, 0);
     }
 
+    tab->current_line = 0;
+    tab->current_column = 0;
+
     return 0;
 }
 
@@ -326,6 +329,12 @@ int tab_key_press(tab_t* tab, KEY key) { LOG
                 tab_remove_char(tab);
             }
             break;
+        case KEY_TAB: {
+            int i;
+            for (i = 0; i < 4; ++i)
+                tab_add_char(tab, ' ');
+            break;
+        }
         default: {
             if (key <= 0 || key > LAST_KEY)
                 return 1;
@@ -415,5 +424,19 @@ int tab_rewind_line(tab_t* tab) {
 int tab_mouse_press(tab_t* tab, unsigned long x, unsigned long y) { LOG
     // TODO: calculate current_column and current_line based on x and y
     // TODO: if dragging mouse do text selection (possibly)
+    return 0;
+}
+
+int tab_printf(tab_t* tab, char* format, ...) {
+
+    char buffer[256];
+    va_list args;
+    va_start(args, format);
+    vsprintf(buffer, format, args);
+
+    int i;
+    for (i = 0; buffer[i]; ++i)
+        tab_add_char(tab, buffer[i]);
+
     return 0;
 }
