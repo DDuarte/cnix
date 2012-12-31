@@ -89,7 +89,7 @@ void vector_erase(vector* v, int index) { LOG
 
     if (index != v->count -1) {
         int i;
-        for (i = index; i < v->count - 2; ++i)
+        for (i = index; i < v->count - 1; ++i)
             v->buffer[i] = v->buffer[i+1];
     }
     

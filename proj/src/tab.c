@@ -216,7 +216,7 @@ int tab_remove_char(tab_t* tab) { LOG
     int curr_line_size = vector_size(line);
 
     if (tab->current_column != 0) { // simply remove character
-        //free((char_screen*)vector_get(line, tab->current_column - 1));
+        free((char_screen*)vector_get(line, tab->current_column - 1));
         vector_erase(line, tab->current_column - 1);
         tab->current_column--;
     } else if (curr_line_size == 0) { // remove empty line
@@ -230,17 +230,17 @@ int tab_remove_char(tab_t* tab) { LOG
             char_screen* cs = vector_get(line, i);
             vector_push_back(above_line, cs);
         }
-
-        for (i = 0; i < curr_line_size; ++i) {
-            //free((char_screen*)vector_get(line, 0));
-            vector_erase(line, 0); // always remove first element
+        tab->current_column = vector_size(above_line) - i;
+        
+        for (i = curr_line_size - 1; i >= 0; --i) {
+            vector_erase(line, i); // always remove first element
         }
 
         vector_free(line);
         vector_erase(&tab->lines, tab->current_line);
 
         tab->current_line--;
-        tab->current_column = vector_size(above_line);
+        
     }
 
     return 0;
