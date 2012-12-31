@@ -55,10 +55,10 @@ int tab_destroy(tab_t* tab) { LOG
     int i, j;
     for (i = 0; i < vector_size(&tab->lines); ++i) {
         for (j = 0; j < vector_size(vector_get(&tab->lines, i)); ++j) {
-            free(vector_get(vector_get(&tab->lines, i), j));
+            //free(vector_get(vector_get(&tab->lines, i), j));
         }
         vector_free((vector*)vector_get(&tab->lines, i));
-        free(vector_get(&tab->lines, i));
+        //free(vector_get(&tab->lines, i));
     }
 
     vector_free(&tab->lines);
@@ -208,7 +208,7 @@ int tab_remove_char(tab_t* tab) { LOG
         vector_erase(line, tab->current_column - 1);
         tab->current_column--;
     } else if (curr_line_size == 0) { // remove empty line
-        //free((vector*)line);
+        vector_free(line);
         vector_erase(&tab->lines, tab->current_line);
         tab->current_line--;
     } else { // move current line to above and remove line
@@ -224,7 +224,7 @@ int tab_remove_char(tab_t* tab) { LOG
             vector_erase(line, 0); // always remove first element
         }
 
-        //free((vector*)line);
+        vector_free(line);
         vector_erase(&tab->lines, tab->current_line);
 
         tab->current_line--;
@@ -233,17 +233,24 @@ int tab_remove_char(tab_t* tab) { LOG
 
     return 0;
 }
+/*
+int tab_remove_all(tab_t* tab) {
+
+    int num_of_lines = vector_size(&tab->lines);
+
+
+}*/
 
 int tab_key_press(tab_t* tab, KEY key) { LOG
     if (key <= 0 && key >= LAST_KEY) {
         return 1;
     }
 
-    int last_column_this_line;
+    int size_of_column;
     if (!vector_size(&tab->lines))
-        last_column_this_line = 0;
+        size_of_column = 0;
     else
-        last_column_this_line = vector_size(vector_get(&tab->lines, tab->current_line));
+        size_of_column = vector_size(vector_get(&tab->lines, tab->current_line));
 
     switch (key) {
         case KEY_ARR_UP:
@@ -269,7 +276,7 @@ int tab_key_press(tab_t* tab, KEY key) { LOG
             tab->current_column = 0;
             break;
         case KEY_END:
-            tab->current_column = last_column_this_line;
+            tab->current_column = size_of_column;
             break;
         default: {
             char c = key_to_char(key);
@@ -279,10 +286,17 @@ int tab_key_press(tab_t* tab, KEY key) { LOG
         }
     }
 
-    if (tab->current_line < 0) tab->current_line = 0;
-    if (tab->current_column < 0) tab->current_column = 0;
-    //if (tab->current_column > last_column_this_line) tab->current_column = last_column_this_line - 1;
-    //if (tab->current_line > EOF) tab->current_column = EOF;
+    size_of_column = vector_size(vector_get(&tab->lines, tab->current_line)); /* update */
+
+    if (tab->current_line < 0)
+        tab->current_line = 0;
+    else if (tab->current_line > vector_size(&tab->lines))
+        tab->current_line = vector_size(&tab->lines) - 1;
+
+    if (tab->current_column < 0)
+        tab->current_column = 0;
+    else if (tab->current_column > size_of_column)
+        tab->current_column = size_of_column;
 
     return 0;
 }

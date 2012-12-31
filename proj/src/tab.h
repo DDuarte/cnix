@@ -39,5 +39,6 @@ int tab_mouse_press(tab_t* tab, unsigned long x, unsigned long y);
 
 int tab_add_char(tab_t* tab, char character);
 int tab_remove_char(tab_t* tab);
+int tab_remove_all(tab_t* tab);
 
 #endif
