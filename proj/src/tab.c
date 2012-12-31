@@ -2,7 +2,7 @@
 #include "video_gr.h"
 #include "utilities.h"
 #include "window.h"
-#include "cnix.h"
+
 #include <string.h>
 #include <assert.h>
 #include <ctype.h>
@@ -105,24 +105,24 @@ int tab_draw_label(tab_t* tab, int tab_num, int selected) { LOG
     return 0;
 }
 
-int tab_draw_text(tab_t* tab, int tab_num, int selected) { LOG   
+int tab_draw_text(tab_t* tab, int tab_num, int selected) { LOG
     static unsigned int caret_on = 1;
     int x = 15;
     int y = (tab_num == TAB_CONSOLE ? 730 : 100);
-    
-    if (selected)
+
+    if (selected) {
         if (caret_on) {
             vg_draw_line(tab->current_column * 17 + x, tab->current_line * 25 + y,
                     tab->current_column * 17 + x, tab->current_line * 25 + y - 17,
                     vg_color_rgb(0, 0, 0));
             caret_on = 0;
-        } else {
+        } else
             caret_on = 1;
-        }
+    }
 
     // char_size = 17
     // size between lines = 25
-     
+
     int i, j;
     for (i = 0; i < vector_size(&tab->lines); ++i) {
         for (j = 0; j < vector_size(vector_get(&tab->lines, i)); ++j) {
@@ -167,7 +167,7 @@ int tab_add_char(tab_t* tab, char character) { LOG
             }
 
             for (i = 0; i < new_line_size; ++i) { // remove from current line
-                free(vector_get(current_line, tab->current_column));
+                //free(vector_get(current_line, tab->current_column));
                 vector_erase(current_line, tab->current_column); // erase reduces the number of elements, no +i
             }
         }
@@ -196,7 +196,41 @@ int tab_add_char(tab_t* tab, char character) { LOG
 }
 
 int tab_remove_char(tab_t* tab) { LOG
-    // TODO
+
+    if (tab->current_line == 0 && tab->current_column == 0)
+        return 0;
+
+    vector* line = vector_get(&tab->lines, tab->current_line);
+    int curr_line_size = vector_size(line);
+
+    if (tab->current_column != 0) { // simply remove character
+        //free((char_screen*)vector_get(line, tab->current_column - 1));
+        vector_erase(line, tab->current_column - 1);
+        tab->current_column--;
+    } else if (curr_line_size == 0) { // remove empty line
+        //free((vector*)line);
+        vector_erase(&tab->lines, tab->current_line);
+        tab->current_line--;
+    } else { // move current line to above and remove line
+        vector* above_line = vector_get(&tab->lines, tab->current_line - 1);
+        int i;
+        for (i = 0; i < curr_line_size; ++i) { // move chars to above line
+            char_screen* cs = vector_get(line, i);
+            vector_push_back(above_line, cs);
+        }
+
+        for (i = 0; i < curr_line_size; ++i) {
+            //free((char_screen*)vector_get(line, 0));
+            vector_erase(line, 0); // always remove first element
+        }
+
+        //free((vector*)line);
+        vector_erase(&tab->lines, tab->current_line);
+
+        tab->current_line--;
+        tab->current_column = vector_size(above_line);
+    }
+
     return 0;
 }
 

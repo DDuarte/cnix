@@ -135,7 +135,7 @@ int window_init(window_t* window) { LOG
     make_btn = new_button(944, 5, 20, 20, make_btn_draw, make_btn_click, 1, window);
     run_btn = new_button(969, 5, 20, 20, run_btn_draw, run_btn_click, 1, window);
     close_btn = new_button(994, 5, 20, 20, close_btn_draw, close_btn_click, 1, window);
-    
+
     window->state = WIN_STATE_NORMAL;
     return 0;
 }
@@ -208,9 +208,9 @@ int window_update(window_t* window) { LOG
         if (mouse_state.ldown || mouse_state.mdown || mouse_state.rdown)
             window_mouse_press(window);
 
-        if (prev_mouse_state.ldown && !mouse_state.ldown ||
-            prev_mouse_state.mdown && !mouse_state.mdown ||
-            prev_mouse_state.rdown && !mouse_state.rdown)
+        if ((prev_mouse_state.ldown && !mouse_state.ldown) ||
+            (prev_mouse_state.mdown && !mouse_state.mdown) ||
+            (prev_mouse_state.rdown && !mouse_state.rdown))
             window_mouse_release(window);
 
         window->redraw = 1;
@@ -220,7 +220,7 @@ int window_update(window_t* window) { LOG
     /* Keyboard */
     if (last_key_pressed != -1) {
         error = window_key_press(window, last_key_pressed);
-        if (!error) {        
+        if (!error) {
             switch (window->state) {
                 case WIN_STATE_OPEN_ASK_NAME: {
                     if (window->current_tab != TAB_CONSOLE) {
@@ -229,29 +229,29 @@ int window_update(window_t* window) { LOG
                     else if (last_key_pressed == KEY_ENTER || last_key_pressed == KEY_NUM_ENTER) {
                         int i;
                         size_t size;
-                        char* fileName = tab_to_file(_window.tabs[11]);
-                        char* fileBuffer;
+                        char* fileName = tab_to_file(_window.tabs[TAB_CONSOLE]);
+                        char* fileBuffer = NULL;
                         tab_t* tab = NULL;
-                        
-                        for (i = 0; i < 11; i++) {
+
+                        for (i = 0; i < TAB_COUNT - 1; i++) {
                             if (!_window.tabs[i]) {
                                 tab = _window.tabs[i];
                                 break;
                             }
                         }
-                        
+
                         if (!tab) {
                             printf("Open: No tabs available to open file!");
                             window->state = WIN_STATE_NORMAL;
                             break;
                         }
-                        
-                        if (!File_Load(fileName, fileBuffer, &size)) { 
-                            window->state = WIN_STATE_NORMAL; 
-                            break; 
+
+                        if (!File_Load(fileName, fileBuffer, &size)) {
+                            window->state = WIN_STATE_NORMAL;
+                            break;
                         }
-                        
-                        tab = tab_create_from_file(fileName, fileBuffer);
+
+                        _window.tabs[i] = tab_create_from_file(fileName, fileBuffer);
                         window->state = WIN_STATE_NORMAL;
                     }
                     break;
@@ -262,7 +262,7 @@ int window_update(window_t* window) { LOG
                     } else if (last_key_pressed == KEY_ENTER || last_key_pressed == KEY_NUM_ENTER) {
                         char* fileName = tab_to_file(_window.tabs[TAB_CONSOLE]);
                         char* fileBuffer = tab_to_file(_window.tabs[_window.prev_current_tab]);
-                        
+
                         if (strlen(fileName) != 0) {
                             File_Save(fileName, fileBuffer, strlen(fileBuffer));
                         }
@@ -271,13 +271,13 @@ int window_update(window_t* window) { LOG
                     break;
                 }
             }
-        
+
             previous_key = last_key_pressed;
             last_key_pressed = -1;
             window->redraw = 1;
         } else {
             printf("window_update: window_key_press failed with error code %d.\n", error);
-        } 
+        }
     }
 
     /* RTC */
@@ -347,7 +347,7 @@ int window_draw(window_t* window) { LOG
     for (i = 0; i < TAB_COUNT; ++i) {
         tab_t* tab = window->tabs[i];
         if (tab) {
-            error = tab_draw(tab, 
+            error = tab_draw(tab,
                              i, /* tab_num */
                              window->current_tab == i || (window->current_tab == TAB_CONSOLE && window->prev_current_tab == i), /* selected */
                              window->current_tab == i || i == TAB_CONSOLE || (window->current_tab == TAB_CONSOLE && window->prev_current_tab == i), /* drawText */
@@ -495,23 +495,18 @@ void mouseCallback(void) { LOG
 }
 
 int window_key_press(window_t* window, KEY key) { LOG
-    tab_t* tab = NULL;
-
-    if (key >= KEY_F1 && key <= KEY_F10) {
+    if (key >= KEY_F1 && key <= KEY_F10)
         window_set_tab(window, key - KEY_F1);
-    }
-    else if (key == KEY_F11) { /* F10 is 0x44 but F11 is not 0x45 */
+    else if (key == KEY_F11) /* F10 is 0x44 but F11 is not 0x45 */
         window_set_tab(window, TAB_COUNT - 2);
-    }
     else if (key == KEY_F12) {
         window_set_tab(window, TAB_CONSOLE);
     }
-    
-    if (window->current_tab == TAB_CONSOLE && (key == KEY_ENTER || key == KEY_NUM_ENTER)) {
+
+    if (window->current_tab == TAB_CONSOLE && (key == KEY_ENTER || key == KEY_NUM_ENTER))
         return 0;
-    } else {
-      return tab_key_press(window->tabs[window->current_tab], key);
-    }
+    else
+        return tab_key_press(window->tabs[window->current_tab], key);
 }
 
 int window_mouse_press(window_t* window) { LOG
@@ -520,18 +515,18 @@ int window_mouse_press(window_t* window) { LOG
     if (window->mouse_y > 30 && window->mouse_y < 60)
         if (window->mouse_x > 5 && window->mouse_x < (window->width - 5))
             window_set_tab(window, (window->mouse_x  - 5) / 92); /* dividing by size of label */
-    
+
     /* console box */
     if (window->mouse_y > 703 && window->mouse_y < 733)
         if (window->mouse_x > 5 && window->mouse_x < (window->width - 5))
             window_set_tab(window, TAB_CONSOLE);
-            
+
     /* tab box */
     if (window->current_tab == TAB_CONSOLE)
         if (window->mouse_y > 5 && window->mouse_y < 698)
             if (window->mouse_x > 5 && window->mouse_x < (window->width - 5))
                 window_set_previous_tab(window);
-    
+
     button_update(new_btn, window->mouse_x, window->mouse_y, mouse_state.ldown);
     button_update(open_btn, window->mouse_x, window->mouse_y, mouse_state.ldown);
     button_update(save_btn, window->mouse_x, window->mouse_y, mouse_state.ldown);
