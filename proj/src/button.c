@@ -2,7 +2,7 @@
 #include "utilities.h"
 #include <stdlib.h>
 
-button_t* new_button(unsigned int locx, unsigned int locy, unsigned int szx, unsigned int szy, void(*drfunc)(button_t*), void (*clcallback)(button_t*), int enabled) { LOG
+button_t* new_button(unsigned int locx, unsigned int locy, unsigned int szx, unsigned int szy, void(*drfunc)(button_t*), void (*clcallback)(button_t*), int enabled, window_t* wnd) { LOG
     button_t* newbtn = (button_t*)malloc(sizeof(button_t));
 
     newbtn->location_x = locx;
@@ -15,6 +15,7 @@ button_t* new_button(unsigned int locx, unsigned int locy, unsigned int szx, uns
     newbtn->selected = 0;
     newbtn->mouse_st = MOUSE_NONE;
     newbtn->prev_mouse_left = 0;
+    newbtn->wnd = wnd;
 
     return newbtn;
 }

@@ -1,6 +1,8 @@
 #ifndef BUTTON_H_
 #define BUTTON_H_
 
+#include "window.h"
+
 typedef enum {
     MOUSE_NONE,
     MOUSE_OVER,
@@ -18,9 +20,10 @@ typedef struct bt{
     int selected;
     button_mouse_st mouse_st;
     int prev_mouse_left;
+    window_t* wnd;
 } button_t;
 
-button_t* new_button(unsigned int locx, unsigned int locy, unsigned int szx, unsigned int szy, void(*drfunc)(button_t*), void (*clcallback)(button_t*), int enabled);
+button_t* new_button(unsigned int locx, unsigned int locy, unsigned int szx, unsigned int szy, void(*drfunc)(button_t*), void (*clcallback)(button_t*), int enabled, window_t* wnd);
 
 void button_update(button_t* btn, unsigned long mouse_x, unsigned long mouse_y, int mouse_left);
 

@@ -118,12 +118,12 @@ int window_init(window_t* window) { LOG
     printf("window_init: keyboard installed with success.\n");
 
     /* set up buttons */
-    new_btn = new_button(869, 5, 20, 20, new_btn_draw, new_btn_click, 1);
-    open_btn = new_button(894, 5, 20, 20, open_btn_draw, open_btn_click, 1);
-    save_btn = new_button(919, 5, 20, 20, save_btn_draw, save_btn_click, 1);
-    make_btn = new_button(944, 5, 20, 20, make_btn_draw, make_btn_click, 1);
-    run_btn = new_button(969, 5, 20, 20, run_btn_draw, run_btn_click, 1);
-    close_btn = new_button(994, 5, 20, 20, close_btn_draw, close_btn_click, 1);
+    new_btn = new_button(869, 5, 20, 20, new_btn_draw, new_btn_click, 1, window);
+    open_btn = new_button(894, 5, 20, 20, open_btn_draw, open_btn_click, 1, window);
+    save_btn = new_button(919, 5, 20, 20, save_btn_draw, save_btn_click, 1, window);
+    make_btn = new_button(944, 5, 20, 20, make_btn_draw, make_btn_click, 1, window);
+    run_btn = new_button(969, 5, 20, 20, run_btn_draw, run_btn_click, 1, window);
+    close_btn = new_button(994, 5, 20, 20, close_btn_draw, close_btn_click, 1, window);
     
     window->state = WIN_STATE_NORMAL;
     return 0;
@@ -215,7 +215,7 @@ int window_update(window_t* window) { LOG
                     if (window->current_tab != TAB_CONSOLE) {
                         window->state = WIN_STATE_NORMAL;
                     }
-                    if (last_key_pressed == KEY_ENTER || last_key_pressed == KEY_NUM_ENTER) {
+                    else if (last_key_pressed == KEY_ENTER || last_key_pressed == KEY_NUM_ENTER) {
                         int i;
                         size_t size;
                         char* fileName = tab_to_file(_window.tabs[11]);
@@ -607,18 +607,20 @@ void new_btn_click(button_t* btn) { LOG
 }
 
 void open_btn_click(button_t* btn) { LOG
-    if (_window.state == WIN_STATE_NORMAL) {
-        _window.prev_current_tab = _window.current_tab;
-        _window.current_tab = TAB_CONSOLE;
-        _window.state = WIN_STATE_OPEN_ASK_NAME;
+    window_t* window = btn->wnd;
+    if (window->state == WIN_STATE_NORMAL) {
+        window->prev_current_tab = window->current_tab;
+        window->current_tab = TAB_CONSOLE;
+        window->state = WIN_STATE_OPEN_ASK_NAME;
     }
 }
 
 void save_btn_click(button_t* btn) { LOG
-    if (_window.state == WIN_STATE_NORMAL) {
-        _window.prev_current_tab = _window.current_tab;
-        _window.current_tab = TAB_CONSOLE;
-        _window.state = WIN_STATE_SAVE_ASK_NAME;
+    window_t* window = btn->wnd;
+    if (window->state == WIN_STATE_NORMAL) {
+        window->prev_current_tab = window->current_tab;
+        window->current_tab = TAB_CONSOLE;
+        window->state = WIN_STATE_SAVE_ASK_NAME;
     }
 }
 
