@@ -50,8 +50,8 @@ void window_set_tab(window_t* window, int tab) {
     }
     
     if (!window->tabs[tab]) {
-window_set_log_message(window, "Tab doesn't exist");     
-     return;
+        window_set_log_message(window, "Tab Manager: Tab doesn't exist");     
+        return;
     }
         
     window->prev_current_tab = window->current_tab;
@@ -331,6 +331,11 @@ int window_update(window_t* window) { LOG
                         }
                         else if ((size == 4) && (strcmp("open", command) == 0)) {
                             open_btn_click(open_btn);
+                        } else if ((size == 4) && (strcmp("exit", command) == 0)) {
+                            close_btn_click(close_btn);
+                        } else if ((size == 9) && (strcmp("close-tab", command) == 0)) {
+                            window_remove_tab(window, window->prev_current_tab);
+                            tab_remove_all(window->tabs[TAB_CONSOLE]);
                         } else {
                             window_set_log_message(window, "Invalid Command.");
                         }
@@ -611,21 +616,30 @@ int window_key_press(window_t* window, KEY key) { LOG
 
 int window_mouse_press(window_t* window) { LOG
 
-    /* tab labels */
-    if (window->mouse_y > 30 && window->mouse_y < 60)
-        if (window->mouse_x > 5 && window->mouse_x < (window->width - 5))
-            window_set_tab(window, (window->mouse_x  - 5) / 92); /* dividing by size of label */
-
-    /* console box */
-    if (window->mouse_y > 703 && window->mouse_y < 733)
-        if (window->mouse_x > 5 && window->mouse_x < (window->width - 5))
-            window_set_tab(window, TAB_CONSOLE);
-
-    /* tab box */
-    if (window->current_tab == TAB_CONSOLE)
-        if (window->mouse_y > 5 && window->mouse_y < 698)
+    if (mouse_state.ldown) {
+        /* tab labels */
+        if (window->mouse_y > 30 && window->mouse_y < 60)
             if (window->mouse_x > 5 && window->mouse_x < (window->width - 5))
-                window_set_previous_tab(window);
+                window_set_tab(window, (window->mouse_x  - 5) / 92); /* dividing by size of label */            
+    
+        /* console box */
+        if (window->mouse_y > 703 && window->mouse_y < 733)
+            if (window->mouse_x > 5 && window->mouse_x < (window->width - 5))
+                window_set_tab(window, TAB_CONSOLE);
+    
+        /* tab box */
+        if (window->current_tab == TAB_CONSOLE)
+            if (window->mouse_y > 5 && window->mouse_y < 698)
+                if (window->mouse_x > 5 && window->mouse_x < (window->width - 5))
+                    window_set_previous_tab(window);
+    }
+    
+    if (mouse_state.rdown) {
+        /* tab labels */
+        if (window->mouse_y > 30 && window->mouse_y < 60)
+            if (window->mouse_x > 5 && window->mouse_x < (window->width - 5))
+                window_remove_tab(window, (window->mouse_x  - 5) / 92); /* dividing by size of label */ 
+    }
 
     button_update(new_btn, window->mouse_x, window->mouse_y, mouse_state.ldown);
     button_update(open_btn, window->mouse_x, window->mouse_y, mouse_state.ldown);
@@ -766,4 +780,28 @@ void run_btn_click(button_t* btn) { LOG
 void close_btn_click(button_t* btn) { LOG
     printf("Exiting...\n");
     int_stop_handler();
+}
+
+int window_remove_tab(window_t* window, int tab_num) {
+    if (tab_num < 0 || tab_num >= TAB_COUNT || tab_num == TAB_CONSOLE) {
+        window_set_log_message(window, "Tab Manager: Invalid tab.");
+        return 0;
+    }
+    
+    if (!window->tabs[tab_num]) {
+        window_set_log_message(window, "Tab Manager: Tab doesn't exist");
+        return 0;
+    }
+        
+    tab_destroy(window->tabs[tab_num]);
+    window->tabs[tab_num] = NULL;
+    if (window->prev_current_tab == tab_num) {
+        window->prev_current_tab = TAB_CONSOLE;
+    }
+    if (window->current_tab == tab_num) {
+        window->current_tab = TAB_CONSOLE;
+    }
+    window_set_log_message(window, "Tab Manager: Tab closed with success.");
+    
+    return 1;
 }

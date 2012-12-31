@@ -56,10 +56,10 @@ int tab_destroy(tab_t* tab) { LOG
     int i, j;
     for (i = 0; i < vector_size(&tab->lines); ++i) {
         for (j = 0; j < vector_size(vector_get(&tab->lines, i)); ++j) {
-            //free(vector_get(vector_get(&tab->lines, i), j));
+            free(vector_get(vector_get(&tab->lines, i), j));
         }
         vector_free((vector*)vector_get(&tab->lines, i));
-        //free(vector_get(&tab->lines, i));
+        free(vector_get(&tab->lines, i));
     }
 
     vector_free(&tab->lines);

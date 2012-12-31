@@ -57,6 +57,7 @@ int window_uninstall_mouse(window_t* window); ///< Unnistalls mouse
 int window_key_press(window_t* window, KEY key); ///< Key has been pressed
 int window_mouse_press(window_t* window); ///< Mouse key has been pressed
 int window_mouse_release(window_t* window); ///< Mouse key has been released
+int window_remove_tab(window_t* window, int tab); ///< Destroy given tab
 
 /**@}*/
 
