@@ -86,8 +86,7 @@ char* tab_to_file(tab_t* tab) { LOG
     char* buffer;
 
     for (i = 0; i < vector_size(&tab->lines); ++i)
-        for (j = 0; j < vector_size(vector_get(&tab->lines, i)); ++j)
-            buffer_size++;
+       buffer_size += vector_size(vector_get(&tab->lines, i)) + 1;
 
     buffer = (char*)malloc(sizeof(char) * buffer_size + 1);
 
@@ -249,6 +248,9 @@ int tab_remove_char(tab_t* tab) { LOG
 
 int tab_remove_all(tab_t* tab) { LOG
 
+    if (!vector_size(&tab->lines))
+        return 0;
+
     int i, j;
     for (i = 0; i < vector_size(&tab->lines); ++i) {
         for (j = 0; j < vector_size(vector_get(&tab->lines, i)); ++j)
@@ -310,15 +312,15 @@ int tab_key_press(tab_t* tab, KEY key) { LOG
             break;
         }
     }
-    
+
     if (added) {
         size_of_column = vector_size(vector_get(&tab->lines, tab->current_line)); /* update */
-    
+
         if (tab->current_line < 0)
             tab->current_line = 0;
         else if (tab->current_line > vector_size(&tab->lines))
             tab->current_line = vector_size(&tab->lines) - 1;
-    
+
         if (tab->current_column < 0)
             tab->current_column = 0;
         else if (tab->current_column > size_of_column)
