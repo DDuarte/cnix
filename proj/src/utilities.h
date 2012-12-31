@@ -15,7 +15,7 @@ void swapl(long* a, long* b);
 
 int clamp(int x, int min, int max);
 
-// #define DEBUG_CALLS - only enable when sh*t goes really wrong
+// #define DEBUG_CALLS // only enable when sh*t goes really wrong
 
 #ifdef DEBUG_CALLS
     #define LOG printf("DEBUG: %s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);

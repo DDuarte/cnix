@@ -104,12 +104,12 @@ int tab_draw_label(tab_t* tab, int tab_num, int selected) { LOG
     return 0;
 }
 
-int tab_draw_text(tab_t* tab, int tab_num, int selected) { LOG   
+int tab_draw_text(tab_t* tab, int tab_num, int selected) { LOG
     static unsigned int caret_on = 1;
     int x = 15;
     int y = (tab_num == TAB_CONSOLE ? 730 : 100);
-    
-    if (selected)
+
+    if (selected) {
         if (caret_on) {
             vg_draw_line(tab->current_column * 17 + x, tab->current_line * 25 + y,
                     tab->current_column * 17 + x, tab->current_line * 25 + y - 17,
@@ -118,10 +118,11 @@ int tab_draw_text(tab_t* tab, int tab_num, int selected) { LOG
         } else {
             caret_on = 1;
         }
+    }
 
     // char_size = 17
     // size between lines = 25
-     
+
     int i, j;
     for (i = 0; i < vector_size(&tab->lines); ++i) {
         for (j = 0; j < vector_size(vector_get(&tab->lines, i)); ++j) {
@@ -152,8 +153,7 @@ int tab_add_char(tab_t* tab, char character) { LOG
 
     vector* current_line = (vector*)vector_get(&tab->lines, tab->current_line);
 
-    if (character == '\n') // add new line
-    {
+    if (character == '\n') { // add new line
         vector* new_line = (vector*)malloc(sizeof(vector));
         vector_new(new_line);
 
@@ -166,7 +166,7 @@ int tab_add_char(tab_t* tab, char character) { LOG
             }
 
             for (i = 0; i < new_line_size; ++i) { // remove from current line
-                free(vector_get(current_line, tab->current_column));
+                //free(vector_get(current_line, tab->current_column));
                 vector_erase(current_line, tab->current_column); // erase reduces the number of elements, no +i
             }
         }
