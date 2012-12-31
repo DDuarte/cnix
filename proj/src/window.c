@@ -41,6 +41,17 @@ void make_btn_click(button_t* btn);
 void run_btn_click(button_t* btn);
 void close_btn_click(button_t* btn);
 
+void window_set_tab(window_t* window, int tab) {
+    window->prev_current_tab = window->current_tab;
+    window->current_tab = tab;
+}
+
+void window_set_previous_tab(window_t* window) {
+    int temp = window->prev_current_tab;
+    window->prev_current_tab = window->current_tab;
+    window->current_tab = temp;
+}
+
 int window_init(window_t* window) { LOG
 
     int error;
@@ -487,14 +498,13 @@ int window_key_press(window_t* window, KEY key) { LOG
     tab_t* tab = NULL;
 
     if (key >= KEY_F1 && key <= KEY_F10) {
-        window->current_tab = key - KEY_F1;
+        window_set_tab(window, key - KEY_F1);
     }
     else if (key == KEY_F11) { /* F10 is 0x44 but F11 is not 0x45 */
-        window->current_tab = TAB_COUNT - 2;
+        window_set_tab(window, TAB_COUNT - 2);
     }
     else if (key == KEY_F12) {
-        window->prev_current_tab = window->current_tab;
-        window->current_tab = TAB_CONSOLE;
+        window_set_tab(window, TAB_CONSOLE);
     }
     
     if (window->current_tab == TAB_CONSOLE && (key == KEY_ENTER || key == KEY_NUM_ENTER)) {
@@ -509,18 +519,18 @@ int window_mouse_press(window_t* window) { LOG
     /* tab labels */
     if (window->mouse_y > 30 && window->mouse_y < 60)
         if (window->mouse_x > 5 && window->mouse_x < (window->width - 5))
-            window->current_tab = (window->mouse_x  - 5) / 92; /* dividing by size of label */
+            window_set_tab(window, (window->mouse_x  - 5) / 92); /* dividing by size of label */
     
     /* console box */
     if (window->mouse_y > 703 && window->mouse_y < 733)
         if (window->mouse_x > 5 && window->mouse_x < (window->width - 5))
-            window->current_tab = TAB_CONSOLE;
+            window_set_tab(window, TAB_CONSOLE);
             
     /* tab box */
     if (window->current_tab == TAB_CONSOLE)
         if (window->mouse_y > 5 && window->mouse_y < 698)
             if (window->mouse_x > 5 && window->mouse_x < (window->width - 5))
-                window->current_tab = window->prev_current_tab;
+                window_set_previous_tab(window);
     
     button_update(new_btn, window->mouse_x, window->mouse_y, mouse_state.ldown);
     button_update(open_btn, window->mouse_x, window->mouse_y, mouse_state.ldown);
@@ -609,8 +619,8 @@ void new_btn_click(button_t* btn) { LOG
 void open_btn_click(button_t* btn) { LOG
     window_t* window = btn->wnd;
     if (window->state == WIN_STATE_NORMAL) {
-        window->prev_current_tab = window->current_tab;
-        window->current_tab = TAB_CONSOLE;
+        window_set_tab(window, TAB_CONSOLE);
+        /* Empty console */
         window->state = WIN_STATE_OPEN_ASK_NAME;
     }
 }
@@ -618,8 +628,9 @@ void open_btn_click(button_t* btn) { LOG
 void save_btn_click(button_t* btn) { LOG
     window_t* window = btn->wnd;
     if (window->state == WIN_STATE_NORMAL) {
-        window->prev_current_tab = window->current_tab;
-        window->current_tab = TAB_CONSOLE;
+        window_set_tab(window, TAB_CONSOLE);
+        /* Empty console */
+        /* Write current tab name to console */
         window->state = WIN_STATE_SAVE_ASK_NAME;
     }
 }
