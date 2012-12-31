@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int File_Load(const char* fileName, char* buffer, size_t* size) { LOG
+int File_Load(const char* fileName, char** buffer, size_t* size) { LOG
     FILE* file;
     size_t result;
 
@@ -28,18 +28,18 @@ int File_Load(const char* fileName, char* buffer, size_t* size) { LOG
         return 0;
     }
 
-    buffer = (char*)malloc(sizeof(char) * (*size));
-    if (!buffer) {
+    (*buffer) = (char*)malloc(sizeof(char) * (*size));
+    if (!(*buffer)) {
         printf("File_Load: Failed to allocate buffer for file %s (size %u)", fileName, (*size));
         fclose(file);
         return 0;
     }
 
-    result = fread(buffer, sizeof(char), (*size), file);
+    result = fread((*buffer), sizeof(char), (*size), file);
     if (result != (*size)) {
         printf("File_Load: Could not read the same number of bytes (size != result) for file %s (size %u, result %u)", fileName, (*size), result);
-        free(buffer);
-        buffer = NULL;
+        free((*buffer));
+        (*buffer) = NULL;
         fclose(file);
         return 0;
     }
