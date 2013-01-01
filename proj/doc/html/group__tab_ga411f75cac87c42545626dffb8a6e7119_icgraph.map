@@ -1,9 +1,12 @@
 <map id="char_screen_create" name="char_screen_create">
-<area shape="rect" id="node3" href="$group__tab.html#gad0c861e19c2767d14e6e42d2e08f80b8" title="Adds a character to tab." alt="" coords="190,31,290,57"/>
+<area shape="rect" id="node3" href="$group__tab.html#gad0c861e19c2767d14e6e42d2e08f80b8" title="Adds a character to tab." alt="" coords="190,56,290,83"/>
 <area shape="rect" id="node5" href="$group__tab.html#ga2ec91ba4d969945404a5cde2de245b45" title="Tab filled with contents of file." alt="" coords="493,5,632,32"/>
 <area shape="rect" id="node13" href="$group__tab.html#gaa86587646ff0fef58be4b60993a0ba5c" title="A key has been pressed while tab was active." alt="" coords="339,56,445,83"/>
-<area shape="rect" id="node7" href="$group__window.html#ga69fb99e8de59bdbacfb1de0b46649b14" title="Updates window and all its &quot;children&quot; elements (tabs, buttons, etc)" alt="" coords="681,31,791,57"/>
-<area shape="rect" id="node9" href="$cnix_8c.html#aa9c1f035c82a93594d9838ea8ceae094" title="timer_handler" alt="" coords="841,31,941,57"/>
-<area shape="rect" id="node11" href="$cnix_8c.html#abf9e6b7e6f15df4b525a2e7705ba3089" title="main" alt="" coords="989,31,1040,57"/>
+<area shape="rect" id="node18" href="$group__tab.html#gada91b9bb012b9346c12867a4c8799b98" title="Prints the message to the end of the tab." alt="" coords="355,107,429,133"/>
+<area shape="rect" id="node7" href="$group__window.html#ga69fb99e8de59bdbacfb1de0b46649b14" title="Updates window and all its &quot;children&quot; elements (tabs, buttons, etc)" alt="" coords="681,56,791,83"/>
+<area shape="rect" id="node9" href="$cnix_8c.html#aa9c1f035c82a93594d9838ea8ceae094" title="timer_handler" alt="" coords="841,56,941,83"/>
+<area shape="rect" id="node11" href="$cnix_8c.html#abf9e6b7e6f15df4b525a2e7705ba3089" title="main" alt="" coords="989,81,1040,108"/>
 <area shape="rect" id="node15" href="$group__window.html#gacd8cd4c2fe8e78e21480301dcb996df1" title="Key has been pressed." alt="" coords="497,56,628,83"/>
+<area shape="rect" id="node20" href="$window_8c.html#af80bc278890db817b683ad18c96e3e17" title="save_btn_click" alt="" coords="509,107,616,133"/>
+<area shape="rect" id="node22" href="$group__window.html#gad605925d100847b069d261d7f69b4d0a" title="Initializes a window." alt="" coords="847,107,935,133"/>
 </map>

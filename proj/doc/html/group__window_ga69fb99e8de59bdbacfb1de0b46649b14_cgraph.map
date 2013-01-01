@@ -1,38 +1,47 @@
 <map id="window_update" name="window_update">
-<area shape="rect" id="node3" href="$group__utilities.html#ga3a3d5eba5d944116bb0e72f187a955f9" title="Clamps a value between two limits." alt="" coords="217,107,274,133"/>
-<area shape="rect" id="node5" href="$group__window.html#gab0b36f6f3a4ad3275bae13d051df1883" title="Changes title of window, printf style." alt="" coords="187,157,304,184"/>
+<area shape="rect" id="node3" href="$group__utilities.html#ga3a3d5eba5d944116bb0e72f187a955f9" title="Clamps a value between two limits." alt="" coords="217,5,274,32"/>
+<area shape="rect" id="node5" href="$group__window.html#gab0b36f6f3a4ad3275bae13d051df1883" title="Changes title of window, printf style." alt="" coords="187,56,304,83"/>
 <area shape="rect" id="node7" href="$group__window.html#ga978ba95fd412b9c52111f1b704dd3735" title="Mouse key has been pressed." alt="" coords="171,208,320,235"/>
-<area shape="rect" id="node19" href="$group__window.html#ga999f33cf098b9b7d34b8e22c22102b2e" title="Mouse key has been released." alt="" coords="166,259,325,285"/>
-<area shape="rect" id="node22" href="$group__window.html#gacd8cd4c2fe8e78e21480301dcb996df1" title="Key has been pressed." alt="" coords="180,309,311,336"/>
-<area shape="rect" id="node73" href="$group__tab.html#gaaf2425cbe541677aa765cdb5d2589717" title="Gets tab content and returns it as a string." alt="" coords="635,461,717,488"/>
-<area shape="rect" id="node77" href="$group__file.html#gaa1ef067398cb3bd1c9f93094e18c5b44" title="Loads a file." alt="" coords="206,411,285,437"/>
-<area shape="rect" id="node79" href="$group__tab.html#ga2ec91ba4d969945404a5cde2de245b45" title="Tab filled with contents of file." alt="" coords="388,487,527,513"/>
-<area shape="rect" id="node87" href="$group__file.html#ga2c95d70ead492ebfc78bd3f28e377eba" title="Saves a file." alt="" coords="206,512,285,539"/>
-<area shape="rect" id="node89" href="$group__rtc.html#ga634061cbf87acc0a1cb6515035d64c7b" title="Returns string representation of date and time from RTC." alt="" coords="198,576,293,603"/>
-<area shape="rect" id="node9" href="$window_8c.html#af251e06a5e8fb2c157c93b4c00f2c529" title="window_set_tab" alt="" coords="400,259,515,285"/>
+<area shape="rect" id="node9" href="$window_8c.html#af251e06a5e8fb2c157c93b4c00f2c529" title="window_set_tab" alt="" coords="400,613,515,640"/>
+<area shape="rect" id="node11" href="$group__window.html#ga599f76484bcb17c622dbb276690e4f0d" title="Changes log message, printf style." alt="" coords="589,715,763,741"/>
 <area shape="rect" id="node13" href="$window_8c.html#afa6ad953bd931537e62b00924501663b" title="window_set_previous_tab" alt="" coords="373,107,541,133"/>
-<area shape="rect" id="node15" href="$group__button.html#ga32d863c39b7e4d9f6f0f6fe4800f069d" title="Updates an existing button." alt="" coords="405,208,509,235"/>
-<area shape="rect" id="node17" href="$group__tab.html#ga097f8d1bc06b4cec77fa958994185169" title="Mouse has been pressed while tab was active." alt="" coords="395,157,520,184"/>
-<area shape="rect" id="node11" href="$group__window.html#ga599f76484bcb17c622dbb276690e4f0d" title="Changes log message, printf style." alt="" coords="589,5,763,32"/>
-<area shape="rect" id="node25" href="$group__tab.html#gaa86587646ff0fef58be4b60993a0ba5c" title="A key has been pressed while tab was active." alt="" coords="404,309,511,336"/>
-<area shape="rect" id="node27" href="$group__tab.html#ga80257379dbd89c2c8822dd827c490075" title="Retreats cursor line (with limits)" alt="" coords="621,107,731,133"/>
-<area shape="rect" id="node29" href="$group__vector.html#gaa6a1e26e7d26552925e2981d4b3d2499" title="Size of vector." alt="" coords="835,411,922,437"/>
-<area shape="rect" id="node31" href="$group__vector.html#ga75ffb2ad4233613bd0c97d40b1c68611" title="Element at position index." alt="" coords="838,259,919,285"/>
-<area shape="rect" id="node33" href="$group__tab.html#gac17c67228dfcda1b12ed8cc31523d4a4" title="Advances cursor line (with limits)" alt="" coords="615,208,737,235"/>
-<area shape="rect" id="node37" href="$group__tab.html#ga0601da6933ec63427f0b7924c6df8d9d" title="Retreats cursor column (with limits)" alt="" coords="609,157,743,184"/>
-<area shape="rect" id="node41" href="$group__tab.html#ga2ccd9a29bea54b870a9f0b4f26160115" title="Advances cursor column (with limits)" alt="" coords="605,259,747,285"/>
-<area shape="rect" id="node45" href="$group__tab.html#gad0c861e19c2767d14e6e42d2e08f80b8" title="Adds a character to tab." alt="" coords="626,613,726,640"/>
-<area shape="rect" id="node61" href="$group__tab.html#ga0e365320092224c8054821ff2e18052f" title="Removes a character from tab." alt="" coords="616,563,736,589"/>
-<area shape="rect" id="node71" href="$group__keyboard.html#ga7268a0d7e8eb37d7326cba832ec0d4a8" title="Converts a key into a char." alt="" coords="629,309,723,336"/>
-<area shape="rect" id="node48" href="$group__vector.html#ga4c767de193ea3674ab101c805d098f0d" title="Create new vector." alt="" coords="835,765,922,792"/>
-<area shape="rect" id="node50" href="$group__vector.html#ga0d36e1e11d647504f35299974f222766" title="Adds element to back of vector." alt="" coords="815,512,942,539"/>
-<area shape="rect" id="node53" href="$group__vector.html#ga951a0ef34f7e54967c45c59f9ded305b" title="Removes element at position index." alt="" coords="831,563,926,589"/>
-<area shape="rect" id="node55" href="$group__vector.html#ga27a3e8cd2e23332b340ba1e89fa1ea57" title="Adds element at position index." alt="" coords="831,613,926,640"/>
-<area shape="rect" id="node57" href="$group__tab.html#ga411f75cac87c42545626dffb8a6e7119" title="Creates a char_screen." alt="" coords="811,664,947,691"/>
-<area shape="rect" id="node59" href="$group__video__gr.html#ga352cdbc0a4a6290ccaa84b28c4428010" title="Converts a RGB color to the color supported by VBE." alt="" coords="831,715,926,741"/>
-<area shape="rect" id="node67" href="$group__vector.html#ga04ca0e01713a6dd658ea2a9af0c655b2" title="Delete vector." alt="" coords="837,461,921,488"/>
-<area shape="rect" id="node81" href="$group__tab.html#gaaf84d60061510013ace5ad84c3b3827d" title="Creates empty tab." alt="" coords="635,715,717,741"/>
-<area shape="rect" id="node91" href="$group__rtc.html#ga3b4a54cae34c67d2b07c7ca6e99d0cf8" title="Waits for RTC to be available." alt="" coords="408,537,507,564"/>
-<area shape="rect" id="node93" href="$group__rtc.html#ga2e1631108feead6b7d06a928a022ce5f" title="Reads byte from RTC from a specific register." alt="" coords="398,588,517,615"/>
-<area shape="rect" id="node95" href="$group__rtc.html#ga2a1f4793f5f1df109056889c5e5f2e05" title="Converts bcd number to decimal." alt="" coords="401,639,514,665"/>
+<area shape="rect" id="node15" href="$group__window.html#ga2db228ed901030ec9bc93dc368e441e9" title="Destroy given tab." alt="" coords="389,309,526,336"/>
+<area shape="rect" id="node18" href="$group__tab.html#ga3742c04b7b83fcee6a89c23a398885cb" title="Remove tab." alt="" coords="631,208,721,235"/>
+<area shape="rect" id="node30" href="$group__window.html#ga999f33cf098b9b7d34b8e22c22102b2e" title="Mouse key has been released." alt="" coords="166,157,325,184"/>
+<area shape="rect" id="node33" href="$group__window.html#gacd8cd4c2fe8e78e21480301dcb996df1" title="Key has been pressed." alt="" coords="180,512,311,539"/>
+<area shape="rect" id="node83" href="$group__tab.html#gaaf2425cbe541677aa765cdb5d2589717" title="Gets tab content and returns it as a string." alt="" coords="635,309,717,336"/>
+<area shape="rect" id="node87" href="$group__file.html#gaa1ef067398cb3bd1c9f93094e18c5b44" title="Loads a file." alt="" coords="206,613,285,640"/>
+<area shape="rect" id="node89" href="$group__tab.html#ga2ec91ba4d969945404a5cde2de245b45" title="Tab filled with contents of file." alt="" coords="388,917,527,944"/>
+<area shape="rect" id="node98" href="$group__file.html#ga2c95d70ead492ebfc78bd3f28e377eba" title="Saves a file." alt="" coords="206,715,285,741"/>
+<area shape="rect" id="node100" href="$group__tab.html#gaf028b51aca95129243487cb699201212" title="Removes all characters from tab." alt="" coords="622,765,730,792"/>
+<area shape="rect" id="node106" href="$window_8c.html#a7c542480b0ef0d70c1d720cfeb2b75eb" title="new_btn_click" alt="" coords="193,563,297,589"/>
+<area shape="rect" id="node112" href="$window_8c.html#af80bc278890db817b683ad18c96e3e17" title="save_btn_click" alt="" coords="192,816,299,843"/>
+<area shape="rect" id="node120" href="$window_8c.html#abd6d08c5425d8005c32eb28213bb3ea1" title="open_btn_click" alt="" coords="191,664,300,691"/>
+<area shape="rect" id="node125" href="$window_8c.html#ad3ca36c6b5e0fe6ba859a91cef4f2f76" title="close_btn_click" alt="" coords="189,1019,301,1045"/>
+<area shape="rect" id="node130" href="$group__rtc.html#ga634061cbf87acc0a1cb6515035d64c7b" title="Returns string representation of date and time from RTC." alt="" coords="198,1145,293,1172"/>
+<area shape="rect" id="node26" href="$group__button.html#ga32d863c39b7e4d9f6f0f6fe4800f069d" title="Updates an existing button." alt="" coords="405,157,509,184"/>
+<area shape="rect" id="node28" href="$group__tab.html#ga097f8d1bc06b4cec77fa958994185169" title="Mouse has been pressed while tab was active." alt="" coords="395,208,520,235"/>
+<area shape="rect" id="node20" href="$group__vector.html#gaa6a1e26e7d26552925e2981d4b3d2499" title="Size of vector." alt="" coords="835,563,922,589"/>
+<area shape="rect" id="node22" href="$group__vector.html#ga75ffb2ad4233613bd0c97d40b1c68611" title="Element at position index." alt="" coords="838,512,919,539"/>
+<area shape="rect" id="node24" href="$group__vector.html#ga04ca0e01713a6dd658ea2a9af0c655b2" title="Delete vector." alt="" coords="837,335,921,361"/>
+<area shape="rect" id="node36" href="$group__tab.html#gaa86587646ff0fef58be4b60993a0ba5c" title="A key has been pressed while tab was active." alt="" coords="404,461,511,488"/>
+<area shape="rect" id="node38" href="$group__tab.html#ga80257379dbd89c2c8822dd827c490075" title="Retreats cursor line (with limits)" alt="" coords="621,461,731,488"/>
+<area shape="rect" id="node42" href="$group__tab.html#gac17c67228dfcda1b12ed8cc31523d4a4" title="Advances cursor line (with limits)" alt="" coords="615,512,737,539"/>
+<area shape="rect" id="node46" href="$group__tab.html#ga0601da6933ec63427f0b7924c6df8d9d" title="Retreats cursor column (with limits)" alt="" coords="609,411,743,437"/>
+<area shape="rect" id="node50" href="$group__tab.html#ga2ccd9a29bea54b870a9f0b4f26160115" title="Advances cursor column (with limits)" alt="" coords="605,563,747,589"/>
+<area shape="rect" id="node54" href="$group__tab.html#gad0c861e19c2767d14e6e42d2e08f80b8" title="Adds a character to tab." alt="" coords="626,917,726,944"/>
+<area shape="rect" id="node70" href="$group__tab.html#ga0e365320092224c8054821ff2e18052f" title="Removes a character from tab." alt="" coords="616,613,736,640"/>
+<area shape="rect" id="node79" href="$group__keyboard.html#ga7268a0d7e8eb37d7326cba832ec0d4a8" title="Converts a key into a char." alt="" coords="629,360,723,387"/>
+<area shape="rect" id="node57" href="$group__vector.html#ga4c767de193ea3674ab101c805d098f0d" title="Create new vector." alt="" coords="835,993,922,1020"/>
+<area shape="rect" id="node59" href="$group__vector.html#ga0d36e1e11d647504f35299974f222766" title="Adds element to back of vector." alt="" coords="815,791,942,817"/>
+<area shape="rect" id="node62" href="$group__vector.html#ga951a0ef34f7e54967c45c59f9ded305b" title="Removes element at position index." alt="" coords="831,740,926,767"/>
+<area shape="rect" id="node64" href="$group__vector.html#ga27a3e8cd2e23332b340ba1e89fa1ea57" title="Adds element at position index." alt="" coords="831,943,926,969"/>
+<area shape="rect" id="node66" href="$group__tab.html#ga411f75cac87c42545626dffb8a6e7119" title="Creates a char_screen." alt="" coords="811,841,947,868"/>
+<area shape="rect" id="node68" href="$group__video__gr.html#ga352cdbc0a4a6290ccaa84b28c4428010" title="Converts a RGB color to the color supported by VBE." alt="" coords="831,892,926,919"/>
+<area shape="rect" id="node91" href="$group__tab.html#gaaf84d60061510013ace5ad84c3b3827d" title="Creates empty tab." alt="" coords="635,968,717,995"/>
+<area shape="rect" id="node115" href="$group__tab.html#gada91b9bb012b9346c12867a4c8799b98" title="Prints the message to the end of the tab." alt="" coords="420,1019,495,1045"/>
+<area shape="rect" id="node127" href="$group__interrupt.html#ga7ed855ada1474b14465e984db8004ef7" title="Stop handling interrupts." alt="" coords="399,1069,516,1096"/>
+<area shape="rect" id="node132" href="$group__rtc.html#ga3b4a54cae34c67d2b07c7ca6e99d0cf8" title="Waits for RTC to be available." alt="" coords="408,1171,507,1197"/>
+<area shape="rect" id="node134" href="$group__rtc.html#ga2e1631108feead6b7d06a928a022ce5f" title="Reads byte from RTC from a specific register." alt="" coords="398,1221,517,1248"/>
+<area shape="rect" id="node136" href="$group__rtc.html#ga2a1f4793f5f1df109056889c5e5f2e05" title="Converts bcd number to decimal." alt="" coords="401,1120,514,1147"/>
 </map>

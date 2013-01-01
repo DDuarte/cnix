@@ -1,11 +1,15 @@
 <map id="vector_free" name="vector_free">
-<area shape="rect" id="node3" href="$group__tab.html#ga3742c04b7b83fcee6a89c23a398885cb" title="Remove tab." alt="" coords="153,5,244,32"/>
-<area shape="rect" id="node11" href="$group__tab.html#ga0e365320092224c8054821ff2e18052f" title="Removes a character from tab." alt="" coords="139,56,259,83"/>
-<area shape="rect" id="node5" href="$group__window.html#gaa072ae013c999ef6b1eb8d44c9eda573" title="De&#45;allocates whatever the window required." alt="" coords="307,5,421,32"/>
-<area shape="rect" id="node7" href="$cnix_8c.html#ad7f085309ae89de98d2f3755d6b00d6a" title="exit_cleanup" alt="" coords="657,5,751,32"/>
-<area shape="rect" id="node9" href="$cnix_8c.html#abf9e6b7e6f15df4b525a2e7705ba3089" title="main" alt="" coords="957,31,1008,57"/>
-<area shape="rect" id="node13" href="$group__tab.html#gaa86587646ff0fef58be4b60993a0ba5c" title="A key has been pressed while tab was active." alt="" coords="311,56,417,83"/>
-<area shape="rect" id="node15" href="$group__window.html#gacd8cd4c2fe8e78e21480301dcb996df1" title="Key has been pressed." alt="" coords="469,56,600,83"/>
-<area shape="rect" id="node17" href="$group__window.html#ga69fb99e8de59bdbacfb1de0b46649b14" title="Updates window and all its &quot;children&quot; elements (tabs, buttons, etc)" alt="" coords="649,56,759,83"/>
-<area shape="rect" id="node19" href="$cnix_8c.html#aa9c1f035c82a93594d9838ea8ceae094" title="timer_handler" alt="" coords="809,56,909,83"/>
+<area shape="rect" id="node3" href="$group__tab.html#ga3742c04b7b83fcee6a89c23a398885cb" title="Remove tab." alt="" coords="153,107,244,133"/>
+<area shape="rect" id="node28" href="$group__tab.html#ga0e365320092224c8054821ff2e18052f" title="Removes a character from tab." alt="" coords="139,208,259,235"/>
+<area shape="rect" id="node5" href="$group__window.html#gaa072ae013c999ef6b1eb8d44c9eda573" title="De&#45;allocates whatever the window required." alt="" coords="319,56,433,83"/>
+<area shape="rect" id="node11" href="$group__window.html#ga69fb99e8de59bdbacfb1de0b46649b14" title="Updates window and all its &quot;children&quot; elements (tabs, buttons, etc)" alt="" coords="691,145,802,172"/>
+<area shape="rect" id="node16" href="$window_8c.html#a7c542480b0ef0d70c1d720cfeb2b75eb" title="new_btn_click" alt="" coords="516,5,620,32"/>
+<area shape="rect" id="node22" href="$group__window.html#ga2db228ed901030ec9bc93dc368e441e9" title="Destroy given tab." alt="" coords="307,157,445,184"/>
+<area shape="rect" id="node7" href="$cnix_8c.html#ad7f085309ae89de98d2f3755d6b00d6a" title="exit_cleanup" alt="" coords="854,56,949,83"/>
+<area shape="rect" id="node9" href="$cnix_8c.html#abf9e6b7e6f15df4b525a2e7705ba3089" title="main" alt="" coords="1000,56,1051,83"/>
+<area shape="rect" id="node13" href="$cnix_8c.html#aa9c1f035c82a93594d9838ea8ceae094" title="timer_handler" alt="" coords="851,132,951,159"/>
+<area shape="rect" id="node18" href="$group__window.html#gad605925d100847b069d261d7f69b4d0a" title="Initializes a window." alt="" coords="703,5,791,32"/>
+<area shape="rect" id="node25" href="$group__window.html#ga978ba95fd412b9c52111f1b704dd3735" title="Mouse key has been pressed." alt="" coords="493,208,643,235"/>
+<area shape="rect" id="node30" href="$group__tab.html#gaa86587646ff0fef58be4b60993a0ba5c" title="A key has been pressed while tab was active." alt="" coords="323,233,429,260"/>
+<area shape="rect" id="node32" href="$group__window.html#gacd8cd4c2fe8e78e21480301dcb996df1" title="Key has been pressed." alt="" coords="503,259,633,285"/>
 </map>

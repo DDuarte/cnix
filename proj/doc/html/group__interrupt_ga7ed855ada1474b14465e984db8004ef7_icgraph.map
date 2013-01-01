@@ -1,8 +1,9 @@
 <map id="int_stop_handler" name="int_stop_handler">
-<area shape="rect" id="node3" href="$cnix_8c.html#aa9c1f035c82a93594d9838ea8ceae094" title="timer_handler" alt="" coords="353,5,453,32"/>
-<area shape="rect" id="node7" href="$keyboard_8c.html#ac00f3ebcdb64d0910af1c1fc7b0bf0ae" title="keyboard_handler" alt="" coords="171,56,295,83"/>
-<area shape="rect" id="node14" href="$window_8c.html#ad3ca36c6b5e0fe6ba859a91cef4f2f76" title="close_btn_click" alt="" coords="177,107,289,133"/>
-<area shape="rect" id="node5" href="$cnix_8c.html#abf9e6b7e6f15df4b525a2e7705ba3089" title="main" alt="" coords="645,31,696,57"/>
-<area shape="rect" id="node9" href="$group__keyboard.html#gac734f92550b667d9fe9b2968fa0e183e" title="Subscribe keyboard." alt="" coords="345,56,461,83"/>
-<area shape="rect" id="node11" href="$group__window.html#gad605925d100847b069d261d7f69b4d0a" title="Initializes a window." alt="" coords="509,56,597,83"/>
+<area shape="rect" id="node3" href="$cnix_8c.html#aa9c1f035c82a93594d9838ea8ceae094" title="timer_handler" alt="" coords="510,26,610,53"/>
+<area shape="rect" id="node7" href="$keyboard_8c.html#ac00f3ebcdb64d0910af1c1fc7b0bf0ae" title="keyboard_handler" alt="" coords="171,115,295,142"/>
+<area shape="rect" id="node14" href="$window_8c.html#ad3ca36c6b5e0fe6ba859a91cef4f2f76" title="close_btn_click" alt="" coords="177,39,289,66"/>
+<area shape="rect" id="node5" href="$cnix_8c.html#abf9e6b7e6f15df4b525a2e7705ba3089" title="main" alt="" coords="659,51,709,78"/>
+<area shape="rect" id="node9" href="$group__keyboard.html#gac734f92550b667d9fe9b2968fa0e183e" title="Subscribe keyboard." alt="" coords="345,127,461,154"/>
+<area shape="rect" id="node11" href="$group__window.html#gad605925d100847b069d261d7f69b4d0a" title="Initializes a window." alt="" coords="516,77,604,103"/>
+<area shape="rect" id="node17" href="$group__window.html#ga69fb99e8de59bdbacfb1de0b46649b14" title="Updates window and all its &quot;children&quot; elements (tabs, buttons, etc)" alt="" coords="347,26,458,53"/>
 </map>

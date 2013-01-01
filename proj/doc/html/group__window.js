@@ -33,6 +33,7 @@ var group__window =
     [ "window_key_press", "group__window.html#gacd8cd4c2fe8e78e21480301dcb996df1", null ],
     [ "window_mouse_press", "group__window.html#ga978ba95fd412b9c52111f1b704dd3735", null ],
     [ "window_mouse_release", "group__window.html#ga999f33cf098b9b7d34b8e22c22102b2e", null ],
+    [ "window_remove_tab", "group__window.html#ga2db228ed901030ec9bc93dc368e441e9", null ],
     [ "window_set_log_message", "group__window.html#ga599f76484bcb17c622dbb276690e4f0d", null ],
     [ "window_set_size", "group__window.html#ga833db7fbaeba321aa70de170380ae4ac", null ],
     [ "window_set_title", "group__window.html#gab0b36f6f3a4ad3275bae13d051df1883", null ],

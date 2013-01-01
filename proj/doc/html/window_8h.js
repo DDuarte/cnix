@@ -16,6 +16,7 @@ var window_8h =
     [ "window_key_press", "window_8h.html#gacd8cd4c2fe8e78e21480301dcb996df1", null ],
     [ "window_mouse_press", "window_8h.html#ga978ba95fd412b9c52111f1b704dd3735", null ],
     [ "window_mouse_release", "window_8h.html#ga999f33cf098b9b7d34b8e22c22102b2e", null ],
+    [ "window_remove_tab", "window_8h.html#ga2db228ed901030ec9bc93dc368e441e9", null ],
     [ "window_set_log_message", "window_8h.html#ga599f76484bcb17c622dbb276690e4f0d", null ],
     [ "window_set_size", "window_8h.html#ga833db7fbaeba321aa70de170380ae4ac", null ],
     [ "window_set_title", "window_8h.html#gab0b36f6f3a4ad3275bae13d051df1883", null ],

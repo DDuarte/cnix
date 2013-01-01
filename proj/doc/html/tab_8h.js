@@ -14,6 +14,7 @@ var tab_8h =
     [ "tab_draw", "tab_8h.html#ga3602a64b3cb3808621920f9cf12308a4", null ],
     [ "tab_key_press", "tab_8h.html#gaa86587646ff0fef58be4b60993a0ba5c", null ],
     [ "tab_mouse_press", "tab_8h.html#ga097f8d1bc06b4cec77fa958994185169", null ],
+    [ "tab_printf", "tab_8h.html#gada91b9bb012b9346c12867a4c8799b98", null ],
     [ "tab_remove_all", "tab_8h.html#gaf028b51aca95129243487cb699201212", null ],
     [ "tab_remove_char", "tab_8h.html#ga0e365320092224c8054821ff2e18052f", null ],
     [ "tab_rewind_column", "tab_8h.html#ga0601da6933ec63427f0b7924c6df8d9d", null ],
