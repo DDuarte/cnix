@@ -1,5 +1,0 @@
-<map id="event_t" name="event_t">
-<area shape="rect" id="node2" href="$structtimer__event__t.html" title="timer_event_t" alt="" coords="5,5,104,32"/>
-<area shape="rect" id="node4" href="$structmouse__event__t.html" title="mouse_event_t" alt="" coords="128,5,237,32"/>
-<area shape="rect" id="node6" href="$structkeyboard__event__t.html" title="keyboard_event_t" alt="" coords="261,5,384,32"/>
-</map>

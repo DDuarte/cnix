@@ -1,4 +1,0 @@
-<map id="keyboard_destroy" name="keyboard_destroy">
-<area shape="rect" id="node3" href="$group__interrupt.html#ga55b1d9744d5a5f7e7445dc8b5db1f62b" title="Unsubscribes a system interrupt." alt="" coords="179,5,293,32"/>
-<area shape="rect" id="node5" href="$group__interrupt.html#ga901b6a6215a5f9152950435e221ceb01" title="(Internal function, do not use) Clears assigned callback" alt="" coords="341,5,475,32"/>
-</map>

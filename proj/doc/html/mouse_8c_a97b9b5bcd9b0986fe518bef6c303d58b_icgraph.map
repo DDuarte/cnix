@@ -1,6 +1,0 @@
-<map id="mouse_write" name="mouse_write">
-<area shape="rect" id="node3" href="$mouse_8h.html#a27eefbf4822f7b30cdb554f0e0085a43" title="mouse_enable_stream_mode" alt="" coords="149,5,341,32"/>
-<area shape="rect" id="node5" href="$window_8h.html#a984bfdd6079a744c49e6d5c48fcaf6f4" title="window_install_mouse" alt="" coords="390,5,541,32"/>
-<area shape="rect" id="node7" href="$window_8h.html#ad605925d100847b069d261d7f69b4d0a" title="window_init" alt="" coords="589,5,677,32"/>
-<area shape="rect" id="node9" href="$cnix_8c.html#abf9e6b7e6f15df4b525a2e7705ba3089" title="main" alt="" coords="725,5,776,32"/>
-</map>

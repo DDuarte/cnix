@@ -1,6 +1,0 @@
-<map id="save_btn_click" name="save_btn_click">
-<area shape="rect" id="node3" href="$group__window.html#gad605925d100847b069d261d7f69b4d0a" title="Initializes a window." alt="" coords="327,5,415,32"/>
-<area shape="rect" id="node7" href="$group__window.html#ga69fb99e8de59bdbacfb1de0b46649b14" title="Updates window and all its &quot;children&quot; elements (tabs, buttons, etc)" alt="" coords="161,56,271,83"/>
-<area shape="rect" id="node5" href="$cnix_8c.html#abf9e6b7e6f15df4b525a2e7705ba3089" title="main" alt="" coords="469,31,520,57"/>
-<area shape="rect" id="node9" href="$cnix_8c.html#aa9c1f035c82a93594d9838ea8ceae094" title="timer_handler" alt="" coords="321,56,421,83"/>
-</map>

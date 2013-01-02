@@ -1,7 +1,0 @@
-<map id="vg_draw_string" name="vg_draw_string">
-<area shape="rect" id="node3" href="$tab_8c.html#a4ceef5602db37e7372611e43d014a289" title="tab_draw_label" alt="" coords="161,5,269,32"/>
-<area shape="rect" id="node7" href="$group__window.html#gaac0270c2bc86b0fab8572aa784636549" title="Function called to draw window and all its &quot;children&quot; elements (tabs, buttons, etc)" alt="" coords="440,31,539,57"/>
-<area shape="rect" id="node5" href="$group__tab.html#ga3602a64b3cb3808621920f9cf12308a4" title="Draw tab to screen." alt="" coords="317,5,392,32"/>
-<area shape="rect" id="node9" href="$cnix_8c.html#aa9c1f035c82a93594d9838ea8ceae094" title="timer_handler" alt="" coords="587,31,687,57"/>
-<area shape="rect" id="node11" href="$cnix_8c.html#abf9e6b7e6f15df4b525a2e7705ba3089" title="main" alt="" coords="736,31,787,57"/>
-</map>

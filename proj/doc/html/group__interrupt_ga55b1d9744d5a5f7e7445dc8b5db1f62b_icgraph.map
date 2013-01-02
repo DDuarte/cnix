@@ -1,8 +1,0 @@
-<map id="int_unsubscribe" name="int_unsubscribe">
-<area shape="rect" id="node3" href="$group__keyboard.html#ga549c651b674392e78482a4104736c171" title="Unsubscribe keyboard." alt="" coords="188,5,313,32"/>
-<area shape="rect" id="node11" href="$group__timer.html#gaf1a740b5f3dbd50a13a9562dad01a8cc" title="Unsubscribes Timer 0 interrupts." alt="" coords="195,56,307,83"/>
-<area shape="rect" id="node13" href="$group__window.html#ga50da694f2aab136cb76b29459f4f354d" title="Unnistalls mouse." alt="" coords="168,107,333,133"/>
-<area shape="rect" id="node5" href="$group__window.html#gaa072ae013c999ef6b1eb8d44c9eda573" title="De&#45;allocates whatever the window required." alt="" coords="381,56,496,83"/>
-<area shape="rect" id="node7" href="$cnix_8c.html#ad7f085309ae89de98d2f3755d6b00d6a" title="exit_cleanup" alt="" coords="545,56,639,83"/>
-<area shape="rect" id="node9" href="$cnix_8c.html#abf9e6b7e6f15df4b525a2e7705ba3089" title="main" alt="" coords="688,56,739,83"/>
-</map>

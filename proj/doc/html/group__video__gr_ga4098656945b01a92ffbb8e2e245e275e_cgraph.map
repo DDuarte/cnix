@@ -1,7 +1,0 @@
-<map id="vg_draw_line" name="vg_draw_line">
-<area shape="rect" id="node3" href="$group__video__gr.html#ga407d2bebb5960e308ff7114142ed22e5" title="vg_scale_x" alt="" coords="186,5,273,32"/>
-<area shape="rect" id="node5" href="$group__video__gr.html#gaeea403b6eab6cae98efc1dd52ec1a993" title="vg_scale_y" alt="" coords="186,56,273,83"/>
-<area shape="rect" id="node7" href="$video__gr_8c.html#ae488b1f87dfb59b645f3d888d54a85be" title="_vg_draw_absolute_line" alt="" coords="150,107,309,133"/>
-<area shape="rect" id="node9" href="$group__utilities.html#ga9ec50cbe0735fc65f2eff87afe8582a6" title="Swaps two longs." alt="" coords="409,81,463,108"/>
-<area shape="rect" id="node11" href="$video__gr_8c.html#adfeba900ab1ada58c92bef25f22ae368" title="_vg_set_absolute_pixel" alt="" coords="358,132,514,159"/>
-</map>

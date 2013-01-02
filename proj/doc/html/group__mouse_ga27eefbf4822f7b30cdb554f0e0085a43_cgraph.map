@@ -1,5 +1,0 @@
-<map id="mouse_enable_stream_mode" name="mouse_enable_stream_mode">
-<area shape="rect" id="node3" href="$group__mouse.html#ga97b9b5bcd9b0986fe518bef6c303d58b" title="Write byte to mouse." alt="" coords="246,5,341,32"/>
-<area shape="rect" id="node7" href="$group__mouse.html#ga35dc9f62be9d7d238bd18baa033fd597" title="Read byte from mouse." alt="" coords="247,56,340,83"/>
-<area shape="rect" id="node5" href="$group__kbc.html#ga95d6e1f5fed116286e1052147e7c0ee3" title="Writes byte to keyboard." alt="" coords="389,5,467,32"/>
-</map>

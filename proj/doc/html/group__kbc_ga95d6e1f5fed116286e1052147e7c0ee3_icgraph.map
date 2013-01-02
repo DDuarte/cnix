@@ -1,7 +1,0 @@
-<map id="write_kbc" name="write_kbc">
-<area shape="rect" id="node3" href="$group__mouse.html#ga97b9b5bcd9b0986fe518bef6c303d58b" title="Write byte to mouse." alt="" coords="131,5,226,32"/>
-<area shape="rect" id="node5" href="$group__mouse.html#ga27eefbf4822f7b30cdb554f0e0085a43" title="Enables stream mode." alt="" coords="275,5,467,32"/>
-<area shape="rect" id="node7" href="$group__window.html#ga984bfdd6079a744c49e6d5c48fcaf6f4" title="Installs mouse." alt="" coords="515,5,666,32"/>
-<area shape="rect" id="node9" href="$group__window.html#gad605925d100847b069d261d7f69b4d0a" title="Initializes a window." alt="" coords="715,5,803,32"/>
-<area shape="rect" id="node11" href="$cnix_8c.html#abf9e6b7e6f15df4b525a2e7705ba3089" title="main" alt="" coords="851,5,901,32"/>
-</map>

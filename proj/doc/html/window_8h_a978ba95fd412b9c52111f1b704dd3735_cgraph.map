@@ -1,7 +1,0 @@
-<map id="window_mouse_press" name="window_mouse_press">
-<area shape="rect" id="node3" href="$window_8c.html#af251e06a5e8fb2c157c93b4c00f2c529" title="window_set_tab" alt="" coords="229,5,344,32"/>
-<area shape="rect" id="node7" href="$window_8c.html#afa6ad953bd931537e62b00924501663b" title="window_set_previous_tab" alt="" coords="203,56,371,83"/>
-<area shape="rect" id="node9" href="$group__button.html#ga32d863c39b7e4d9f6f0f6fe4800f069d" title="Updates an existing button." alt="" coords="235,107,339,133"/>
-<area shape="rect" id="node11" href="$tab_8c.html#a097f8d1bc06b4cec77fa958994185169" title="tab_mouse_press" alt="" coords="224,157,349,184"/>
-<area shape="rect" id="node5" href="$window_8c.html#a599f76484bcb17c622dbb276690e4f0d" title="window_set_log_message" alt="" coords="419,5,592,32"/>
-</map>
