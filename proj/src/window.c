@@ -87,7 +87,7 @@ int window_init(window_t* window) { LOG
         return error;
     }
 
-    error = window_set_title(window, "cnix %s", "0.1");
+    error = window_set_title(window, "cnix %s", "0.2");
     if (error) {
         printf("window_init: window_set_title failed with error code %d.\n", error);
         return error;
@@ -276,6 +276,8 @@ int window_update(window_t* window) { LOG
                             break;
                         }
 
+			fileBuffer[size-1] = 0;
+
                         window->tabs[i] = tab_create_from_file(fileName, fileBuffer);
                         if (window->tabs[i]) {
                             window_set_log_message(window, "Open: File loaded with success");
@@ -459,7 +461,8 @@ int window_draw(window_t* window) { LOG
     
     /* window log message */
     if (window->log_message) {
-        error = vg_draw_string(window->log_message, 16, 512, 760, vg_color_rgb(0, 0, 0));
+        error = vg_draw_string(window->log_message, 16, 256, 760, 
+vg_color_rgb(0, 0, 0));
         if (error) {
             printf("window_draw: vg_draw_string (1) failed with error code %d.\n", error);
             return error;
