@@ -93,7 +93,7 @@ int window_init(window_t* window) { LOG
         return error;
     }
     
-    error = window_set_log_message(window, "LOG_MESSAGE");
+    error = window_set_log_message(window, "");
     if (error) {
         printf("window_init: window_set_log_message failed with error code %d.\n", error);
         return error;
@@ -215,7 +215,7 @@ int window_update(window_t* window) { LOG
         window->mouse_x = clamp(window->mouse_x, 0, window->width);
         window->mouse_y = clamp(window->mouse_y, 0, window->height);
 
-        error = window_set_title(window, "x: %d, y: %d, w: %d, h: %d",
+        /*error = window_set_title(window, "x: %d, y: %d, w: %d, h: %d",
             window->mouse_x,
             window->mouse_y,
             window->width,
@@ -223,7 +223,7 @@ int window_update(window_t* window) { LOG
         if (error) {
             printf("window_update: window_set_title failed with error code %d.\n", error);
             return error;
-        }
+        }*/
 
         if (mouse_state.ldown || mouse_state.mdown || mouse_state.rdown)
             window_mouse_press(window);
